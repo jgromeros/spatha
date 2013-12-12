@@ -6,6 +6,7 @@ package co.qcsc.spatha.domain.product;
 import co.qcsc.spatha.db.product.FamilyRepository;
 import co.qcsc.spatha.domain.product.FamilyDataOnDemand;
 import co.qcsc.spatha.domain.product.FamilyIntegrationTest;
+import co.qcsc.spatha.service.product.FamilyService;
 import java.util.Iterator;
 import java.util.List;
 import javax.validation.ConstraintViolation;
@@ -30,44 +31,47 @@ privileged aspect FamilyIntegrationTest_Roo_IntegrationTest {
     FamilyDataOnDemand FamilyIntegrationTest.dod;
     
     @Autowired
+    FamilyService FamilyIntegrationTest.familyService;
+    
+    @Autowired
     FamilyRepository FamilyIntegrationTest.familyRepository;
     
     @Test
-    public void FamilyIntegrationTest.testCount() {
+    public void FamilyIntegrationTest.testCountAllFamilys() {
         Assert.assertNotNull("Data on demand for 'Family' failed to initialize correctly", dod.getRandomFamily());
-        long count = familyRepository.count();
+        long count = familyService.countAllFamilys();
         Assert.assertTrue("Counter for 'Family' incorrectly reported there were no entries", count > 0);
     }
     
     @Test
-    public void FamilyIntegrationTest.testFind() {
+    public void FamilyIntegrationTest.testFindFamily() {
         Family obj = dod.getRandomFamily();
         Assert.assertNotNull("Data on demand for 'Family' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'Family' failed to provide an identifier", id);
-        obj = familyRepository.findOne(id);
+        obj = familyService.findFamily(id);
         Assert.assertNotNull("Find method for 'Family' illegally returned null for id '" + id + "'", obj);
         Assert.assertEquals("Find method for 'Family' returned the incorrect identifier", id, obj.getId());
     }
     
     @Test
-    public void FamilyIntegrationTest.testFindAll() {
+    public void FamilyIntegrationTest.testFindAllFamilys() {
         Assert.assertNotNull("Data on demand for 'Family' failed to initialize correctly", dod.getRandomFamily());
-        long count = familyRepository.count();
+        long count = familyService.countAllFamilys();
         Assert.assertTrue("Too expensive to perform a find all test for 'Family', as there are " + count + " entries; set the findAllMaximum to exceed this value or set findAll=false on the integration test annotation to disable the test", count < 250);
-        List<Family> result = familyRepository.findAll();
+        List<Family> result = familyService.findAllFamilys();
         Assert.assertNotNull("Find all method for 'Family' illegally returned null", result);
         Assert.assertTrue("Find all method for 'Family' failed to return any data", result.size() > 0);
     }
     
     @Test
-    public void FamilyIntegrationTest.testFindEntries() {
+    public void FamilyIntegrationTest.testFindFamilyEntries() {
         Assert.assertNotNull("Data on demand for 'Family' failed to initialize correctly", dod.getRandomFamily());
-        long count = familyRepository.count();
+        long count = familyService.countAllFamilys();
         if (count > 20) count = 20;
         int firstResult = 0;
         int maxResults = (int) count;
-        List<Family> result = familyRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
+        List<Family> result = familyService.findFamilyEntries(firstResult, maxResults);
         Assert.assertNotNull("Find entries method for 'Family' illegally returned null", result);
         Assert.assertEquals("Find entries method for 'Family' returned an incorrect number of entries", count, result.size());
     }
@@ -78,7 +82,7 @@ privileged aspect FamilyIntegrationTest_Roo_IntegrationTest {
         Assert.assertNotNull("Data on demand for 'Family' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'Family' failed to provide an identifier", id);
-        obj = familyRepository.findOne(id);
+        obj = familyService.findFamily(id);
         Assert.assertNotNull("Find method for 'Family' illegally returned null for id '" + id + "'", obj);
         boolean modified =  dod.modifyFamily(obj);
         Integer currentVersion = obj.getVersion();
@@ -87,28 +91,28 @@ privileged aspect FamilyIntegrationTest_Roo_IntegrationTest {
     }
     
     @Test
-    public void FamilyIntegrationTest.testSaveUpdate() {
+    public void FamilyIntegrationTest.testUpdateFamilyUpdate() {
         Family obj = dod.getRandomFamily();
         Assert.assertNotNull("Data on demand for 'Family' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'Family' failed to provide an identifier", id);
-        obj = familyRepository.findOne(id);
+        obj = familyService.findFamily(id);
         boolean modified =  dod.modifyFamily(obj);
         Integer currentVersion = obj.getVersion();
-        Family merged = familyRepository.save(obj);
+        Family merged = familyService.updateFamily(obj);
         familyRepository.flush();
         Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
         Assert.assertTrue("Version for 'Family' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);
     }
     
     @Test
-    public void FamilyIntegrationTest.testSave() {
+    public void FamilyIntegrationTest.testSaveFamily() {
         Assert.assertNotNull("Data on demand for 'Family' failed to initialize correctly", dod.getRandomFamily());
         Family obj = dod.getNewTransientFamily(Integer.MAX_VALUE);
         Assert.assertNotNull("Data on demand for 'Family' failed to provide a new transient entity", obj);
         Assert.assertNull("Expected 'Family' identifier to be null", obj.getId());
         try {
-            familyRepository.save(obj);
+            familyService.saveFamily(obj);
         } catch (final ConstraintViolationException e) {
             final StringBuilder msg = new StringBuilder();
             for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
@@ -122,15 +126,15 @@ privileged aspect FamilyIntegrationTest_Roo_IntegrationTest {
     }
     
     @Test
-    public void FamilyIntegrationTest.testDelete() {
+    public void FamilyIntegrationTest.testDeleteFamily() {
         Family obj = dod.getRandomFamily();
         Assert.assertNotNull("Data on demand for 'Family' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'Family' failed to provide an identifier", id);
-        obj = familyRepository.findOne(id);
-        familyRepository.delete(obj);
+        obj = familyService.findFamily(id);
+        familyService.deleteFamily(obj);
         familyRepository.flush();
-        Assert.assertNull("Failed to remove 'Family' with identifier '" + id + "'", familyRepository.findOne(id));
+        Assert.assertNull("Failed to remove 'Family' with identifier '" + id + "'", familyService.findFamily(id));
     }
     
 }

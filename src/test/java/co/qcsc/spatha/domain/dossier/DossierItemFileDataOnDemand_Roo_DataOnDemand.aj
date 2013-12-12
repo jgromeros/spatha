@@ -7,6 +7,7 @@ import co.qcsc.spatha.db.dossier.DossierItemFileRepository;
 import co.qcsc.spatha.domain.dossier.DossierItemDataOnDemand;
 import co.qcsc.spatha.domain.dossier.DossierItemFile;
 import co.qcsc.spatha.domain.dossier.DossierItemFileDataOnDemand;
+import co.qcsc.spatha.service.dossier.DossierItemFileService;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -27,6 +28,9 @@ privileged aspect DossierItemFileDataOnDemand_Roo_DataOnDemand {
     
     @Autowired
     DossierItemDataOnDemand DossierItemFileDataOnDemand.dossierItemDataOnDemand;
+    
+    @Autowired
+    DossierItemFileService DossierItemFileDataOnDemand.dossierItemFileService;
     
     @Autowired
     DossierItemFileRepository DossierItemFileDataOnDemand.dossierItemFileRepository;
@@ -52,14 +56,14 @@ privileged aspect DossierItemFileDataOnDemand_Roo_DataOnDemand {
         }
         DossierItemFile obj = data.get(index);
         Long id = obj.getId();
-        return dossierItemFileRepository.findOne(id);
+        return dossierItemFileService.findDossierItemFile(id);
     }
     
     public DossierItemFile DossierItemFileDataOnDemand.getRandomDossierItemFile() {
         init();
         DossierItemFile obj = data.get(rnd.nextInt(data.size()));
         Long id = obj.getId();
-        return dossierItemFileRepository.findOne(id);
+        return dossierItemFileService.findDossierItemFile(id);
     }
     
     public boolean DossierItemFileDataOnDemand.modifyDossierItemFile(DossierItemFile obj) {
@@ -69,7 +73,7 @@ privileged aspect DossierItemFileDataOnDemand_Roo_DataOnDemand {
     public void DossierItemFileDataOnDemand.init() {
         int from = 0;
         int to = 10;
-        data = dossierItemFileRepository.findAll(new org.springframework.data.domain.PageRequest(from / to, to)).getContent();
+        data = dossierItemFileService.findDossierItemFileEntries(from, to);
         if (data == null) {
             throw new IllegalStateException("Find entries implementation for 'DossierItemFile' illegally returned null");
         }
@@ -81,7 +85,7 @@ privileged aspect DossierItemFileDataOnDemand_Roo_DataOnDemand {
         for (int i = 0; i < 10; i++) {
             DossierItemFile obj = getNewTransientDossierItemFile(i);
             try {
-                dossierItemFileRepository.save(obj);
+                dossierItemFileService.saveDossierItemFile(obj);
             } catch (final ConstraintViolationException e) {
                 final StringBuilder msg = new StringBuilder();
                 for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {

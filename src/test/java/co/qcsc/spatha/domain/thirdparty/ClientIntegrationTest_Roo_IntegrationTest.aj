@@ -6,6 +6,7 @@ package co.qcsc.spatha.domain.thirdparty;
 import co.qcsc.spatha.db.thirdparty.ClientRepository;
 import co.qcsc.spatha.domain.thirdparty.ClientDataOnDemand;
 import co.qcsc.spatha.domain.thirdparty.ClientIntegrationTest;
+import co.qcsc.spatha.service.thirdparty.ClientService;
 import java.util.Iterator;
 import java.util.List;
 import javax.validation.ConstraintViolation;
@@ -30,44 +31,47 @@ privileged aspect ClientIntegrationTest_Roo_IntegrationTest {
     ClientDataOnDemand ClientIntegrationTest.dod;
     
     @Autowired
+    ClientService ClientIntegrationTest.clientService;
+    
+    @Autowired
     ClientRepository ClientIntegrationTest.clientRepository;
     
     @Test
-    public void ClientIntegrationTest.testCount() {
+    public void ClientIntegrationTest.testCountAllClients() {
         Assert.assertNotNull("Data on demand for 'Client' failed to initialize correctly", dod.getRandomClient());
-        long count = clientRepository.count();
+        long count = clientService.countAllClients();
         Assert.assertTrue("Counter for 'Client' incorrectly reported there were no entries", count > 0);
     }
     
     @Test
-    public void ClientIntegrationTest.testFind() {
+    public void ClientIntegrationTest.testFindClient() {
         Client obj = dod.getRandomClient();
         Assert.assertNotNull("Data on demand for 'Client' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'Client' failed to provide an identifier", id);
-        obj = clientRepository.findOne(id);
+        obj = clientService.findClient(id);
         Assert.assertNotNull("Find method for 'Client' illegally returned null for id '" + id + "'", obj);
         Assert.assertEquals("Find method for 'Client' returned the incorrect identifier", id, obj.getId());
     }
     
     @Test
-    public void ClientIntegrationTest.testFindAll() {
+    public void ClientIntegrationTest.testFindAllClients() {
         Assert.assertNotNull("Data on demand for 'Client' failed to initialize correctly", dod.getRandomClient());
-        long count = clientRepository.count();
+        long count = clientService.countAllClients();
         Assert.assertTrue("Too expensive to perform a find all test for 'Client', as there are " + count + " entries; set the findAllMaximum to exceed this value or set findAll=false on the integration test annotation to disable the test", count < 250);
-        List<Client> result = clientRepository.findAll();
+        List<Client> result = clientService.findAllClients();
         Assert.assertNotNull("Find all method for 'Client' illegally returned null", result);
         Assert.assertTrue("Find all method for 'Client' failed to return any data", result.size() > 0);
     }
     
     @Test
-    public void ClientIntegrationTest.testFindEntries() {
+    public void ClientIntegrationTest.testFindClientEntries() {
         Assert.assertNotNull("Data on demand for 'Client' failed to initialize correctly", dod.getRandomClient());
-        long count = clientRepository.count();
+        long count = clientService.countAllClients();
         if (count > 20) count = 20;
         int firstResult = 0;
         int maxResults = (int) count;
-        List<Client> result = clientRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
+        List<Client> result = clientService.findClientEntries(firstResult, maxResults);
         Assert.assertNotNull("Find entries method for 'Client' illegally returned null", result);
         Assert.assertEquals("Find entries method for 'Client' returned an incorrect number of entries", count, result.size());
     }
@@ -78,7 +82,7 @@ privileged aspect ClientIntegrationTest_Roo_IntegrationTest {
         Assert.assertNotNull("Data on demand for 'Client' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'Client' failed to provide an identifier", id);
-        obj = clientRepository.findOne(id);
+        obj = clientService.findClient(id);
         Assert.assertNotNull("Find method for 'Client' illegally returned null for id '" + id + "'", obj);
         boolean modified =  dod.modifyClient(obj);
         Integer currentVersion = obj.getVersion();
@@ -87,28 +91,28 @@ privileged aspect ClientIntegrationTest_Roo_IntegrationTest {
     }
     
     @Test
-    public void ClientIntegrationTest.testSaveUpdate() {
+    public void ClientIntegrationTest.testUpdateClientUpdate() {
         Client obj = dod.getRandomClient();
         Assert.assertNotNull("Data on demand for 'Client' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'Client' failed to provide an identifier", id);
-        obj = clientRepository.findOne(id);
+        obj = clientService.findClient(id);
         boolean modified =  dod.modifyClient(obj);
         Integer currentVersion = obj.getVersion();
-        Client merged = clientRepository.save(obj);
+        Client merged = clientService.updateClient(obj);
         clientRepository.flush();
         Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
         Assert.assertTrue("Version for 'Client' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);
     }
     
     @Test
-    public void ClientIntegrationTest.testSave() {
+    public void ClientIntegrationTest.testSaveClient() {
         Assert.assertNotNull("Data on demand for 'Client' failed to initialize correctly", dod.getRandomClient());
         Client obj = dod.getNewTransientClient(Integer.MAX_VALUE);
         Assert.assertNotNull("Data on demand for 'Client' failed to provide a new transient entity", obj);
         Assert.assertNull("Expected 'Client' identifier to be null", obj.getId());
         try {
-            clientRepository.save(obj);
+            clientService.saveClient(obj);
         } catch (final ConstraintViolationException e) {
             final StringBuilder msg = new StringBuilder();
             for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
@@ -122,15 +126,15 @@ privileged aspect ClientIntegrationTest_Roo_IntegrationTest {
     }
     
     @Test
-    public void ClientIntegrationTest.testDelete() {
+    public void ClientIntegrationTest.testDeleteClient() {
         Client obj = dod.getRandomClient();
         Assert.assertNotNull("Data on demand for 'Client' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'Client' failed to provide an identifier", id);
-        obj = clientRepository.findOne(id);
-        clientRepository.delete(obj);
+        obj = clientService.findClient(id);
+        clientService.deleteClient(obj);
         clientRepository.flush();
-        Assert.assertNull("Failed to remove 'Client' with identifier '" + id + "'", clientRepository.findOne(id));
+        Assert.assertNull("Failed to remove 'Client' with identifier '" + id + "'", clientService.findClient(id));
     }
     
 }

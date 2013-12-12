@@ -6,8 +6,9 @@ package co.qcsc.spatha.domain.purchase;
 import co.qcsc.spatha.db.purchase.PurchaseOrderRepository;
 import co.qcsc.spatha.domain.purchase.PurchaseOrder;
 import co.qcsc.spatha.domain.purchase.PurchaseOrderDataOnDemand;
-import co.qcsc.spatha.domain.thirdparty.Client;
-import co.qcsc.spatha.domain.thirdparty.Supplier;
+import co.qcsc.spatha.domain.thirdparty.ClientDataOnDemand;
+import co.qcsc.spatha.domain.thirdparty.SupplierDataOnDemand;
+import co.qcsc.spatha.service.purchase.PurchaseOrderService;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -27,25 +28,27 @@ privileged aspect PurchaseOrderDataOnDemand_Roo_DataOnDemand {
     private List<PurchaseOrder> PurchaseOrderDataOnDemand.data;
     
     @Autowired
+    ClientDataOnDemand PurchaseOrderDataOnDemand.clientDataOnDemand;
+    
+    @Autowired
+    SupplierDataOnDemand PurchaseOrderDataOnDemand.supplierDataOnDemand;
+    
+    @Autowired
+    PurchaseOrderService PurchaseOrderDataOnDemand.purchaseOrderService;
+    
+    @Autowired
     PurchaseOrderRepository PurchaseOrderDataOnDemand.purchaseOrderRepository;
     
     public PurchaseOrder PurchaseOrderDataOnDemand.getNewTransientPurchaseOrder(int index) {
         PurchaseOrder obj = new PurchaseOrder();
-        setClient(obj, index);
         setClientContact(obj, index);
         setClientEmail(obj, index);
         setClientPhone(obj, index);
         setNumberOrder(obj, index);
-        setSupplier(obj, index);
         setSupplierContact(obj, index);
         setSupplierEmail(obj, index);
         setSupplierPhone(obj, index);
         return obj;
-    }
-    
-    public void PurchaseOrderDataOnDemand.setClient(PurchaseOrder obj, int index) {
-        Client client = null;
-        obj.setClient(client);
     }
     
     public void PurchaseOrderDataOnDemand.setClientContact(PurchaseOrder obj, int index) {
@@ -66,11 +69,6 @@ privileged aspect PurchaseOrderDataOnDemand_Roo_DataOnDemand {
     public void PurchaseOrderDataOnDemand.setNumberOrder(PurchaseOrder obj, int index) {
         String numberOrder = "numberOrder_" + index;
         obj.setNumberOrder(numberOrder);
-    }
-    
-    public void PurchaseOrderDataOnDemand.setSupplier(PurchaseOrder obj, int index) {
-        Supplier supplier = null;
-        obj.setSupplier(supplier);
     }
     
     public void PurchaseOrderDataOnDemand.setSupplierContact(PurchaseOrder obj, int index) {
@@ -98,14 +96,14 @@ privileged aspect PurchaseOrderDataOnDemand_Roo_DataOnDemand {
         }
         PurchaseOrder obj = data.get(index);
         Long id = obj.getId();
-        return purchaseOrderRepository.findOne(id);
+        return purchaseOrderService.findPurchaseOrder(id);
     }
     
     public PurchaseOrder PurchaseOrderDataOnDemand.getRandomPurchaseOrder() {
         init();
         PurchaseOrder obj = data.get(rnd.nextInt(data.size()));
         Long id = obj.getId();
-        return purchaseOrderRepository.findOne(id);
+        return purchaseOrderService.findPurchaseOrder(id);
     }
     
     public boolean PurchaseOrderDataOnDemand.modifyPurchaseOrder(PurchaseOrder obj) {
@@ -115,7 +113,7 @@ privileged aspect PurchaseOrderDataOnDemand_Roo_DataOnDemand {
     public void PurchaseOrderDataOnDemand.init() {
         int from = 0;
         int to = 10;
-        data = purchaseOrderRepository.findAll(new org.springframework.data.domain.PageRequest(from / to, to)).getContent();
+        data = purchaseOrderService.findPurchaseOrderEntries(from, to);
         if (data == null) {
             throw new IllegalStateException("Find entries implementation for 'PurchaseOrder' illegally returned null");
         }
@@ -127,7 +125,7 @@ privileged aspect PurchaseOrderDataOnDemand_Roo_DataOnDemand {
         for (int i = 0; i < 10; i++) {
             PurchaseOrder obj = getNewTransientPurchaseOrder(i);
             try {
-                purchaseOrderRepository.save(obj);
+                purchaseOrderService.savePurchaseOrder(obj);
             } catch (final ConstraintViolationException e) {
                 final StringBuilder msg = new StringBuilder();
                 for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {

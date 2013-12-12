@@ -7,7 +7,8 @@ import co.qcsc.spatha.db.product.ProductSpecialtyRepository;
 import co.qcsc.spatha.domain.product.ProductDataOnDemand;
 import co.qcsc.spatha.domain.product.ProductSpecialty;
 import co.qcsc.spatha.domain.product.ProductSpecialtyDataOnDemand;
-import co.qcsc.spatha.domain.product.Specialty;
+import co.qcsc.spatha.domain.product.SpecialtyDataOnDemand;
+import co.qcsc.spatha.service.product.ProductSpecialtyService;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -30,17 +31,17 @@ privileged aspect ProductSpecialtyDataOnDemand_Roo_DataOnDemand {
     ProductDataOnDemand ProductSpecialtyDataOnDemand.productDataOnDemand;
     
     @Autowired
+    SpecialtyDataOnDemand ProductSpecialtyDataOnDemand.specialtyDataOnDemand;
+    
+    @Autowired
+    ProductSpecialtyService ProductSpecialtyDataOnDemand.productSpecialtyService;
+    
+    @Autowired
     ProductSpecialtyRepository ProductSpecialtyDataOnDemand.productSpecialtyRepository;
     
     public ProductSpecialty ProductSpecialtyDataOnDemand.getNewTransientProductSpecialty(int index) {
         ProductSpecialty obj = new ProductSpecialty();
-        setSpecialty(obj, index);
         return obj;
-    }
-    
-    public void ProductSpecialtyDataOnDemand.setSpecialty(ProductSpecialty obj, int index) {
-        Specialty specialty = null;
-        obj.setSpecialty(specialty);
     }
     
     public ProductSpecialty ProductSpecialtyDataOnDemand.getSpecificProductSpecialty(int index) {
@@ -53,14 +54,14 @@ privileged aspect ProductSpecialtyDataOnDemand_Roo_DataOnDemand {
         }
         ProductSpecialty obj = data.get(index);
         Long id = obj.getId();
-        return productSpecialtyRepository.findOne(id);
+        return productSpecialtyService.findProductSpecialty(id);
     }
     
     public ProductSpecialty ProductSpecialtyDataOnDemand.getRandomProductSpecialty() {
         init();
         ProductSpecialty obj = data.get(rnd.nextInt(data.size()));
         Long id = obj.getId();
-        return productSpecialtyRepository.findOne(id);
+        return productSpecialtyService.findProductSpecialty(id);
     }
     
     public boolean ProductSpecialtyDataOnDemand.modifyProductSpecialty(ProductSpecialty obj) {
@@ -70,7 +71,7 @@ privileged aspect ProductSpecialtyDataOnDemand_Roo_DataOnDemand {
     public void ProductSpecialtyDataOnDemand.init() {
         int from = 0;
         int to = 10;
-        data = productSpecialtyRepository.findAll(new org.springframework.data.domain.PageRequest(from / to, to)).getContent();
+        data = productSpecialtyService.findProductSpecialtyEntries(from, to);
         if (data == null) {
             throw new IllegalStateException("Find entries implementation for 'ProductSpecialty' illegally returned null");
         }
@@ -82,7 +83,7 @@ privileged aspect ProductSpecialtyDataOnDemand_Roo_DataOnDemand {
         for (int i = 0; i < 10; i++) {
             ProductSpecialty obj = getNewTransientProductSpecialty(i);
             try {
-                productSpecialtyRepository.save(obj);
+                productSpecialtyService.saveProductSpecialty(obj);
             } catch (final ConstraintViolationException e) {
                 final StringBuilder msg = new StringBuilder();
                 for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {

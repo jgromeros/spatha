@@ -7,7 +7,8 @@ import co.qcsc.spatha.db.purchase.OrderItemRepository;
 import co.qcsc.spatha.domain.product.ProductClientDataOnDemand;
 import co.qcsc.spatha.domain.purchase.OrderItem;
 import co.qcsc.spatha.domain.purchase.OrderItemDataOnDemand;
-import co.qcsc.spatha.domain.purchase.PurchaseOrder;
+import co.qcsc.spatha.domain.purchase.PurchaseOrderDataOnDemand;
+import co.qcsc.spatha.service.purchase.OrderItemService;
 import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -31,18 +32,18 @@ privileged aspect OrderItemDataOnDemand_Roo_DataOnDemand {
     ProductClientDataOnDemand OrderItemDataOnDemand.productClientDataOnDemand;
     
     @Autowired
+    PurchaseOrderDataOnDemand OrderItemDataOnDemand.purchaseOrderDataOnDemand;
+    
+    @Autowired
+    OrderItemService OrderItemDataOnDemand.orderItemService;
+    
+    @Autowired
     OrderItemRepository OrderItemDataOnDemand.orderItemRepository;
     
     public OrderItem OrderItemDataOnDemand.getNewTransientOrderItem(int index) {
         OrderItem obj = new OrderItem();
-        setPurchaseOrder(obj, index);
         setQuantity(obj, index);
         return obj;
-    }
-    
-    public void OrderItemDataOnDemand.setPurchaseOrder(OrderItem obj, int index) {
-        PurchaseOrder purchaseOrder = null;
-        obj.setPurchaseOrder(purchaseOrder);
     }
     
     public void OrderItemDataOnDemand.setQuantity(OrderItem obj, int index) {
@@ -63,14 +64,14 @@ privileged aspect OrderItemDataOnDemand_Roo_DataOnDemand {
         }
         OrderItem obj = data.get(index);
         Long id = obj.getId();
-        return orderItemRepository.findOne(id);
+        return orderItemService.findOrderItem(id);
     }
     
     public OrderItem OrderItemDataOnDemand.getRandomOrderItem() {
         init();
         OrderItem obj = data.get(rnd.nextInt(data.size()));
         Long id = obj.getId();
-        return orderItemRepository.findOne(id);
+        return orderItemService.findOrderItem(id);
     }
     
     public boolean OrderItemDataOnDemand.modifyOrderItem(OrderItem obj) {
@@ -80,7 +81,7 @@ privileged aspect OrderItemDataOnDemand_Roo_DataOnDemand {
     public void OrderItemDataOnDemand.init() {
         int from = 0;
         int to = 10;
-        data = orderItemRepository.findAll(new org.springframework.data.domain.PageRequest(from / to, to)).getContent();
+        data = orderItemService.findOrderItemEntries(from, to);
         if (data == null) {
             throw new IllegalStateException("Find entries implementation for 'OrderItem' illegally returned null");
         }
@@ -92,7 +93,7 @@ privileged aspect OrderItemDataOnDemand_Roo_DataOnDemand {
         for (int i = 0; i < 10; i++) {
             OrderItem obj = getNewTransientOrderItem(i);
             try {
-                orderItemRepository.save(obj);
+                orderItemService.saveOrderItem(obj);
             } catch (final ConstraintViolationException e) {
                 final StringBuilder msg = new StringBuilder();
                 for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {

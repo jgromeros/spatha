@@ -6,6 +6,7 @@ package co.qcsc.spatha.domain.thirdparty;
 import co.qcsc.spatha.db.thirdparty.ClientRepository;
 import co.qcsc.spatha.domain.thirdparty.Client;
 import co.qcsc.spatha.domain.thirdparty.ClientDataOnDemand;
+import co.qcsc.spatha.service.thirdparty.ClientService;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -23,6 +24,9 @@ privileged aspect ClientDataOnDemand_Roo_DataOnDemand {
     private Random ClientDataOnDemand.rnd = new SecureRandom();
     
     private List<Client> ClientDataOnDemand.data;
+    
+    @Autowired
+    ClientService ClientDataOnDemand.clientService;
     
     @Autowired
     ClientRepository ClientDataOnDemand.clientRepository;
@@ -54,14 +58,14 @@ privileged aspect ClientDataOnDemand_Roo_DataOnDemand {
         }
         Client obj = data.get(index);
         Long id = obj.getId();
-        return clientRepository.findOne(id);
+        return clientService.findClient(id);
     }
     
     public Client ClientDataOnDemand.getRandomClient() {
         init();
         Client obj = data.get(rnd.nextInt(data.size()));
         Long id = obj.getId();
-        return clientRepository.findOne(id);
+        return clientService.findClient(id);
     }
     
     public boolean ClientDataOnDemand.modifyClient(Client obj) {
@@ -71,7 +75,7 @@ privileged aspect ClientDataOnDemand_Roo_DataOnDemand {
     public void ClientDataOnDemand.init() {
         int from = 0;
         int to = 10;
-        data = clientRepository.findAll(new org.springframework.data.domain.PageRequest(from / to, to)).getContent();
+        data = clientService.findClientEntries(from, to);
         if (data == null) {
             throw new IllegalStateException("Find entries implementation for 'Client' illegally returned null");
         }
@@ -83,7 +87,7 @@ privileged aspect ClientDataOnDemand_Roo_DataOnDemand {
         for (int i = 0; i < 10; i++) {
             Client obj = getNewTransientClient(i);
             try {
-                clientRepository.save(obj);
+                clientService.saveClient(obj);
             } catch (final ConstraintViolationException e) {
                 final StringBuilder msg = new StringBuilder();
                 for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {

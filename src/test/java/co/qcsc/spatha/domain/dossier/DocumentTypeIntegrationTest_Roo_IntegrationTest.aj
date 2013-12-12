@@ -6,6 +6,7 @@ package co.qcsc.spatha.domain.dossier;
 import co.qcsc.spatha.db.dossier.DocumentTypeRepository;
 import co.qcsc.spatha.domain.dossier.DocumentTypeDataOnDemand;
 import co.qcsc.spatha.domain.dossier.DocumentTypeIntegrationTest;
+import co.qcsc.spatha.service.dossier.DocumentTypeService;
 import java.util.Iterator;
 import java.util.List;
 import javax.validation.ConstraintViolation;
@@ -30,44 +31,47 @@ privileged aspect DocumentTypeIntegrationTest_Roo_IntegrationTest {
     DocumentTypeDataOnDemand DocumentTypeIntegrationTest.dod;
     
     @Autowired
+    DocumentTypeService DocumentTypeIntegrationTest.documentTypeService;
+    
+    @Autowired
     DocumentTypeRepository DocumentTypeIntegrationTest.documentTypeRepository;
     
     @Test
-    public void DocumentTypeIntegrationTest.testCount() {
+    public void DocumentTypeIntegrationTest.testCountAllDocumentTypes() {
         Assert.assertNotNull("Data on demand for 'DocumentType' failed to initialize correctly", dod.getRandomDocumentType());
-        long count = documentTypeRepository.count();
+        long count = documentTypeService.countAllDocumentTypes();
         Assert.assertTrue("Counter for 'DocumentType' incorrectly reported there were no entries", count > 0);
     }
     
     @Test
-    public void DocumentTypeIntegrationTest.testFind() {
+    public void DocumentTypeIntegrationTest.testFindDocumentType() {
         DocumentType obj = dod.getRandomDocumentType();
         Assert.assertNotNull("Data on demand for 'DocumentType' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'DocumentType' failed to provide an identifier", id);
-        obj = documentTypeRepository.findOne(id);
+        obj = documentTypeService.findDocumentType(id);
         Assert.assertNotNull("Find method for 'DocumentType' illegally returned null for id '" + id + "'", obj);
         Assert.assertEquals("Find method for 'DocumentType' returned the incorrect identifier", id, obj.getId());
     }
     
     @Test
-    public void DocumentTypeIntegrationTest.testFindAll() {
+    public void DocumentTypeIntegrationTest.testFindAllDocumentTypes() {
         Assert.assertNotNull("Data on demand for 'DocumentType' failed to initialize correctly", dod.getRandomDocumentType());
-        long count = documentTypeRepository.count();
+        long count = documentTypeService.countAllDocumentTypes();
         Assert.assertTrue("Too expensive to perform a find all test for 'DocumentType', as there are " + count + " entries; set the findAllMaximum to exceed this value or set findAll=false on the integration test annotation to disable the test", count < 250);
-        List<DocumentType> result = documentTypeRepository.findAll();
+        List<DocumentType> result = documentTypeService.findAllDocumentTypes();
         Assert.assertNotNull("Find all method for 'DocumentType' illegally returned null", result);
         Assert.assertTrue("Find all method for 'DocumentType' failed to return any data", result.size() > 0);
     }
     
     @Test
-    public void DocumentTypeIntegrationTest.testFindEntries() {
+    public void DocumentTypeIntegrationTest.testFindDocumentTypeEntries() {
         Assert.assertNotNull("Data on demand for 'DocumentType' failed to initialize correctly", dod.getRandomDocumentType());
-        long count = documentTypeRepository.count();
+        long count = documentTypeService.countAllDocumentTypes();
         if (count > 20) count = 20;
         int firstResult = 0;
         int maxResults = (int) count;
-        List<DocumentType> result = documentTypeRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
+        List<DocumentType> result = documentTypeService.findDocumentTypeEntries(firstResult, maxResults);
         Assert.assertNotNull("Find entries method for 'DocumentType' illegally returned null", result);
         Assert.assertEquals("Find entries method for 'DocumentType' returned an incorrect number of entries", count, result.size());
     }
@@ -78,7 +82,7 @@ privileged aspect DocumentTypeIntegrationTest_Roo_IntegrationTest {
         Assert.assertNotNull("Data on demand for 'DocumentType' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'DocumentType' failed to provide an identifier", id);
-        obj = documentTypeRepository.findOne(id);
+        obj = documentTypeService.findDocumentType(id);
         Assert.assertNotNull("Find method for 'DocumentType' illegally returned null for id '" + id + "'", obj);
         boolean modified =  dod.modifyDocumentType(obj);
         Integer currentVersion = obj.getVersion();
@@ -87,28 +91,28 @@ privileged aspect DocumentTypeIntegrationTest_Roo_IntegrationTest {
     }
     
     @Test
-    public void DocumentTypeIntegrationTest.testSaveUpdate() {
+    public void DocumentTypeIntegrationTest.testUpdateDocumentTypeUpdate() {
         DocumentType obj = dod.getRandomDocumentType();
         Assert.assertNotNull("Data on demand for 'DocumentType' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'DocumentType' failed to provide an identifier", id);
-        obj = documentTypeRepository.findOne(id);
+        obj = documentTypeService.findDocumentType(id);
         boolean modified =  dod.modifyDocumentType(obj);
         Integer currentVersion = obj.getVersion();
-        DocumentType merged = documentTypeRepository.save(obj);
+        DocumentType merged = documentTypeService.updateDocumentType(obj);
         documentTypeRepository.flush();
         Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
         Assert.assertTrue("Version for 'DocumentType' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);
     }
     
     @Test
-    public void DocumentTypeIntegrationTest.testSave() {
+    public void DocumentTypeIntegrationTest.testSaveDocumentType() {
         Assert.assertNotNull("Data on demand for 'DocumentType' failed to initialize correctly", dod.getRandomDocumentType());
         DocumentType obj = dod.getNewTransientDocumentType(Integer.MAX_VALUE);
         Assert.assertNotNull("Data on demand for 'DocumentType' failed to provide a new transient entity", obj);
         Assert.assertNull("Expected 'DocumentType' identifier to be null", obj.getId());
         try {
-            documentTypeRepository.save(obj);
+            documentTypeService.saveDocumentType(obj);
         } catch (final ConstraintViolationException e) {
             final StringBuilder msg = new StringBuilder();
             for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
@@ -122,15 +126,15 @@ privileged aspect DocumentTypeIntegrationTest_Roo_IntegrationTest {
     }
     
     @Test
-    public void DocumentTypeIntegrationTest.testDelete() {
+    public void DocumentTypeIntegrationTest.testDeleteDocumentType() {
         DocumentType obj = dod.getRandomDocumentType();
         Assert.assertNotNull("Data on demand for 'DocumentType' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'DocumentType' failed to provide an identifier", id);
-        obj = documentTypeRepository.findOne(id);
-        documentTypeRepository.delete(obj);
+        obj = documentTypeService.findDocumentType(id);
+        documentTypeService.deleteDocumentType(obj);
         documentTypeRepository.flush();
-        Assert.assertNull("Failed to remove 'DocumentType' with identifier '" + id + "'", documentTypeRepository.findOne(id));
+        Assert.assertNull("Failed to remove 'DocumentType' with identifier '" + id + "'", documentTypeService.findDocumentType(id));
     }
     
 }

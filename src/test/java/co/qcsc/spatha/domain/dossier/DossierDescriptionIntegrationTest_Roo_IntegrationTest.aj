@@ -6,6 +6,7 @@ package co.qcsc.spatha.domain.dossier;
 import co.qcsc.spatha.db.dossier.DossierDescriptionRepository;
 import co.qcsc.spatha.domain.dossier.DossierDescriptionDataOnDemand;
 import co.qcsc.spatha.domain.dossier.DossierDescriptionIntegrationTest;
+import co.qcsc.spatha.service.dossier.DossierDescriptionService;
 import java.util.Iterator;
 import java.util.List;
 import javax.validation.ConstraintViolation;
@@ -30,44 +31,47 @@ privileged aspect DossierDescriptionIntegrationTest_Roo_IntegrationTest {
     DossierDescriptionDataOnDemand DossierDescriptionIntegrationTest.dod;
     
     @Autowired
+    DossierDescriptionService DossierDescriptionIntegrationTest.dossierDescriptionService;
+    
+    @Autowired
     DossierDescriptionRepository DossierDescriptionIntegrationTest.dossierDescriptionRepository;
     
     @Test
-    public void DossierDescriptionIntegrationTest.testCount() {
+    public void DossierDescriptionIntegrationTest.testCountAllDossierDescriptions() {
         Assert.assertNotNull("Data on demand for 'DossierDescription' failed to initialize correctly", dod.getRandomDossierDescription());
-        long count = dossierDescriptionRepository.count();
+        long count = dossierDescriptionService.countAllDossierDescriptions();
         Assert.assertTrue("Counter for 'DossierDescription' incorrectly reported there were no entries", count > 0);
     }
     
     @Test
-    public void DossierDescriptionIntegrationTest.testFind() {
+    public void DossierDescriptionIntegrationTest.testFindDossierDescription() {
         DossierDescription obj = dod.getRandomDossierDescription();
         Assert.assertNotNull("Data on demand for 'DossierDescription' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'DossierDescription' failed to provide an identifier", id);
-        obj = dossierDescriptionRepository.findOne(id);
+        obj = dossierDescriptionService.findDossierDescription(id);
         Assert.assertNotNull("Find method for 'DossierDescription' illegally returned null for id '" + id + "'", obj);
         Assert.assertEquals("Find method for 'DossierDescription' returned the incorrect identifier", id, obj.getId());
     }
     
     @Test
-    public void DossierDescriptionIntegrationTest.testFindAll() {
+    public void DossierDescriptionIntegrationTest.testFindAllDossierDescriptions() {
         Assert.assertNotNull("Data on demand for 'DossierDescription' failed to initialize correctly", dod.getRandomDossierDescription());
-        long count = dossierDescriptionRepository.count();
+        long count = dossierDescriptionService.countAllDossierDescriptions();
         Assert.assertTrue("Too expensive to perform a find all test for 'DossierDescription', as there are " + count + " entries; set the findAllMaximum to exceed this value or set findAll=false on the integration test annotation to disable the test", count < 250);
-        List<DossierDescription> result = dossierDescriptionRepository.findAll();
+        List<DossierDescription> result = dossierDescriptionService.findAllDossierDescriptions();
         Assert.assertNotNull("Find all method for 'DossierDescription' illegally returned null", result);
         Assert.assertTrue("Find all method for 'DossierDescription' failed to return any data", result.size() > 0);
     }
     
     @Test
-    public void DossierDescriptionIntegrationTest.testFindEntries() {
+    public void DossierDescriptionIntegrationTest.testFindDossierDescriptionEntries() {
         Assert.assertNotNull("Data on demand for 'DossierDescription' failed to initialize correctly", dod.getRandomDossierDescription());
-        long count = dossierDescriptionRepository.count();
+        long count = dossierDescriptionService.countAllDossierDescriptions();
         if (count > 20) count = 20;
         int firstResult = 0;
         int maxResults = (int) count;
-        List<DossierDescription> result = dossierDescriptionRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
+        List<DossierDescription> result = dossierDescriptionService.findDossierDescriptionEntries(firstResult, maxResults);
         Assert.assertNotNull("Find entries method for 'DossierDescription' illegally returned null", result);
         Assert.assertEquals("Find entries method for 'DossierDescription' returned an incorrect number of entries", count, result.size());
     }
@@ -78,7 +82,7 @@ privileged aspect DossierDescriptionIntegrationTest_Roo_IntegrationTest {
         Assert.assertNotNull("Data on demand for 'DossierDescription' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'DossierDescription' failed to provide an identifier", id);
-        obj = dossierDescriptionRepository.findOne(id);
+        obj = dossierDescriptionService.findDossierDescription(id);
         Assert.assertNotNull("Find method for 'DossierDescription' illegally returned null for id '" + id + "'", obj);
         boolean modified =  dod.modifyDossierDescription(obj);
         Integer currentVersion = obj.getVersion();
@@ -87,28 +91,28 @@ privileged aspect DossierDescriptionIntegrationTest_Roo_IntegrationTest {
     }
     
     @Test
-    public void DossierDescriptionIntegrationTest.testSaveUpdate() {
+    public void DossierDescriptionIntegrationTest.testUpdateDossierDescriptionUpdate() {
         DossierDescription obj = dod.getRandomDossierDescription();
         Assert.assertNotNull("Data on demand for 'DossierDescription' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'DossierDescription' failed to provide an identifier", id);
-        obj = dossierDescriptionRepository.findOne(id);
+        obj = dossierDescriptionService.findDossierDescription(id);
         boolean modified =  dod.modifyDossierDescription(obj);
         Integer currentVersion = obj.getVersion();
-        DossierDescription merged = dossierDescriptionRepository.save(obj);
+        DossierDescription merged = dossierDescriptionService.updateDossierDescription(obj);
         dossierDescriptionRepository.flush();
         Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
         Assert.assertTrue("Version for 'DossierDescription' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);
     }
     
     @Test
-    public void DossierDescriptionIntegrationTest.testSave() {
+    public void DossierDescriptionIntegrationTest.testSaveDossierDescription() {
         Assert.assertNotNull("Data on demand for 'DossierDescription' failed to initialize correctly", dod.getRandomDossierDescription());
         DossierDescription obj = dod.getNewTransientDossierDescription(Integer.MAX_VALUE);
         Assert.assertNotNull("Data on demand for 'DossierDescription' failed to provide a new transient entity", obj);
         Assert.assertNull("Expected 'DossierDescription' identifier to be null", obj.getId());
         try {
-            dossierDescriptionRepository.save(obj);
+            dossierDescriptionService.saveDossierDescription(obj);
         } catch (final ConstraintViolationException e) {
             final StringBuilder msg = new StringBuilder();
             for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
@@ -122,15 +126,15 @@ privileged aspect DossierDescriptionIntegrationTest_Roo_IntegrationTest {
     }
     
     @Test
-    public void DossierDescriptionIntegrationTest.testDelete() {
+    public void DossierDescriptionIntegrationTest.testDeleteDossierDescription() {
         DossierDescription obj = dod.getRandomDossierDescription();
         Assert.assertNotNull("Data on demand for 'DossierDescription' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'DossierDescription' failed to provide an identifier", id);
-        obj = dossierDescriptionRepository.findOne(id);
-        dossierDescriptionRepository.delete(obj);
+        obj = dossierDescriptionService.findDossierDescription(id);
+        dossierDescriptionService.deleteDossierDescription(obj);
         dossierDescriptionRepository.flush();
-        Assert.assertNull("Failed to remove 'DossierDescription' with identifier '" + id + "'", dossierDescriptionRepository.findOne(id));
+        Assert.assertNull("Failed to remove 'DossierDescription' with identifier '" + id + "'", dossierDescriptionService.findDossierDescription(id));
     }
     
 }

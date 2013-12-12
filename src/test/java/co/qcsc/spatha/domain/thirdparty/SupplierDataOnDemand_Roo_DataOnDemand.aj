@@ -6,6 +6,7 @@ package co.qcsc.spatha.domain.thirdparty;
 import co.qcsc.spatha.db.thirdparty.SupplierRepository;
 import co.qcsc.spatha.domain.thirdparty.Supplier;
 import co.qcsc.spatha.domain.thirdparty.SupplierDataOnDemand;
+import co.qcsc.spatha.service.thirdparty.SupplierService;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -23,6 +24,9 @@ privileged aspect SupplierDataOnDemand_Roo_DataOnDemand {
     private Random SupplierDataOnDemand.rnd = new SecureRandom();
     
     private List<Supplier> SupplierDataOnDemand.data;
+    
+    @Autowired
+    SupplierService SupplierDataOnDemand.supplierService;
     
     @Autowired
     SupplierRepository SupplierDataOnDemand.supplierRepository;
@@ -54,14 +58,14 @@ privileged aspect SupplierDataOnDemand_Roo_DataOnDemand {
         }
         Supplier obj = data.get(index);
         Long id = obj.getId();
-        return supplierRepository.findOne(id);
+        return supplierService.findSupplier(id);
     }
     
     public Supplier SupplierDataOnDemand.getRandomSupplier() {
         init();
         Supplier obj = data.get(rnd.nextInt(data.size()));
         Long id = obj.getId();
-        return supplierRepository.findOne(id);
+        return supplierService.findSupplier(id);
     }
     
     public boolean SupplierDataOnDemand.modifySupplier(Supplier obj) {
@@ -71,7 +75,7 @@ privileged aspect SupplierDataOnDemand_Roo_DataOnDemand {
     public void SupplierDataOnDemand.init() {
         int from = 0;
         int to = 10;
-        data = supplierRepository.findAll(new org.springframework.data.domain.PageRequest(from / to, to)).getContent();
+        data = supplierService.findSupplierEntries(from, to);
         if (data == null) {
             throw new IllegalStateException("Find entries implementation for 'Supplier' illegally returned null");
         }
@@ -83,7 +87,7 @@ privileged aspect SupplierDataOnDemand_Roo_DataOnDemand {
         for (int i = 0; i < 10; i++) {
             Supplier obj = getNewTransientSupplier(i);
             try {
-                supplierRepository.save(obj);
+                supplierService.saveSupplier(obj);
             } catch (final ConstraintViolationException e) {
                 final StringBuilder msg = new StringBuilder();
                 for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {

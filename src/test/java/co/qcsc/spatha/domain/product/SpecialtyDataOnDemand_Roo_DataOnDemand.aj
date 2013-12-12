@@ -6,6 +6,7 @@ package co.qcsc.spatha.domain.product;
 import co.qcsc.spatha.db.product.SpecialtyRepository;
 import co.qcsc.spatha.domain.product.Specialty;
 import co.qcsc.spatha.domain.product.SpecialtyDataOnDemand;
+import co.qcsc.spatha.service.product.SpecialtyService;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -23,6 +24,9 @@ privileged aspect SpecialtyDataOnDemand_Roo_DataOnDemand {
     private Random SpecialtyDataOnDemand.rnd = new SecureRandom();
     
     private List<Specialty> SpecialtyDataOnDemand.data;
+    
+    @Autowired
+    SpecialtyService SpecialtyDataOnDemand.specialtyService;
     
     @Autowired
     SpecialtyRepository SpecialtyDataOnDemand.specialtyRepository;
@@ -48,14 +52,14 @@ privileged aspect SpecialtyDataOnDemand_Roo_DataOnDemand {
         }
         Specialty obj = data.get(index);
         Long id = obj.getId();
-        return specialtyRepository.findOne(id);
+        return specialtyService.findSpecialty(id);
     }
     
     public Specialty SpecialtyDataOnDemand.getRandomSpecialty() {
         init();
         Specialty obj = data.get(rnd.nextInt(data.size()));
         Long id = obj.getId();
-        return specialtyRepository.findOne(id);
+        return specialtyService.findSpecialty(id);
     }
     
     public boolean SpecialtyDataOnDemand.modifySpecialty(Specialty obj) {
@@ -65,7 +69,7 @@ privileged aspect SpecialtyDataOnDemand_Roo_DataOnDemand {
     public void SpecialtyDataOnDemand.init() {
         int from = 0;
         int to = 10;
-        data = specialtyRepository.findAll(new org.springframework.data.domain.PageRequest(from / to, to)).getContent();
+        data = specialtyService.findSpecialtyEntries(from, to);
         if (data == null) {
             throw new IllegalStateException("Find entries implementation for 'Specialty' illegally returned null");
         }
@@ -77,7 +81,7 @@ privileged aspect SpecialtyDataOnDemand_Roo_DataOnDemand {
         for (int i = 0; i < 10; i++) {
             Specialty obj = getNewTransientSpecialty(i);
             try {
-                specialtyRepository.save(obj);
+                specialtyService.saveSpecialty(obj);
             } catch (final ConstraintViolationException e) {
                 final StringBuilder msg = new StringBuilder();
                 for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {

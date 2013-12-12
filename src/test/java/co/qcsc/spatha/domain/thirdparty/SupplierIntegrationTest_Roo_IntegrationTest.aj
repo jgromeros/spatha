@@ -6,6 +6,7 @@ package co.qcsc.spatha.domain.thirdparty;
 import co.qcsc.spatha.db.thirdparty.SupplierRepository;
 import co.qcsc.spatha.domain.thirdparty.SupplierDataOnDemand;
 import co.qcsc.spatha.domain.thirdparty.SupplierIntegrationTest;
+import co.qcsc.spatha.service.thirdparty.SupplierService;
 import java.util.Iterator;
 import java.util.List;
 import javax.validation.ConstraintViolation;
@@ -30,44 +31,47 @@ privileged aspect SupplierIntegrationTest_Roo_IntegrationTest {
     SupplierDataOnDemand SupplierIntegrationTest.dod;
     
     @Autowired
+    SupplierService SupplierIntegrationTest.supplierService;
+    
+    @Autowired
     SupplierRepository SupplierIntegrationTest.supplierRepository;
     
     @Test
-    public void SupplierIntegrationTest.testCount() {
+    public void SupplierIntegrationTest.testCountAllSuppliers() {
         Assert.assertNotNull("Data on demand for 'Supplier' failed to initialize correctly", dod.getRandomSupplier());
-        long count = supplierRepository.count();
+        long count = supplierService.countAllSuppliers();
         Assert.assertTrue("Counter for 'Supplier' incorrectly reported there were no entries", count > 0);
     }
     
     @Test
-    public void SupplierIntegrationTest.testFind() {
+    public void SupplierIntegrationTest.testFindSupplier() {
         Supplier obj = dod.getRandomSupplier();
         Assert.assertNotNull("Data on demand for 'Supplier' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'Supplier' failed to provide an identifier", id);
-        obj = supplierRepository.findOne(id);
+        obj = supplierService.findSupplier(id);
         Assert.assertNotNull("Find method for 'Supplier' illegally returned null for id '" + id + "'", obj);
         Assert.assertEquals("Find method for 'Supplier' returned the incorrect identifier", id, obj.getId());
     }
     
     @Test
-    public void SupplierIntegrationTest.testFindAll() {
+    public void SupplierIntegrationTest.testFindAllSuppliers() {
         Assert.assertNotNull("Data on demand for 'Supplier' failed to initialize correctly", dod.getRandomSupplier());
-        long count = supplierRepository.count();
+        long count = supplierService.countAllSuppliers();
         Assert.assertTrue("Too expensive to perform a find all test for 'Supplier', as there are " + count + " entries; set the findAllMaximum to exceed this value or set findAll=false on the integration test annotation to disable the test", count < 250);
-        List<Supplier> result = supplierRepository.findAll();
+        List<Supplier> result = supplierService.findAllSuppliers();
         Assert.assertNotNull("Find all method for 'Supplier' illegally returned null", result);
         Assert.assertTrue("Find all method for 'Supplier' failed to return any data", result.size() > 0);
     }
     
     @Test
-    public void SupplierIntegrationTest.testFindEntries() {
+    public void SupplierIntegrationTest.testFindSupplierEntries() {
         Assert.assertNotNull("Data on demand for 'Supplier' failed to initialize correctly", dod.getRandomSupplier());
-        long count = supplierRepository.count();
+        long count = supplierService.countAllSuppliers();
         if (count > 20) count = 20;
         int firstResult = 0;
         int maxResults = (int) count;
-        List<Supplier> result = supplierRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
+        List<Supplier> result = supplierService.findSupplierEntries(firstResult, maxResults);
         Assert.assertNotNull("Find entries method for 'Supplier' illegally returned null", result);
         Assert.assertEquals("Find entries method for 'Supplier' returned an incorrect number of entries", count, result.size());
     }
@@ -78,7 +82,7 @@ privileged aspect SupplierIntegrationTest_Roo_IntegrationTest {
         Assert.assertNotNull("Data on demand for 'Supplier' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'Supplier' failed to provide an identifier", id);
-        obj = supplierRepository.findOne(id);
+        obj = supplierService.findSupplier(id);
         Assert.assertNotNull("Find method for 'Supplier' illegally returned null for id '" + id + "'", obj);
         boolean modified =  dod.modifySupplier(obj);
         Integer currentVersion = obj.getVersion();
@@ -87,28 +91,28 @@ privileged aspect SupplierIntegrationTest_Roo_IntegrationTest {
     }
     
     @Test
-    public void SupplierIntegrationTest.testSaveUpdate() {
+    public void SupplierIntegrationTest.testUpdateSupplierUpdate() {
         Supplier obj = dod.getRandomSupplier();
         Assert.assertNotNull("Data on demand for 'Supplier' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'Supplier' failed to provide an identifier", id);
-        obj = supplierRepository.findOne(id);
+        obj = supplierService.findSupplier(id);
         boolean modified =  dod.modifySupplier(obj);
         Integer currentVersion = obj.getVersion();
-        Supplier merged = supplierRepository.save(obj);
+        Supplier merged = supplierService.updateSupplier(obj);
         supplierRepository.flush();
         Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
         Assert.assertTrue("Version for 'Supplier' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);
     }
     
     @Test
-    public void SupplierIntegrationTest.testSave() {
+    public void SupplierIntegrationTest.testSaveSupplier() {
         Assert.assertNotNull("Data on demand for 'Supplier' failed to initialize correctly", dod.getRandomSupplier());
         Supplier obj = dod.getNewTransientSupplier(Integer.MAX_VALUE);
         Assert.assertNotNull("Data on demand for 'Supplier' failed to provide a new transient entity", obj);
         Assert.assertNull("Expected 'Supplier' identifier to be null", obj.getId());
         try {
-            supplierRepository.save(obj);
+            supplierService.saveSupplier(obj);
         } catch (final ConstraintViolationException e) {
             final StringBuilder msg = new StringBuilder();
             for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
@@ -122,15 +126,15 @@ privileged aspect SupplierIntegrationTest_Roo_IntegrationTest {
     }
     
     @Test
-    public void SupplierIntegrationTest.testDelete() {
+    public void SupplierIntegrationTest.testDeleteSupplier() {
         Supplier obj = dod.getRandomSupplier();
         Assert.assertNotNull("Data on demand for 'Supplier' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'Supplier' failed to provide an identifier", id);
-        obj = supplierRepository.findOne(id);
-        supplierRepository.delete(obj);
+        obj = supplierService.findSupplier(id);
+        supplierService.deleteSupplier(obj);
         supplierRepository.flush();
-        Assert.assertNull("Failed to remove 'Supplier' with identifier '" + id + "'", supplierRepository.findOne(id));
+        Assert.assertNull("Failed to remove 'Supplier' with identifier '" + id + "'", supplierService.findSupplier(id));
     }
     
 }

@@ -6,6 +6,7 @@ package co.qcsc.spatha.domain.product;
 import co.qcsc.spatha.db.product.FamilyRepository;
 import co.qcsc.spatha.domain.product.Family;
 import co.qcsc.spatha.domain.product.FamilyDataOnDemand;
+import co.qcsc.spatha.service.product.FamilyService;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -23,6 +24,9 @@ privileged aspect FamilyDataOnDemand_Roo_DataOnDemand {
     private Random FamilyDataOnDemand.rnd = new SecureRandom();
     
     private List<Family> FamilyDataOnDemand.data;
+    
+    @Autowired
+    FamilyService FamilyDataOnDemand.familyService;
     
     @Autowired
     FamilyRepository FamilyDataOnDemand.familyRepository;
@@ -48,14 +52,14 @@ privileged aspect FamilyDataOnDemand_Roo_DataOnDemand {
         }
         Family obj = data.get(index);
         Long id = obj.getId();
-        return familyRepository.findOne(id);
+        return familyService.findFamily(id);
     }
     
     public Family FamilyDataOnDemand.getRandomFamily() {
         init();
         Family obj = data.get(rnd.nextInt(data.size()));
         Long id = obj.getId();
-        return familyRepository.findOne(id);
+        return familyService.findFamily(id);
     }
     
     public boolean FamilyDataOnDemand.modifyFamily(Family obj) {
@@ -65,7 +69,7 @@ privileged aspect FamilyDataOnDemand_Roo_DataOnDemand {
     public void FamilyDataOnDemand.init() {
         int from = 0;
         int to = 10;
-        data = familyRepository.findAll(new org.springframework.data.domain.PageRequest(from / to, to)).getContent();
+        data = familyService.findFamilyEntries(from, to);
         if (data == null) {
             throw new IllegalStateException("Find entries implementation for 'Family' illegally returned null");
         }
@@ -77,7 +81,7 @@ privileged aspect FamilyDataOnDemand_Roo_DataOnDemand {
         for (int i = 0; i < 10; i++) {
             Family obj = getNewTransientFamily(i);
             try {
-                familyRepository.save(obj);
+                familyService.saveFamily(obj);
             } catch (final ConstraintViolationException e) {
                 final StringBuilder msg = new StringBuilder();
                 for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {

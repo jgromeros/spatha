@@ -6,6 +6,7 @@ package co.qcsc.spatha.domain.purchase;
 import co.qcsc.spatha.db.purchase.PurchaseOrderRepository;
 import co.qcsc.spatha.domain.purchase.PurchaseOrderDataOnDemand;
 import co.qcsc.spatha.domain.purchase.PurchaseOrderIntegrationTest;
+import co.qcsc.spatha.service.purchase.PurchaseOrderService;
 import java.util.Iterator;
 import java.util.List;
 import javax.validation.ConstraintViolation;
@@ -30,44 +31,47 @@ privileged aspect PurchaseOrderIntegrationTest_Roo_IntegrationTest {
     PurchaseOrderDataOnDemand PurchaseOrderIntegrationTest.dod;
     
     @Autowired
+    PurchaseOrderService PurchaseOrderIntegrationTest.purchaseOrderService;
+    
+    @Autowired
     PurchaseOrderRepository PurchaseOrderIntegrationTest.purchaseOrderRepository;
     
     @Test
-    public void PurchaseOrderIntegrationTest.testCount() {
+    public void PurchaseOrderIntegrationTest.testCountAllPurchaseOrders() {
         Assert.assertNotNull("Data on demand for 'PurchaseOrder' failed to initialize correctly", dod.getRandomPurchaseOrder());
-        long count = purchaseOrderRepository.count();
+        long count = purchaseOrderService.countAllPurchaseOrders();
         Assert.assertTrue("Counter for 'PurchaseOrder' incorrectly reported there were no entries", count > 0);
     }
     
     @Test
-    public void PurchaseOrderIntegrationTest.testFind() {
+    public void PurchaseOrderIntegrationTest.testFindPurchaseOrder() {
         PurchaseOrder obj = dod.getRandomPurchaseOrder();
         Assert.assertNotNull("Data on demand for 'PurchaseOrder' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'PurchaseOrder' failed to provide an identifier", id);
-        obj = purchaseOrderRepository.findOne(id);
+        obj = purchaseOrderService.findPurchaseOrder(id);
         Assert.assertNotNull("Find method for 'PurchaseOrder' illegally returned null for id '" + id + "'", obj);
         Assert.assertEquals("Find method for 'PurchaseOrder' returned the incorrect identifier", id, obj.getId());
     }
     
     @Test
-    public void PurchaseOrderIntegrationTest.testFindAll() {
+    public void PurchaseOrderIntegrationTest.testFindAllPurchaseOrders() {
         Assert.assertNotNull("Data on demand for 'PurchaseOrder' failed to initialize correctly", dod.getRandomPurchaseOrder());
-        long count = purchaseOrderRepository.count();
+        long count = purchaseOrderService.countAllPurchaseOrders();
         Assert.assertTrue("Too expensive to perform a find all test for 'PurchaseOrder', as there are " + count + " entries; set the findAllMaximum to exceed this value or set findAll=false on the integration test annotation to disable the test", count < 250);
-        List<PurchaseOrder> result = purchaseOrderRepository.findAll();
+        List<PurchaseOrder> result = purchaseOrderService.findAllPurchaseOrders();
         Assert.assertNotNull("Find all method for 'PurchaseOrder' illegally returned null", result);
         Assert.assertTrue("Find all method for 'PurchaseOrder' failed to return any data", result.size() > 0);
     }
     
     @Test
-    public void PurchaseOrderIntegrationTest.testFindEntries() {
+    public void PurchaseOrderIntegrationTest.testFindPurchaseOrderEntries() {
         Assert.assertNotNull("Data on demand for 'PurchaseOrder' failed to initialize correctly", dod.getRandomPurchaseOrder());
-        long count = purchaseOrderRepository.count();
+        long count = purchaseOrderService.countAllPurchaseOrders();
         if (count > 20) count = 20;
         int firstResult = 0;
         int maxResults = (int) count;
-        List<PurchaseOrder> result = purchaseOrderRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
+        List<PurchaseOrder> result = purchaseOrderService.findPurchaseOrderEntries(firstResult, maxResults);
         Assert.assertNotNull("Find entries method for 'PurchaseOrder' illegally returned null", result);
         Assert.assertEquals("Find entries method for 'PurchaseOrder' returned an incorrect number of entries", count, result.size());
     }
@@ -78,7 +82,7 @@ privileged aspect PurchaseOrderIntegrationTest_Roo_IntegrationTest {
         Assert.assertNotNull("Data on demand for 'PurchaseOrder' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'PurchaseOrder' failed to provide an identifier", id);
-        obj = purchaseOrderRepository.findOne(id);
+        obj = purchaseOrderService.findPurchaseOrder(id);
         Assert.assertNotNull("Find method for 'PurchaseOrder' illegally returned null for id '" + id + "'", obj);
         boolean modified =  dod.modifyPurchaseOrder(obj);
         Integer currentVersion = obj.getVersion();
@@ -87,28 +91,28 @@ privileged aspect PurchaseOrderIntegrationTest_Roo_IntegrationTest {
     }
     
     @Test
-    public void PurchaseOrderIntegrationTest.testSaveUpdate() {
+    public void PurchaseOrderIntegrationTest.testUpdatePurchaseOrderUpdate() {
         PurchaseOrder obj = dod.getRandomPurchaseOrder();
         Assert.assertNotNull("Data on demand for 'PurchaseOrder' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'PurchaseOrder' failed to provide an identifier", id);
-        obj = purchaseOrderRepository.findOne(id);
+        obj = purchaseOrderService.findPurchaseOrder(id);
         boolean modified =  dod.modifyPurchaseOrder(obj);
         Integer currentVersion = obj.getVersion();
-        PurchaseOrder merged = purchaseOrderRepository.save(obj);
+        PurchaseOrder merged = purchaseOrderService.updatePurchaseOrder(obj);
         purchaseOrderRepository.flush();
         Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
         Assert.assertTrue("Version for 'PurchaseOrder' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);
     }
     
     @Test
-    public void PurchaseOrderIntegrationTest.testSave() {
+    public void PurchaseOrderIntegrationTest.testSavePurchaseOrder() {
         Assert.assertNotNull("Data on demand for 'PurchaseOrder' failed to initialize correctly", dod.getRandomPurchaseOrder());
         PurchaseOrder obj = dod.getNewTransientPurchaseOrder(Integer.MAX_VALUE);
         Assert.assertNotNull("Data on demand for 'PurchaseOrder' failed to provide a new transient entity", obj);
         Assert.assertNull("Expected 'PurchaseOrder' identifier to be null", obj.getId());
         try {
-            purchaseOrderRepository.save(obj);
+            purchaseOrderService.savePurchaseOrder(obj);
         } catch (final ConstraintViolationException e) {
             final StringBuilder msg = new StringBuilder();
             for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
@@ -122,15 +126,15 @@ privileged aspect PurchaseOrderIntegrationTest_Roo_IntegrationTest {
     }
     
     @Test
-    public void PurchaseOrderIntegrationTest.testDelete() {
+    public void PurchaseOrderIntegrationTest.testDeletePurchaseOrder() {
         PurchaseOrder obj = dod.getRandomPurchaseOrder();
         Assert.assertNotNull("Data on demand for 'PurchaseOrder' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'PurchaseOrder' failed to provide an identifier", id);
-        obj = purchaseOrderRepository.findOne(id);
-        purchaseOrderRepository.delete(obj);
+        obj = purchaseOrderService.findPurchaseOrder(id);
+        purchaseOrderService.deletePurchaseOrder(obj);
         purchaseOrderRepository.flush();
-        Assert.assertNull("Failed to remove 'PurchaseOrder' with identifier '" + id + "'", purchaseOrderRepository.findOne(id));
+        Assert.assertNull("Failed to remove 'PurchaseOrder' with identifier '" + id + "'", purchaseOrderService.findPurchaseOrder(id));
     }
     
 }

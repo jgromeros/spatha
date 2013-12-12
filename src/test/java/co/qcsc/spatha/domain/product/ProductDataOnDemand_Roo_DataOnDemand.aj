@@ -7,6 +7,7 @@ import co.qcsc.spatha.db.product.ProductRepository;
 import co.qcsc.spatha.domain.product.FamilyDataOnDemand;
 import co.qcsc.spatha.domain.product.Product;
 import co.qcsc.spatha.domain.product.ProductDataOnDemand;
+import co.qcsc.spatha.service.product.ProductService;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -27,6 +28,9 @@ privileged aspect ProductDataOnDemand_Roo_DataOnDemand {
     
     @Autowired
     FamilyDataOnDemand ProductDataOnDemand.familyDataOnDemand;
+    
+    @Autowired
+    ProductService ProductDataOnDemand.productService;
     
     @Autowired
     ProductRepository ProductDataOnDemand.productRepository;
@@ -100,14 +104,14 @@ privileged aspect ProductDataOnDemand_Roo_DataOnDemand {
         }
         Product obj = data.get(index);
         Long id = obj.getId();
-        return productRepository.findOne(id);
+        return productService.findProduct(id);
     }
     
     public Product ProductDataOnDemand.getRandomProduct() {
         init();
         Product obj = data.get(rnd.nextInt(data.size()));
         Long id = obj.getId();
-        return productRepository.findOne(id);
+        return productService.findProduct(id);
     }
     
     public boolean ProductDataOnDemand.modifyProduct(Product obj) {
@@ -117,7 +121,7 @@ privileged aspect ProductDataOnDemand_Roo_DataOnDemand {
     public void ProductDataOnDemand.init() {
         int from = 0;
         int to = 10;
-        data = productRepository.findAll(new org.springframework.data.domain.PageRequest(from / to, to)).getContent();
+        data = productService.findProductEntries(from, to);
         if (data == null) {
             throw new IllegalStateException("Find entries implementation for 'Product' illegally returned null");
         }
@@ -129,7 +133,7 @@ privileged aspect ProductDataOnDemand_Roo_DataOnDemand {
         for (int i = 0; i < 10; i++) {
             Product obj = getNewTransientProduct(i);
             try {
-                productRepository.save(obj);
+                productService.saveProduct(obj);
             } catch (final ConstraintViolationException e) {
                 final StringBuilder msg = new StringBuilder();
                 for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {

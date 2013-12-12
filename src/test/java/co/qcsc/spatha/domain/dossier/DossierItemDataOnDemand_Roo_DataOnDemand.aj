@@ -8,6 +8,7 @@ import co.qcsc.spatha.domain.dossier.DocumentTypeDataOnDemand;
 import co.qcsc.spatha.domain.dossier.DossierDataOnDemand;
 import co.qcsc.spatha.domain.dossier.DossierItem;
 import co.qcsc.spatha.domain.dossier.DossierItemDataOnDemand;
+import co.qcsc.spatha.service.dossier.DossierItemService;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -33,6 +34,9 @@ privileged aspect DossierItemDataOnDemand_Roo_DataOnDemand {
     DossierDataOnDemand DossierItemDataOnDemand.dossierDataOnDemand;
     
     @Autowired
+    DossierItemService DossierItemDataOnDemand.dossierItemService;
+    
+    @Autowired
     DossierItemRepository DossierItemDataOnDemand.dossierItemRepository;
     
     public DossierItem DossierItemDataOnDemand.getNewTransientDossierItem(int index) {
@@ -50,14 +54,14 @@ privileged aspect DossierItemDataOnDemand_Roo_DataOnDemand {
         }
         DossierItem obj = data.get(index);
         Long id = obj.getId();
-        return dossierItemRepository.findOne(id);
+        return dossierItemService.findDossierItem(id);
     }
     
     public DossierItem DossierItemDataOnDemand.getRandomDossierItem() {
         init();
         DossierItem obj = data.get(rnd.nextInt(data.size()));
         Long id = obj.getId();
-        return dossierItemRepository.findOne(id);
+        return dossierItemService.findDossierItem(id);
     }
     
     public boolean DossierItemDataOnDemand.modifyDossierItem(DossierItem obj) {
@@ -67,7 +71,7 @@ privileged aspect DossierItemDataOnDemand_Roo_DataOnDemand {
     public void DossierItemDataOnDemand.init() {
         int from = 0;
         int to = 10;
-        data = dossierItemRepository.findAll(new org.springframework.data.domain.PageRequest(from / to, to)).getContent();
+        data = dossierItemService.findDossierItemEntries(from, to);
         if (data == null) {
             throw new IllegalStateException("Find entries implementation for 'DossierItem' illegally returned null");
         }
@@ -79,7 +83,7 @@ privileged aspect DossierItemDataOnDemand_Roo_DataOnDemand {
         for (int i = 0; i < 10; i++) {
             DossierItem obj = getNewTransientDossierItem(i);
             try {
-                dossierItemRepository.save(obj);
+                dossierItemService.saveDossierItem(obj);
             } catch (final ConstraintViolationException e) {
                 final StringBuilder msg = new StringBuilder();
                 for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {

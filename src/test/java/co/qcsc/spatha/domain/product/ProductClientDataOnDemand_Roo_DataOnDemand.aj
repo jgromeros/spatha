@@ -7,7 +7,8 @@ import co.qcsc.spatha.db.product.ProductClientRepository;
 import co.qcsc.spatha.domain.product.ProductClient;
 import co.qcsc.spatha.domain.product.ProductClientDataOnDemand;
 import co.qcsc.spatha.domain.product.ProductDataOnDemand;
-import co.qcsc.spatha.domain.thirdparty.Client;
+import co.qcsc.spatha.domain.thirdparty.ClientDataOnDemand;
+import co.qcsc.spatha.service.product.ProductClientService;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -27,21 +28,21 @@ privileged aspect ProductClientDataOnDemand_Roo_DataOnDemand {
     private List<ProductClient> ProductClientDataOnDemand.data;
     
     @Autowired
+    ClientDataOnDemand ProductClientDataOnDemand.clientDataOnDemand;
+    
+    @Autowired
     ProductDataOnDemand ProductClientDataOnDemand.productDataOnDemand;
+    
+    @Autowired
+    ProductClientService ProductClientDataOnDemand.productClientService;
     
     @Autowired
     ProductClientRepository ProductClientDataOnDemand.productClientRepository;
     
     public ProductClient ProductClientDataOnDemand.getNewTransientProductClient(int index) {
         ProductClient obj = new ProductClient();
-        setClient(obj, index);
         setCode(obj, index);
         return obj;
-    }
-    
-    public void ProductClientDataOnDemand.setClient(ProductClient obj, int index) {
-        Client client = null;
-        obj.setClient(client);
     }
     
     public void ProductClientDataOnDemand.setCode(ProductClient obj, int index) {
@@ -59,14 +60,14 @@ privileged aspect ProductClientDataOnDemand_Roo_DataOnDemand {
         }
         ProductClient obj = data.get(index);
         Long id = obj.getId();
-        return productClientRepository.findOne(id);
+        return productClientService.findProductClient(id);
     }
     
     public ProductClient ProductClientDataOnDemand.getRandomProductClient() {
         init();
         ProductClient obj = data.get(rnd.nextInt(data.size()));
         Long id = obj.getId();
-        return productClientRepository.findOne(id);
+        return productClientService.findProductClient(id);
     }
     
     public boolean ProductClientDataOnDemand.modifyProductClient(ProductClient obj) {
@@ -76,7 +77,7 @@ privileged aspect ProductClientDataOnDemand_Roo_DataOnDemand {
     public void ProductClientDataOnDemand.init() {
         int from = 0;
         int to = 10;
-        data = productClientRepository.findAll(new org.springframework.data.domain.PageRequest(from / to, to)).getContent();
+        data = productClientService.findProductClientEntries(from, to);
         if (data == null) {
             throw new IllegalStateException("Find entries implementation for 'ProductClient' illegally returned null");
         }
@@ -88,7 +89,7 @@ privileged aspect ProductClientDataOnDemand_Roo_DataOnDemand {
         for (int i = 0; i < 10; i++) {
             ProductClient obj = getNewTransientProductClient(i);
             try {
-                productClientRepository.save(obj);
+                productClientService.saveProductClient(obj);
             } catch (final ConstraintViolationException e) {
                 final StringBuilder msg = new StringBuilder();
                 for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {

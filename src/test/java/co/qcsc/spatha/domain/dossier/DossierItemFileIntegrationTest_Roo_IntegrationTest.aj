@@ -6,6 +6,7 @@ package co.qcsc.spatha.domain.dossier;
 import co.qcsc.spatha.db.dossier.DossierItemFileRepository;
 import co.qcsc.spatha.domain.dossier.DossierItemFileDataOnDemand;
 import co.qcsc.spatha.domain.dossier.DossierItemFileIntegrationTest;
+import co.qcsc.spatha.service.dossier.DossierItemFileService;
 import java.util.Iterator;
 import java.util.List;
 import javax.validation.ConstraintViolation;
@@ -30,44 +31,47 @@ privileged aspect DossierItemFileIntegrationTest_Roo_IntegrationTest {
     DossierItemFileDataOnDemand DossierItemFileIntegrationTest.dod;
     
     @Autowired
+    DossierItemFileService DossierItemFileIntegrationTest.dossierItemFileService;
+    
+    @Autowired
     DossierItemFileRepository DossierItemFileIntegrationTest.dossierItemFileRepository;
     
     @Test
-    public void DossierItemFileIntegrationTest.testCount() {
+    public void DossierItemFileIntegrationTest.testCountAllDossierItemFiles() {
         Assert.assertNotNull("Data on demand for 'DossierItemFile' failed to initialize correctly", dod.getRandomDossierItemFile());
-        long count = dossierItemFileRepository.count();
+        long count = dossierItemFileService.countAllDossierItemFiles();
         Assert.assertTrue("Counter for 'DossierItemFile' incorrectly reported there were no entries", count > 0);
     }
     
     @Test
-    public void DossierItemFileIntegrationTest.testFind() {
+    public void DossierItemFileIntegrationTest.testFindDossierItemFile() {
         DossierItemFile obj = dod.getRandomDossierItemFile();
         Assert.assertNotNull("Data on demand for 'DossierItemFile' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'DossierItemFile' failed to provide an identifier", id);
-        obj = dossierItemFileRepository.findOne(id);
+        obj = dossierItemFileService.findDossierItemFile(id);
         Assert.assertNotNull("Find method for 'DossierItemFile' illegally returned null for id '" + id + "'", obj);
         Assert.assertEquals("Find method for 'DossierItemFile' returned the incorrect identifier", id, obj.getId());
     }
     
     @Test
-    public void DossierItemFileIntegrationTest.testFindAll() {
+    public void DossierItemFileIntegrationTest.testFindAllDossierItemFiles() {
         Assert.assertNotNull("Data on demand for 'DossierItemFile' failed to initialize correctly", dod.getRandomDossierItemFile());
-        long count = dossierItemFileRepository.count();
+        long count = dossierItemFileService.countAllDossierItemFiles();
         Assert.assertTrue("Too expensive to perform a find all test for 'DossierItemFile', as there are " + count + " entries; set the findAllMaximum to exceed this value or set findAll=false on the integration test annotation to disable the test", count < 250);
-        List<DossierItemFile> result = dossierItemFileRepository.findAll();
+        List<DossierItemFile> result = dossierItemFileService.findAllDossierItemFiles();
         Assert.assertNotNull("Find all method for 'DossierItemFile' illegally returned null", result);
         Assert.assertTrue("Find all method for 'DossierItemFile' failed to return any data", result.size() > 0);
     }
     
     @Test
-    public void DossierItemFileIntegrationTest.testFindEntries() {
+    public void DossierItemFileIntegrationTest.testFindDossierItemFileEntries() {
         Assert.assertNotNull("Data on demand for 'DossierItemFile' failed to initialize correctly", dod.getRandomDossierItemFile());
-        long count = dossierItemFileRepository.count();
+        long count = dossierItemFileService.countAllDossierItemFiles();
         if (count > 20) count = 20;
         int firstResult = 0;
         int maxResults = (int) count;
-        List<DossierItemFile> result = dossierItemFileRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
+        List<DossierItemFile> result = dossierItemFileService.findDossierItemFileEntries(firstResult, maxResults);
         Assert.assertNotNull("Find entries method for 'DossierItemFile' illegally returned null", result);
         Assert.assertEquals("Find entries method for 'DossierItemFile' returned an incorrect number of entries", count, result.size());
     }
@@ -78,7 +82,7 @@ privileged aspect DossierItemFileIntegrationTest_Roo_IntegrationTest {
         Assert.assertNotNull("Data on demand for 'DossierItemFile' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'DossierItemFile' failed to provide an identifier", id);
-        obj = dossierItemFileRepository.findOne(id);
+        obj = dossierItemFileService.findDossierItemFile(id);
         Assert.assertNotNull("Find method for 'DossierItemFile' illegally returned null for id '" + id + "'", obj);
         boolean modified =  dod.modifyDossierItemFile(obj);
         Integer currentVersion = obj.getVersion();
@@ -87,28 +91,28 @@ privileged aspect DossierItemFileIntegrationTest_Roo_IntegrationTest {
     }
     
     @Test
-    public void DossierItemFileIntegrationTest.testSaveUpdate() {
+    public void DossierItemFileIntegrationTest.testUpdateDossierItemFileUpdate() {
         DossierItemFile obj = dod.getRandomDossierItemFile();
         Assert.assertNotNull("Data on demand for 'DossierItemFile' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'DossierItemFile' failed to provide an identifier", id);
-        obj = dossierItemFileRepository.findOne(id);
+        obj = dossierItemFileService.findDossierItemFile(id);
         boolean modified =  dod.modifyDossierItemFile(obj);
         Integer currentVersion = obj.getVersion();
-        DossierItemFile merged = dossierItemFileRepository.save(obj);
+        DossierItemFile merged = dossierItemFileService.updateDossierItemFile(obj);
         dossierItemFileRepository.flush();
         Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
         Assert.assertTrue("Version for 'DossierItemFile' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);
     }
     
     @Test
-    public void DossierItemFileIntegrationTest.testSave() {
+    public void DossierItemFileIntegrationTest.testSaveDossierItemFile() {
         Assert.assertNotNull("Data on demand for 'DossierItemFile' failed to initialize correctly", dod.getRandomDossierItemFile());
         DossierItemFile obj = dod.getNewTransientDossierItemFile(Integer.MAX_VALUE);
         Assert.assertNotNull("Data on demand for 'DossierItemFile' failed to provide a new transient entity", obj);
         Assert.assertNull("Expected 'DossierItemFile' identifier to be null", obj.getId());
         try {
-            dossierItemFileRepository.save(obj);
+            dossierItemFileService.saveDossierItemFile(obj);
         } catch (final ConstraintViolationException e) {
             final StringBuilder msg = new StringBuilder();
             for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
@@ -122,15 +126,15 @@ privileged aspect DossierItemFileIntegrationTest_Roo_IntegrationTest {
     }
     
     @Test
-    public void DossierItemFileIntegrationTest.testDelete() {
+    public void DossierItemFileIntegrationTest.testDeleteDossierItemFile() {
         DossierItemFile obj = dod.getRandomDossierItemFile();
         Assert.assertNotNull("Data on demand for 'DossierItemFile' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'DossierItemFile' failed to provide an identifier", id);
-        obj = dossierItemFileRepository.findOne(id);
-        dossierItemFileRepository.delete(obj);
+        obj = dossierItemFileService.findDossierItemFile(id);
+        dossierItemFileService.deleteDossierItemFile(obj);
         dossierItemFileRepository.flush();
-        Assert.assertNull("Failed to remove 'DossierItemFile' with identifier '" + id + "'", dossierItemFileRepository.findOne(id));
+        Assert.assertNull("Failed to remove 'DossierItemFile' with identifier '" + id + "'", dossierItemFileService.findDossierItemFile(id));
     }
     
 }

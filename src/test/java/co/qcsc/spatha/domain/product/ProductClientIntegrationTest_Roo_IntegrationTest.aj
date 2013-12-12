@@ -6,6 +6,7 @@ package co.qcsc.spatha.domain.product;
 import co.qcsc.spatha.db.product.ProductClientRepository;
 import co.qcsc.spatha.domain.product.ProductClientDataOnDemand;
 import co.qcsc.spatha.domain.product.ProductClientIntegrationTest;
+import co.qcsc.spatha.service.product.ProductClientService;
 import java.util.Iterator;
 import java.util.List;
 import javax.validation.ConstraintViolation;
@@ -30,44 +31,47 @@ privileged aspect ProductClientIntegrationTest_Roo_IntegrationTest {
     ProductClientDataOnDemand ProductClientIntegrationTest.dod;
     
     @Autowired
+    ProductClientService ProductClientIntegrationTest.productClientService;
+    
+    @Autowired
     ProductClientRepository ProductClientIntegrationTest.productClientRepository;
     
     @Test
-    public void ProductClientIntegrationTest.testCount() {
+    public void ProductClientIntegrationTest.testCountAllProductClients() {
         Assert.assertNotNull("Data on demand for 'ProductClient' failed to initialize correctly", dod.getRandomProductClient());
-        long count = productClientRepository.count();
+        long count = productClientService.countAllProductClients();
         Assert.assertTrue("Counter for 'ProductClient' incorrectly reported there were no entries", count > 0);
     }
     
     @Test
-    public void ProductClientIntegrationTest.testFind() {
+    public void ProductClientIntegrationTest.testFindProductClient() {
         ProductClient obj = dod.getRandomProductClient();
         Assert.assertNotNull("Data on demand for 'ProductClient' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'ProductClient' failed to provide an identifier", id);
-        obj = productClientRepository.findOne(id);
+        obj = productClientService.findProductClient(id);
         Assert.assertNotNull("Find method for 'ProductClient' illegally returned null for id '" + id + "'", obj);
         Assert.assertEquals("Find method for 'ProductClient' returned the incorrect identifier", id, obj.getId());
     }
     
     @Test
-    public void ProductClientIntegrationTest.testFindAll() {
+    public void ProductClientIntegrationTest.testFindAllProductClients() {
         Assert.assertNotNull("Data on demand for 'ProductClient' failed to initialize correctly", dod.getRandomProductClient());
-        long count = productClientRepository.count();
+        long count = productClientService.countAllProductClients();
         Assert.assertTrue("Too expensive to perform a find all test for 'ProductClient', as there are " + count + " entries; set the findAllMaximum to exceed this value or set findAll=false on the integration test annotation to disable the test", count < 250);
-        List<ProductClient> result = productClientRepository.findAll();
+        List<ProductClient> result = productClientService.findAllProductClients();
         Assert.assertNotNull("Find all method for 'ProductClient' illegally returned null", result);
         Assert.assertTrue("Find all method for 'ProductClient' failed to return any data", result.size() > 0);
     }
     
     @Test
-    public void ProductClientIntegrationTest.testFindEntries() {
+    public void ProductClientIntegrationTest.testFindProductClientEntries() {
         Assert.assertNotNull("Data on demand for 'ProductClient' failed to initialize correctly", dod.getRandomProductClient());
-        long count = productClientRepository.count();
+        long count = productClientService.countAllProductClients();
         if (count > 20) count = 20;
         int firstResult = 0;
         int maxResults = (int) count;
-        List<ProductClient> result = productClientRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
+        List<ProductClient> result = productClientService.findProductClientEntries(firstResult, maxResults);
         Assert.assertNotNull("Find entries method for 'ProductClient' illegally returned null", result);
         Assert.assertEquals("Find entries method for 'ProductClient' returned an incorrect number of entries", count, result.size());
     }
@@ -78,7 +82,7 @@ privileged aspect ProductClientIntegrationTest_Roo_IntegrationTest {
         Assert.assertNotNull("Data on demand for 'ProductClient' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'ProductClient' failed to provide an identifier", id);
-        obj = productClientRepository.findOne(id);
+        obj = productClientService.findProductClient(id);
         Assert.assertNotNull("Find method for 'ProductClient' illegally returned null for id '" + id + "'", obj);
         boolean modified =  dod.modifyProductClient(obj);
         Integer currentVersion = obj.getVersion();
@@ -87,28 +91,28 @@ privileged aspect ProductClientIntegrationTest_Roo_IntegrationTest {
     }
     
     @Test
-    public void ProductClientIntegrationTest.testSaveUpdate() {
+    public void ProductClientIntegrationTest.testUpdateProductClientUpdate() {
         ProductClient obj = dod.getRandomProductClient();
         Assert.assertNotNull("Data on demand for 'ProductClient' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'ProductClient' failed to provide an identifier", id);
-        obj = productClientRepository.findOne(id);
+        obj = productClientService.findProductClient(id);
         boolean modified =  dod.modifyProductClient(obj);
         Integer currentVersion = obj.getVersion();
-        ProductClient merged = productClientRepository.save(obj);
+        ProductClient merged = productClientService.updateProductClient(obj);
         productClientRepository.flush();
         Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
         Assert.assertTrue("Version for 'ProductClient' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);
     }
     
     @Test
-    public void ProductClientIntegrationTest.testSave() {
+    public void ProductClientIntegrationTest.testSaveProductClient() {
         Assert.assertNotNull("Data on demand for 'ProductClient' failed to initialize correctly", dod.getRandomProductClient());
         ProductClient obj = dod.getNewTransientProductClient(Integer.MAX_VALUE);
         Assert.assertNotNull("Data on demand for 'ProductClient' failed to provide a new transient entity", obj);
         Assert.assertNull("Expected 'ProductClient' identifier to be null", obj.getId());
         try {
-            productClientRepository.save(obj);
+            productClientService.saveProductClient(obj);
         } catch (final ConstraintViolationException e) {
             final StringBuilder msg = new StringBuilder();
             for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
@@ -122,15 +126,15 @@ privileged aspect ProductClientIntegrationTest_Roo_IntegrationTest {
     }
     
     @Test
-    public void ProductClientIntegrationTest.testDelete() {
+    public void ProductClientIntegrationTest.testDeleteProductClient() {
         ProductClient obj = dod.getRandomProductClient();
         Assert.assertNotNull("Data on demand for 'ProductClient' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'ProductClient' failed to provide an identifier", id);
-        obj = productClientRepository.findOne(id);
-        productClientRepository.delete(obj);
+        obj = productClientService.findProductClient(id);
+        productClientService.deleteProductClient(obj);
         productClientRepository.flush();
-        Assert.assertNull("Failed to remove 'ProductClient' with identifier '" + id + "'", productClientRepository.findOne(id));
+        Assert.assertNull("Failed to remove 'ProductClient' with identifier '" + id + "'", productClientService.findProductClient(id));
     }
     
 }

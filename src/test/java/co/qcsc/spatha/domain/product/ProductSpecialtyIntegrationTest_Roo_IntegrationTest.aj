@@ -6,6 +6,7 @@ package co.qcsc.spatha.domain.product;
 import co.qcsc.spatha.db.product.ProductSpecialtyRepository;
 import co.qcsc.spatha.domain.product.ProductSpecialtyDataOnDemand;
 import co.qcsc.spatha.domain.product.ProductSpecialtyIntegrationTest;
+import co.qcsc.spatha.service.product.ProductSpecialtyService;
 import java.util.Iterator;
 import java.util.List;
 import javax.validation.ConstraintViolation;
@@ -30,44 +31,47 @@ privileged aspect ProductSpecialtyIntegrationTest_Roo_IntegrationTest {
     ProductSpecialtyDataOnDemand ProductSpecialtyIntegrationTest.dod;
     
     @Autowired
+    ProductSpecialtyService ProductSpecialtyIntegrationTest.productSpecialtyService;
+    
+    @Autowired
     ProductSpecialtyRepository ProductSpecialtyIntegrationTest.productSpecialtyRepository;
     
     @Test
-    public void ProductSpecialtyIntegrationTest.testCount() {
+    public void ProductSpecialtyIntegrationTest.testCountAllProductSpecialtys() {
         Assert.assertNotNull("Data on demand for 'ProductSpecialty' failed to initialize correctly", dod.getRandomProductSpecialty());
-        long count = productSpecialtyRepository.count();
+        long count = productSpecialtyService.countAllProductSpecialtys();
         Assert.assertTrue("Counter for 'ProductSpecialty' incorrectly reported there were no entries", count > 0);
     }
     
     @Test
-    public void ProductSpecialtyIntegrationTest.testFind() {
+    public void ProductSpecialtyIntegrationTest.testFindProductSpecialty() {
         ProductSpecialty obj = dod.getRandomProductSpecialty();
         Assert.assertNotNull("Data on demand for 'ProductSpecialty' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'ProductSpecialty' failed to provide an identifier", id);
-        obj = productSpecialtyRepository.findOne(id);
+        obj = productSpecialtyService.findProductSpecialty(id);
         Assert.assertNotNull("Find method for 'ProductSpecialty' illegally returned null for id '" + id + "'", obj);
         Assert.assertEquals("Find method for 'ProductSpecialty' returned the incorrect identifier", id, obj.getId());
     }
     
     @Test
-    public void ProductSpecialtyIntegrationTest.testFindAll() {
+    public void ProductSpecialtyIntegrationTest.testFindAllProductSpecialtys() {
         Assert.assertNotNull("Data on demand for 'ProductSpecialty' failed to initialize correctly", dod.getRandomProductSpecialty());
-        long count = productSpecialtyRepository.count();
+        long count = productSpecialtyService.countAllProductSpecialtys();
         Assert.assertTrue("Too expensive to perform a find all test for 'ProductSpecialty', as there are " + count + " entries; set the findAllMaximum to exceed this value or set findAll=false on the integration test annotation to disable the test", count < 250);
-        List<ProductSpecialty> result = productSpecialtyRepository.findAll();
+        List<ProductSpecialty> result = productSpecialtyService.findAllProductSpecialtys();
         Assert.assertNotNull("Find all method for 'ProductSpecialty' illegally returned null", result);
         Assert.assertTrue("Find all method for 'ProductSpecialty' failed to return any data", result.size() > 0);
     }
     
     @Test
-    public void ProductSpecialtyIntegrationTest.testFindEntries() {
+    public void ProductSpecialtyIntegrationTest.testFindProductSpecialtyEntries() {
         Assert.assertNotNull("Data on demand for 'ProductSpecialty' failed to initialize correctly", dod.getRandomProductSpecialty());
-        long count = productSpecialtyRepository.count();
+        long count = productSpecialtyService.countAllProductSpecialtys();
         if (count > 20) count = 20;
         int firstResult = 0;
         int maxResults = (int) count;
-        List<ProductSpecialty> result = productSpecialtyRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
+        List<ProductSpecialty> result = productSpecialtyService.findProductSpecialtyEntries(firstResult, maxResults);
         Assert.assertNotNull("Find entries method for 'ProductSpecialty' illegally returned null", result);
         Assert.assertEquals("Find entries method for 'ProductSpecialty' returned an incorrect number of entries", count, result.size());
     }
@@ -78,7 +82,7 @@ privileged aspect ProductSpecialtyIntegrationTest_Roo_IntegrationTest {
         Assert.assertNotNull("Data on demand for 'ProductSpecialty' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'ProductSpecialty' failed to provide an identifier", id);
-        obj = productSpecialtyRepository.findOne(id);
+        obj = productSpecialtyService.findProductSpecialty(id);
         Assert.assertNotNull("Find method for 'ProductSpecialty' illegally returned null for id '" + id + "'", obj);
         boolean modified =  dod.modifyProductSpecialty(obj);
         Integer currentVersion = obj.getVersion();
@@ -87,28 +91,28 @@ privileged aspect ProductSpecialtyIntegrationTest_Roo_IntegrationTest {
     }
     
     @Test
-    public void ProductSpecialtyIntegrationTest.testSaveUpdate() {
+    public void ProductSpecialtyIntegrationTest.testUpdateProductSpecialtyUpdate() {
         ProductSpecialty obj = dod.getRandomProductSpecialty();
         Assert.assertNotNull("Data on demand for 'ProductSpecialty' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'ProductSpecialty' failed to provide an identifier", id);
-        obj = productSpecialtyRepository.findOne(id);
+        obj = productSpecialtyService.findProductSpecialty(id);
         boolean modified =  dod.modifyProductSpecialty(obj);
         Integer currentVersion = obj.getVersion();
-        ProductSpecialty merged = productSpecialtyRepository.save(obj);
+        ProductSpecialty merged = productSpecialtyService.updateProductSpecialty(obj);
         productSpecialtyRepository.flush();
         Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
         Assert.assertTrue("Version for 'ProductSpecialty' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);
     }
     
     @Test
-    public void ProductSpecialtyIntegrationTest.testSave() {
+    public void ProductSpecialtyIntegrationTest.testSaveProductSpecialty() {
         Assert.assertNotNull("Data on demand for 'ProductSpecialty' failed to initialize correctly", dod.getRandomProductSpecialty());
         ProductSpecialty obj = dod.getNewTransientProductSpecialty(Integer.MAX_VALUE);
         Assert.assertNotNull("Data on demand for 'ProductSpecialty' failed to provide a new transient entity", obj);
         Assert.assertNull("Expected 'ProductSpecialty' identifier to be null", obj.getId());
         try {
-            productSpecialtyRepository.save(obj);
+            productSpecialtyService.saveProductSpecialty(obj);
         } catch (final ConstraintViolationException e) {
             final StringBuilder msg = new StringBuilder();
             for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
@@ -122,15 +126,15 @@ privileged aspect ProductSpecialtyIntegrationTest_Roo_IntegrationTest {
     }
     
     @Test
-    public void ProductSpecialtyIntegrationTest.testDelete() {
+    public void ProductSpecialtyIntegrationTest.testDeleteProductSpecialty() {
         ProductSpecialty obj = dod.getRandomProductSpecialty();
         Assert.assertNotNull("Data on demand for 'ProductSpecialty' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'ProductSpecialty' failed to provide an identifier", id);
-        obj = productSpecialtyRepository.findOne(id);
-        productSpecialtyRepository.delete(obj);
+        obj = productSpecialtyService.findProductSpecialty(id);
+        productSpecialtyService.deleteProductSpecialty(obj);
         productSpecialtyRepository.flush();
-        Assert.assertNull("Failed to remove 'ProductSpecialty' with identifier '" + id + "'", productSpecialtyRepository.findOne(id));
+        Assert.assertNull("Failed to remove 'ProductSpecialty' with identifier '" + id + "'", productSpecialtyService.findProductSpecialty(id));
     }
     
 }

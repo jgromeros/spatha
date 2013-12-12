@@ -6,7 +6,8 @@ package co.qcsc.spatha.domain.dossier;
 import co.qcsc.spatha.db.dossier.DocumentTypeRepository;
 import co.qcsc.spatha.domain.dossier.DocumentType;
 import co.qcsc.spatha.domain.dossier.DocumentTypeDataOnDemand;
-import co.qcsc.spatha.domain.dossier.DossierDescription;
+import co.qcsc.spatha.domain.dossier.DossierDescriptionDataOnDemand;
+import co.qcsc.spatha.service.dossier.DocumentTypeService;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -26,13 +27,18 @@ privileged aspect DocumentTypeDataOnDemand_Roo_DataOnDemand {
     private List<DocumentType> DocumentTypeDataOnDemand.data;
     
     @Autowired
+    DossierDescriptionDataOnDemand DocumentTypeDataOnDemand.dossierDescriptionDataOnDemand;
+    
+    @Autowired
+    DocumentTypeService DocumentTypeDataOnDemand.documentTypeService;
+    
+    @Autowired
     DocumentTypeRepository DocumentTypeDataOnDemand.documentTypeRepository;
     
     public DocumentType DocumentTypeDataOnDemand.getNewTransientDocumentType(int index) {
         DocumentType obj = new DocumentType();
         setCode(obj, index);
         setDocumentOrder(obj, index);
-        setDossierDescription(obj, index);
         setName(obj, index);
         return obj;
     }
@@ -45,11 +51,6 @@ privileged aspect DocumentTypeDataOnDemand_Roo_DataOnDemand {
     public void DocumentTypeDataOnDemand.setDocumentOrder(DocumentType obj, int index) {
         Integer documentOrder = new Integer(index);
         obj.setDocumentOrder(documentOrder);
-    }
-    
-    public void DocumentTypeDataOnDemand.setDossierDescription(DocumentType obj, int index) {
-        DossierDescription dossierDescription = null;
-        obj.setDossierDescription(dossierDescription);
     }
     
     public void DocumentTypeDataOnDemand.setName(DocumentType obj, int index) {
@@ -67,14 +68,14 @@ privileged aspect DocumentTypeDataOnDemand_Roo_DataOnDemand {
         }
         DocumentType obj = data.get(index);
         Long id = obj.getId();
-        return documentTypeRepository.findOne(id);
+        return documentTypeService.findDocumentType(id);
     }
     
     public DocumentType DocumentTypeDataOnDemand.getRandomDocumentType() {
         init();
         DocumentType obj = data.get(rnd.nextInt(data.size()));
         Long id = obj.getId();
-        return documentTypeRepository.findOne(id);
+        return documentTypeService.findDocumentType(id);
     }
     
     public boolean DocumentTypeDataOnDemand.modifyDocumentType(DocumentType obj) {
@@ -84,7 +85,7 @@ privileged aspect DocumentTypeDataOnDemand_Roo_DataOnDemand {
     public void DocumentTypeDataOnDemand.init() {
         int from = 0;
         int to = 10;
-        data = documentTypeRepository.findAll(new org.springframework.data.domain.PageRequest(from / to, to)).getContent();
+        data = documentTypeService.findDocumentTypeEntries(from, to);
         if (data == null) {
             throw new IllegalStateException("Find entries implementation for 'DocumentType' illegally returned null");
         }
@@ -96,7 +97,7 @@ privileged aspect DocumentTypeDataOnDemand_Roo_DataOnDemand {
         for (int i = 0; i < 10; i++) {
             DocumentType obj = getNewTransientDocumentType(i);
             try {
-                documentTypeRepository.save(obj);
+                documentTypeService.saveDocumentType(obj);
             } catch (final ConstraintViolationException e) {
                 final StringBuilder msg = new StringBuilder();
                 for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {

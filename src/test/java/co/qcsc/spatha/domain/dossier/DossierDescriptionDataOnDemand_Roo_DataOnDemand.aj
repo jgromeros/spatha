@@ -6,7 +6,8 @@ package co.qcsc.spatha.domain.dossier;
 import co.qcsc.spatha.db.dossier.DossierDescriptionRepository;
 import co.qcsc.spatha.domain.dossier.DossierDescription;
 import co.qcsc.spatha.domain.dossier.DossierDescriptionDataOnDemand;
-import co.qcsc.spatha.domain.thirdparty.Client;
+import co.qcsc.spatha.domain.thirdparty.ClientDataOnDemand;
+import co.qcsc.spatha.service.dossier.DossierDescriptionService;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -26,18 +27,18 @@ privileged aspect DossierDescriptionDataOnDemand_Roo_DataOnDemand {
     private List<DossierDescription> DossierDescriptionDataOnDemand.data;
     
     @Autowired
+    ClientDataOnDemand DossierDescriptionDataOnDemand.clientDataOnDemand;
+    
+    @Autowired
+    DossierDescriptionService DossierDescriptionDataOnDemand.dossierDescriptionService;
+    
+    @Autowired
     DossierDescriptionRepository DossierDescriptionDataOnDemand.dossierDescriptionRepository;
     
     public DossierDescription DossierDescriptionDataOnDemand.getNewTransientDossierDescription(int index) {
         DossierDescription obj = new DossierDescription();
-        setClient(obj, index);
         setName(obj, index);
         return obj;
-    }
-    
-    public void DossierDescriptionDataOnDemand.setClient(DossierDescription obj, int index) {
-        Client client = null;
-        obj.setClient(client);
     }
     
     public void DossierDescriptionDataOnDemand.setName(DossierDescription obj, int index) {
@@ -55,14 +56,14 @@ privileged aspect DossierDescriptionDataOnDemand_Roo_DataOnDemand {
         }
         DossierDescription obj = data.get(index);
         Long id = obj.getId();
-        return dossierDescriptionRepository.findOne(id);
+        return dossierDescriptionService.findDossierDescription(id);
     }
     
     public DossierDescription DossierDescriptionDataOnDemand.getRandomDossierDescription() {
         init();
         DossierDescription obj = data.get(rnd.nextInt(data.size()));
         Long id = obj.getId();
-        return dossierDescriptionRepository.findOne(id);
+        return dossierDescriptionService.findDossierDescription(id);
     }
     
     public boolean DossierDescriptionDataOnDemand.modifyDossierDescription(DossierDescription obj) {
@@ -72,7 +73,7 @@ privileged aspect DossierDescriptionDataOnDemand_Roo_DataOnDemand {
     public void DossierDescriptionDataOnDemand.init() {
         int from = 0;
         int to = 10;
-        data = dossierDescriptionRepository.findAll(new org.springframework.data.domain.PageRequest(from / to, to)).getContent();
+        data = dossierDescriptionService.findDossierDescriptionEntries(from, to);
         if (data == null) {
             throw new IllegalStateException("Find entries implementation for 'DossierDescription' illegally returned null");
         }
@@ -84,7 +85,7 @@ privileged aspect DossierDescriptionDataOnDemand_Roo_DataOnDemand {
         for (int i = 0; i < 10; i++) {
             DossierDescription obj = getNewTransientDossierDescription(i);
             try {
-                dossierDescriptionRepository.save(obj);
+                dossierDescriptionService.saveDossierDescription(obj);
             } catch (final ConstraintViolationException e) {
                 final StringBuilder msg = new StringBuilder();
                 for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {

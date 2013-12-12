@@ -6,8 +6,9 @@ package co.qcsc.spatha.domain.dossier;
 import co.qcsc.spatha.db.dossier.DossierRepository;
 import co.qcsc.spatha.domain.dossier.Dossier;
 import co.qcsc.spatha.domain.dossier.DossierDataOnDemand;
-import co.qcsc.spatha.domain.product.ProductSpecialty;
-import co.qcsc.spatha.domain.purchase.OrderItem;
+import co.qcsc.spatha.domain.product.ProductSpecialtyDataOnDemand;
+import co.qcsc.spatha.domain.purchase.OrderItemDataOnDemand;
+import co.qcsc.spatha.service.dossier.DossierService;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -27,24 +28,21 @@ privileged aspect DossierDataOnDemand_Roo_DataOnDemand {
     private List<Dossier> DossierDataOnDemand.data;
     
     @Autowired
+    OrderItemDataOnDemand DossierDataOnDemand.orderItemDataOnDemand;
+    
+    @Autowired
+    ProductSpecialtyDataOnDemand DossierDataOnDemand.productSpecialtyDataOnDemand;
+    
+    @Autowired
+    DossierService DossierDataOnDemand.dossierService;
+    
+    @Autowired
     DossierRepository DossierDataOnDemand.dossierRepository;
     
     public Dossier DossierDataOnDemand.getNewTransientDossier(int index) {
         Dossier obj = new Dossier();
-        setOrderItem(obj, index);
-        setSpecialty(obj, index);
         setTemplate(obj, index);
         return obj;
-    }
-    
-    public void DossierDataOnDemand.setOrderItem(Dossier obj, int index) {
-        OrderItem orderItem = null;
-        obj.setOrderItem(orderItem);
-    }
-    
-    public void DossierDataOnDemand.setSpecialty(Dossier obj, int index) {
-        ProductSpecialty specialty = null;
-        obj.setSpecialty(specialty);
     }
     
     public void DossierDataOnDemand.setTemplate(Dossier obj, int index) {
@@ -62,14 +60,14 @@ privileged aspect DossierDataOnDemand_Roo_DataOnDemand {
         }
         Dossier obj = data.get(index);
         Long id = obj.getId();
-        return dossierRepository.findOne(id);
+        return dossierService.findDossier(id);
     }
     
     public Dossier DossierDataOnDemand.getRandomDossier() {
         init();
         Dossier obj = data.get(rnd.nextInt(data.size()));
         Long id = obj.getId();
-        return dossierRepository.findOne(id);
+        return dossierService.findDossier(id);
     }
     
     public boolean DossierDataOnDemand.modifyDossier(Dossier obj) {
@@ -79,7 +77,7 @@ privileged aspect DossierDataOnDemand_Roo_DataOnDemand {
     public void DossierDataOnDemand.init() {
         int from = 0;
         int to = 10;
-        data = dossierRepository.findAll(new org.springframework.data.domain.PageRequest(from / to, to)).getContent();
+        data = dossierService.findDossierEntries(from, to);
         if (data == null) {
             throw new IllegalStateException("Find entries implementation for 'Dossier' illegally returned null");
         }
@@ -91,7 +89,7 @@ privileged aspect DossierDataOnDemand_Roo_DataOnDemand {
         for (int i = 0; i < 10; i++) {
             Dossier obj = getNewTransientDossier(i);
             try {
-                dossierRepository.save(obj);
+                dossierService.saveDossier(obj);
             } catch (final ConstraintViolationException e) {
                 final StringBuilder msg = new StringBuilder();
                 for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {

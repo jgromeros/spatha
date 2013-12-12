@@ -6,6 +6,7 @@ package co.qcsc.spatha.domain.product;
 import co.qcsc.spatha.db.product.SpecialtyRepository;
 import co.qcsc.spatha.domain.product.SpecialtyDataOnDemand;
 import co.qcsc.spatha.domain.product.SpecialtyIntegrationTest;
+import co.qcsc.spatha.service.product.SpecialtyService;
 import java.util.Iterator;
 import java.util.List;
 import javax.validation.ConstraintViolation;
@@ -30,44 +31,47 @@ privileged aspect SpecialtyIntegrationTest_Roo_IntegrationTest {
     SpecialtyDataOnDemand SpecialtyIntegrationTest.dod;
     
     @Autowired
+    SpecialtyService SpecialtyIntegrationTest.specialtyService;
+    
+    @Autowired
     SpecialtyRepository SpecialtyIntegrationTest.specialtyRepository;
     
     @Test
-    public void SpecialtyIntegrationTest.testCount() {
+    public void SpecialtyIntegrationTest.testCountAllSpecialtys() {
         Assert.assertNotNull("Data on demand for 'Specialty' failed to initialize correctly", dod.getRandomSpecialty());
-        long count = specialtyRepository.count();
+        long count = specialtyService.countAllSpecialtys();
         Assert.assertTrue("Counter for 'Specialty' incorrectly reported there were no entries", count > 0);
     }
     
     @Test
-    public void SpecialtyIntegrationTest.testFind() {
+    public void SpecialtyIntegrationTest.testFindSpecialty() {
         Specialty obj = dod.getRandomSpecialty();
         Assert.assertNotNull("Data on demand for 'Specialty' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'Specialty' failed to provide an identifier", id);
-        obj = specialtyRepository.findOne(id);
+        obj = specialtyService.findSpecialty(id);
         Assert.assertNotNull("Find method for 'Specialty' illegally returned null for id '" + id + "'", obj);
         Assert.assertEquals("Find method for 'Specialty' returned the incorrect identifier", id, obj.getId());
     }
     
     @Test
-    public void SpecialtyIntegrationTest.testFindAll() {
+    public void SpecialtyIntegrationTest.testFindAllSpecialtys() {
         Assert.assertNotNull("Data on demand for 'Specialty' failed to initialize correctly", dod.getRandomSpecialty());
-        long count = specialtyRepository.count();
+        long count = specialtyService.countAllSpecialtys();
         Assert.assertTrue("Too expensive to perform a find all test for 'Specialty', as there are " + count + " entries; set the findAllMaximum to exceed this value or set findAll=false on the integration test annotation to disable the test", count < 250);
-        List<Specialty> result = specialtyRepository.findAll();
+        List<Specialty> result = specialtyService.findAllSpecialtys();
         Assert.assertNotNull("Find all method for 'Specialty' illegally returned null", result);
         Assert.assertTrue("Find all method for 'Specialty' failed to return any data", result.size() > 0);
     }
     
     @Test
-    public void SpecialtyIntegrationTest.testFindEntries() {
+    public void SpecialtyIntegrationTest.testFindSpecialtyEntries() {
         Assert.assertNotNull("Data on demand for 'Specialty' failed to initialize correctly", dod.getRandomSpecialty());
-        long count = specialtyRepository.count();
+        long count = specialtyService.countAllSpecialtys();
         if (count > 20) count = 20;
         int firstResult = 0;
         int maxResults = (int) count;
-        List<Specialty> result = specialtyRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / maxResults, maxResults)).getContent();
+        List<Specialty> result = specialtyService.findSpecialtyEntries(firstResult, maxResults);
         Assert.assertNotNull("Find entries method for 'Specialty' illegally returned null", result);
         Assert.assertEquals("Find entries method for 'Specialty' returned an incorrect number of entries", count, result.size());
     }
@@ -78,7 +82,7 @@ privileged aspect SpecialtyIntegrationTest_Roo_IntegrationTest {
         Assert.assertNotNull("Data on demand for 'Specialty' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'Specialty' failed to provide an identifier", id);
-        obj = specialtyRepository.findOne(id);
+        obj = specialtyService.findSpecialty(id);
         Assert.assertNotNull("Find method for 'Specialty' illegally returned null for id '" + id + "'", obj);
         boolean modified =  dod.modifySpecialty(obj);
         Integer currentVersion = obj.getVersion();
@@ -87,28 +91,28 @@ privileged aspect SpecialtyIntegrationTest_Roo_IntegrationTest {
     }
     
     @Test
-    public void SpecialtyIntegrationTest.testSaveUpdate() {
+    public void SpecialtyIntegrationTest.testUpdateSpecialtyUpdate() {
         Specialty obj = dod.getRandomSpecialty();
         Assert.assertNotNull("Data on demand for 'Specialty' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'Specialty' failed to provide an identifier", id);
-        obj = specialtyRepository.findOne(id);
+        obj = specialtyService.findSpecialty(id);
         boolean modified =  dod.modifySpecialty(obj);
         Integer currentVersion = obj.getVersion();
-        Specialty merged = specialtyRepository.save(obj);
+        Specialty merged = specialtyService.updateSpecialty(obj);
         specialtyRepository.flush();
         Assert.assertEquals("Identifier of merged object not the same as identifier of original object", merged.getId(), id);
         Assert.assertTrue("Version for 'Specialty' failed to increment on merge and flush directive", (currentVersion != null && obj.getVersion() > currentVersion) || !modified);
     }
     
     @Test
-    public void SpecialtyIntegrationTest.testSave() {
+    public void SpecialtyIntegrationTest.testSaveSpecialty() {
         Assert.assertNotNull("Data on demand for 'Specialty' failed to initialize correctly", dod.getRandomSpecialty());
         Specialty obj = dod.getNewTransientSpecialty(Integer.MAX_VALUE);
         Assert.assertNotNull("Data on demand for 'Specialty' failed to provide a new transient entity", obj);
         Assert.assertNull("Expected 'Specialty' identifier to be null", obj.getId());
         try {
-            specialtyRepository.save(obj);
+            specialtyService.saveSpecialty(obj);
         } catch (final ConstraintViolationException e) {
             final StringBuilder msg = new StringBuilder();
             for (Iterator<ConstraintViolation<?>> iter = e.getConstraintViolations().iterator(); iter.hasNext();) {
@@ -122,15 +126,15 @@ privileged aspect SpecialtyIntegrationTest_Roo_IntegrationTest {
     }
     
     @Test
-    public void SpecialtyIntegrationTest.testDelete() {
+    public void SpecialtyIntegrationTest.testDeleteSpecialty() {
         Specialty obj = dod.getRandomSpecialty();
         Assert.assertNotNull("Data on demand for 'Specialty' failed to initialize correctly", obj);
         Long id = obj.getId();
         Assert.assertNotNull("Data on demand for 'Specialty' failed to provide an identifier", id);
-        obj = specialtyRepository.findOne(id);
-        specialtyRepository.delete(obj);
+        obj = specialtyService.findSpecialty(id);
+        specialtyService.deleteSpecialty(obj);
         specialtyRepository.flush();
-        Assert.assertNull("Failed to remove 'Specialty' with identifier '" + id + "'", specialtyRepository.findOne(id));
+        Assert.assertNull("Failed to remove 'Specialty' with identifier '" + id + "'", specialtyService.findSpecialty(id));
     }
     
 }
