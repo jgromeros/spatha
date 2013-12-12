@@ -4,6 +4,7 @@
 package co.qcsc.spatha.domain.dossier;
 
 import co.qcsc.spatha.domain.dossier.DocumentType;
+import co.qcsc.spatha.domain.dossier.DossierDescription;
 
 privileged aspect DocumentType_Roo_JavaBean {
     
@@ -29,6 +30,14 @@ privileged aspect DocumentType_Roo_JavaBean {
     
     public void DocumentType.setDocumentOrder(Integer documentOrder) {
         this.documentOrder = documentOrder;
+    }
+    
+    public DossierDescription DocumentType.getDossierDescription() {
+        return this.dossierDescription;
+    }
+    
+    public void DocumentType.setDossierDescription(DossierDescription dossierDescription) {
+        this.dossierDescription = dossierDescription;
     }
     
 }

@@ -3,7 +3,10 @@
 
 package co.qcsc.spatha.domain.thirdparty;
 
+import co.qcsc.spatha.domain.dossier.DossierDescription;
+import co.qcsc.spatha.domain.product.ProductClient;
 import co.qcsc.spatha.domain.thirdparty.Client;
+import java.util.Set;
 
 privileged aspect Client_Roo_JavaBean {
     
@@ -21,6 +24,22 @@ privileged aspect Client_Roo_JavaBean {
     
     public void Client.setName(String name) {
         this.name = name;
+    }
+    
+    public Set<DossierDescription> Client.getDossierDescriptions() {
+        return this.dossierDescriptions;
+    }
+    
+    public void Client.setDossierDescriptions(Set<DossierDescription> dossierDescriptions) {
+        this.dossierDescriptions = dossierDescriptions;
+    }
+    
+    public Set<ProductClient> Client.getProducts() {
+        return this.products;
+    }
+    
+    public void Client.setProducts(Set<ProductClient> products) {
+        this.products = products;
     }
     
 }

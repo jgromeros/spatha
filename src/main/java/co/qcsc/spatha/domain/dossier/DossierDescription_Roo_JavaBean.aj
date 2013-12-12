@@ -3,7 +3,10 @@
 
 package co.qcsc.spatha.domain.dossier;
 
+import co.qcsc.spatha.domain.dossier.DocumentType;
 import co.qcsc.spatha.domain.dossier.DossierDescription;
+import co.qcsc.spatha.domain.thirdparty.Client;
+import java.util.Set;
 
 privileged aspect DossierDescription_Roo_JavaBean {
     
@@ -13,6 +16,22 @@ privileged aspect DossierDescription_Roo_JavaBean {
     
     public void DossierDescription.setName(String name) {
         this.name = name;
+    }
+    
+    public Client DossierDescription.getClient() {
+        return this.client;
+    }
+    
+    public void DossierDescription.setClient(Client client) {
+        this.client = client;
+    }
+    
+    public Set<DocumentType> DossierDescription.getDocumentTypes() {
+        return this.documentTypes;
+    }
+    
+    public void DossierDescription.setDocumentTypes(Set<DocumentType> documentTypes) {
+        this.documentTypes = documentTypes;
     }
     
 }

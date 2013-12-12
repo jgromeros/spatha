@@ -3,7 +3,9 @@
 
 package co.qcsc.spatha.domain.product;
 
+import co.qcsc.spatha.domain.product.Product;
 import co.qcsc.spatha.domain.product.ProductClient;
+import co.qcsc.spatha.domain.thirdparty.Client;
 
 privileged aspect ProductClient_Roo_JavaBean {
     
@@ -13,6 +15,22 @@ privileged aspect ProductClient_Roo_JavaBean {
     
     public void ProductClient.setCode(String code) {
         this.code = code;
+    }
+    
+    public Client ProductClient.getClient() {
+        return this.client;
+    }
+    
+    public void ProductClient.setClient(Client client) {
+        this.client = client;
+    }
+    
+    public Product ProductClient.getProduct() {
+        return this.product;
+    }
+    
+    public void ProductClient.setProduct(Product product) {
+        this.product = product;
     }
     
 }

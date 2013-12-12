@@ -3,7 +3,11 @@
 
 package co.qcsc.spatha.domain.product;
 
+import co.qcsc.spatha.domain.product.Family;
 import co.qcsc.spatha.domain.product.Product;
+import co.qcsc.spatha.domain.product.ProductClient;
+import co.qcsc.spatha.domain.product.ProductSpecialty;
+import java.util.Set;
 
 privileged aspect Product_Roo_JavaBean {
     
@@ -13,6 +17,14 @@ privileged aspect Product_Roo_JavaBean {
     
     public void Product.setName(String name) {
         this.name = name;
+    }
+    
+    public String Product.getSize() {
+        return this.size;
+    }
+    
+    public void Product.setSize(String size) {
+        this.size = size;
     }
     
     public String Product.getType() {
@@ -69,6 +81,30 @@ privileged aspect Product_Roo_JavaBean {
     
     public void Product.setBrand(String brand) {
         this.brand = brand;
+    }
+    
+    public Family Product.getFamily() {
+        return this.family;
+    }
+    
+    public void Product.setFamily(Family family) {
+        this.family = family;
+    }
+    
+    public Set<ProductClient> Product.getClientProducts() {
+        return this.clientProducts;
+    }
+    
+    public void Product.setClientProducts(Set<ProductClient> clientProducts) {
+        this.clientProducts = clientProducts;
+    }
+    
+    public Set<ProductSpecialty> Product.getSpecialties() {
+        return this.specialties;
+    }
+    
+    public void Product.setSpecialties(Set<ProductSpecialty> specialties) {
+        this.specialties = specialties;
     }
     
 }

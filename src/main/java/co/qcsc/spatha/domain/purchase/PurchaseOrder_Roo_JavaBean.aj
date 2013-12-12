@@ -3,7 +3,11 @@
 
 package co.qcsc.spatha.domain.purchase;
 
+import co.qcsc.spatha.domain.purchase.OrderItem;
 import co.qcsc.spatha.domain.purchase.PurchaseOrder;
+import co.qcsc.spatha.domain.thirdparty.Client;
+import co.qcsc.spatha.domain.thirdparty.Supplier;
+import java.util.Set;
 
 privileged aspect PurchaseOrder_Roo_JavaBean {
     
@@ -61,6 +65,30 @@ privileged aspect PurchaseOrder_Roo_JavaBean {
     
     public void PurchaseOrder.setClientEmail(String clientEmail) {
         this.clientEmail = clientEmail;
+    }
+    
+    public Client PurchaseOrder.getClient() {
+        return this.client;
+    }
+    
+    public void PurchaseOrder.setClient(Client client) {
+        this.client = client;
+    }
+    
+    public Supplier PurchaseOrder.getSupplier() {
+        return this.supplier;
+    }
+    
+    public void PurchaseOrder.setSupplier(Supplier supplier) {
+        this.supplier = supplier;
+    }
+    
+    public Set<OrderItem> PurchaseOrder.getItems() {
+        return this.items;
+    }
+    
+    public void PurchaseOrder.setItems(Set<OrderItem> items) {
+        this.items = items;
     }
     
 }

@@ -3,8 +3,12 @@
 
 package co.qcsc.spatha.domain.purchase;
 
+import co.qcsc.spatha.domain.dossier.Dossier;
+import co.qcsc.spatha.domain.product.ProductClient;
 import co.qcsc.spatha.domain.purchase.OrderItem;
+import co.qcsc.spatha.domain.purchase.PurchaseOrder;
 import java.math.BigDecimal;
+import java.util.Set;
 
 privileged aspect OrderItem_Roo_JavaBean {
     
@@ -14,6 +18,30 @@ privileged aspect OrderItem_Roo_JavaBean {
     
     public void OrderItem.setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
+    }
+    
+    public PurchaseOrder OrderItem.getPurchaseOrder() {
+        return this.purchaseOrder;
+    }
+    
+    public void OrderItem.setPurchaseOrder(PurchaseOrder purchaseOrder) {
+        this.purchaseOrder = purchaseOrder;
+    }
+    
+    public ProductClient OrderItem.getProduct() {
+        return this.product;
+    }
+    
+    public void OrderItem.setProduct(ProductClient product) {
+        this.product = product;
+    }
+    
+    public Set<Dossier> OrderItem.getDossier() {
+        return this.dossier;
+    }
+    
+    public void OrderItem.setDossier(Set<Dossier> dossier) {
+        this.dossier = dossier;
     }
     
 }

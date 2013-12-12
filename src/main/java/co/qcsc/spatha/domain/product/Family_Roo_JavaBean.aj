@@ -4,6 +4,8 @@
 package co.qcsc.spatha.domain.product;
 
 import co.qcsc.spatha.domain.product.Family;
+import co.qcsc.spatha.domain.product.Product;
+import java.util.Set;
 
 privileged aspect Family_Roo_JavaBean {
     
@@ -13,6 +15,14 @@ privileged aspect Family_Roo_JavaBean {
     
     public void Family.setName(String name) {
         this.name = name;
+    }
+    
+    public Set<Product> Family.getProducts() {
+        return this.products;
+    }
+    
+    public void Family.setProducts(Set<Product> products) {
+        this.products = products;
     }
     
 }

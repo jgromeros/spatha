@@ -3,6 +3,7 @@
 
 package co.qcsc.spatha.domain.dossier;
 
+import co.qcsc.spatha.domain.dossier.DossierItem;
 import co.qcsc.spatha.domain.dossier.DossierItemFile;
 
 privileged aspect DossierItemFile_Roo_JavaBean {
@@ -13,6 +14,14 @@ privileged aspect DossierItemFile_Roo_JavaBean {
     
     public void DossierItemFile.setItemFile(byte[] itemFile) {
         this.itemFile = itemFile;
+    }
+    
+    public DossierItem DossierItemFile.getDossierItem() {
+        return this.dossierItem;
+    }
+    
+    public void DossierItemFile.setDossierItem(DossierItem dossierItem) {
+        this.dossierItem = dossierItem;
     }
     
 }
