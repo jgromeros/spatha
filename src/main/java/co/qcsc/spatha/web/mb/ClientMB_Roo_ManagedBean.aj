@@ -7,8 +7,11 @@ import co.qcsc.spatha.domain.thirdparty.Client;
 import co.qcsc.spatha.service.thirdparty.ClientService;
 import co.qcsc.spatha.web.mb.ClientMB;
 import co.qcsc.spatha.web.mb.util.MessageFactory;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -19,6 +22,7 @@ import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.LengthValidator;
+
 import org.primefaces.component.inputtext.InputText;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
