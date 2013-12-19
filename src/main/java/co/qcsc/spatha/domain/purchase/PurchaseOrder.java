@@ -1,4 +1,5 @@
 package co.qcsc.spatha.domain.purchase;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,48 +20,48 @@ import co.qcsc.spatha.domain.thirdparty.Supplier;
 @RooJpaEntity
 public class PurchaseOrder {
 
-    /**
+	/**
      */
-    @NotNull
-    private String numberOrder;
+	@NotNull
+	private String numberOrder;
 
-    /**
+	/**
      */
-    private String supplierContact;
+	private String supplierContact;
 
-    /**
+	/**
      */
-    private String clientContact;
+	private String clientContact;
 
-    /**
+	/**
      */
-    private String supplierPhone;
+	private String supplierPhone;
 
-    /**
+	/**
      */
-    private String clientPhone;
+	private String clientPhone;
 
-    /**
+	/**
      */
-    private String supplierEmail;
+	private String supplierEmail;
 
-    /**
+	/**
      */
-    private String clientEmail;
+	private String clientEmail;
 
-    /**
+	/**
      */
-    @ManyToOne
-    private Client client;
+	@ManyToOne
+	private Client client;
 
-    /**
+	/**
      */
-    @ManyToOne
-    private Supplier supplier;
+	@ManyToOne
+	private Supplier supplier;
 
-    /**
+	/**
      */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "purchaseOrder")
-    private Set<OrderItem> items = new HashSet<OrderItem>();
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "purchaseOrder")
+	private Set<OrderItem> items = new HashSet<OrderItem>();
 
 }
