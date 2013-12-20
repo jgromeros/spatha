@@ -41,6 +41,7 @@ public class ReportGeneratorMB {
         connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/sid", "uvlab",
                 "uvlab");
         // seteamos el contentType
+        facesContext.getExternalContext().setResponseContentType("application/pdf");
         response.setContentType("application/pdf");
 
         // ejecutamos el reporte
