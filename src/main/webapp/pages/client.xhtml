@@ -82,6 +82,10 @@
         </h:form>
       </p:outputPanel>
     </p:confirmDialog>
+    <h:form id="reportForm">
+        <p:commandButton value="Generate Report" id="generate_report"
+        		actionListener="#{reportGeneratorMB.generateReport}" ajax="false"/>
+    </h:form>
   </ui:define>
 </ui:composition>
 </html>
