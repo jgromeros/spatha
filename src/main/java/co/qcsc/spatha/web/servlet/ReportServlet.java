@@ -1,7 +1,7 @@
 package co.qcsc.spatha.web.servlet;
 
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -41,26 +41,29 @@ public class ReportServlet extends HttpServlet {
             throws ServletException, IOException {
         Connection connection;
 
-        InputStream reportStream =getServletConfig().getServletContext().getResourceAsStream(
-                "/resources/reports/index.jasper");
+//        InputStream reportStream = getServletConfig().getServletContext().getResourceAsStream(
+//                "/resources/reports/index.jasper");
         ServletOutputStream servletOutputStream = response.getOutputStream();
+        byte[] bytes = null;
 
         // Nos conectamos a la base de datos (creamos una coneccion)
         try {
             Class.forName("org.postgresql.Driver");
             // Ojo mybase es el nombre de la base, user y password.
-            connection = DriverManager.getConnection(
-                    "jdbc:postgresql://localhost:5432/sid", "uvlab",
-                    "uvlab");
 //            connection = DriverManager.getConnection(
-//                    "jdbc:postgresql://ec2-107-20-245-187.compute-1.amazonaws.com:5432/d98sb9cb44b3uf",
-//                    "wxprdqdkfalprs", "iisCdwiwVHa1gF2c5h2fddF3jR");
-            // seteamos el contentType
-            response.setContentType("application/pdf");
-
+//                    "jdbc:postgresql://localhost:5432/sid", "uvlab",
+//                    "uvlab");
+            connection = DriverManager.getConnection(
+                    "jdbc:postgresql://ec2-107-20-245-187.compute-1.amazonaws.com:5432/d98sb9cb44b3uf",
+                    "wxprdqdkfalprs", "iisCdwiwVHa1gF2c5h2fddF3jR");
             // ejecutamos el reporte
-            JasperRunManager.runReportToPdfStream(reportStream, servletOutputStream, new HashMap(),
-                    connection);
+            File reportFile = new File(this.getServletContext().
+                    getRealPath("/resources/reports/index.jasper"));
+            bytes = JasperRunManager.runReportToPdf(reportFile.getPath(),
+                    new HashMap(), connection);
+            response.setContentType("application/pdf");
+            response.setContentLength(bytes.length);
+            servletOutputStream.write(bytes, 0, bytes.length);
             // Cerramos la coneccion a la Base
             connection.close();
         } catch (ClassNotFoundException e) {
@@ -73,7 +76,6 @@ public class ReportServlet extends HttpServlet {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        reportStream.close();
         // flush y close del reporte
         servletOutputStream.flush();
         servletOutputStream.close();
