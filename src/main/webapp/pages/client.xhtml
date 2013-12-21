@@ -86,8 +86,7 @@
         <p:commandButton value="Generate Report" id="generate_report"
         		oncomplete="reportDialogWidget.show()"/>
     </h:form>
-    <p:dialog id="reportDialog" modal="true" widgetVar="reportDialogWidget" dynamic="true" resizable="true" maximizable="true" showEffect="fade" hideEffect="explode"
-    		width="600" height="400">
+    <p:dialog id="reportDialog" modal="true" widgetVar="reportDialogWidget" dynamic="true" resizable="true" maximizable="true" showEffect="fade" hideEffect="explode">
 	    <iframe src="/clients.pdf" width="800" height="600"></iframe>
 	</p:dialog>
   </ui:define>
