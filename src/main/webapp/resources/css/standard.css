@@ -74,6 +74,10 @@ a:visited {
     width: auto;
 }
 
+.ui-dialog {
+    width: auto !important;
+}
+
 .col1 {
     vertical-align: top;
     font-weight: bold;

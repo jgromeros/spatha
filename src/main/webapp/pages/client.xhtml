@@ -84,8 +84,12 @@
     </p:confirmDialog>
     <h:form id="reportForm">
         <p:commandButton value="Generate Report" id="generate_report"
-        		actionListener="#{reportGeneratorMB.generateReport}" ajax="false"/>
+        		oncomplete="reportDialogWidget.show()"/>
     </h:form>
+    <p:dialog id="reportDialog" modal="true" widgetVar="reportDialogWidget" dynamic="true" resizable="true" maximizable="true" showEffect="fade" hideEffect="explode"
+    		width="600" height="400">
+	    <iframe src="/clients.pdf"></iframe>
+	</p:dialog>
   </ui:define>
 </ui:composition>
 </html>
