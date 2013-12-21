@@ -49,12 +49,12 @@ public class ReportServlet extends HttpServlet {
         try {
             Class.forName("org.postgresql.Driver");
             // Ojo mybase es el nombre de la base, user y password.
-            connection = DriverManager.getConnection(
-                    "jdbc:postgresql://localhost:5432/sid", "uvlab",
-                    "uvlab");
 //            connection = DriverManager.getConnection(
-//                    "jdbc:postgresql://ec2-107-20-245-187.compute-1.amazonaws.com:5432/d98sb9cb44b3uf",
-//                    "wxprdqdkfalprs", "iisCdwiwVHa1gF2c5h2fddF3jR");
+//                    "jdbc:postgresql://localhost:5432/sid", "uvlab",
+//                    "uvlab");
+            connection = DriverManager.getConnection(
+                    "jdbc:postgresql://ec2-107-20-245-187.compute-1.amazonaws.com:5432/d98sb9cb44b3uf",
+                    "wxprdqdkfalprs", "iisCdwiwVHa1gF2c5h2fddF3jR");
             // seteamos el contentType
             response.setContentType("application/pdf");
 
@@ -73,7 +73,6 @@ public class ReportServlet extends HttpServlet {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        reportStream.close();
         // flush y close del reporte
         servletOutputStream.flush();
         servletOutputStream.close();
