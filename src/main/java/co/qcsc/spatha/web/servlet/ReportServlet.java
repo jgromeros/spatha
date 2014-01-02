@@ -16,7 +16,15 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperRunManager;
 
+import javax.sql.DataSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+
+@Configurable
 public class ReportServlet extends HttpServlet {
+
+    @Autowired
+    private DataSource dataSource;
 
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -52,9 +60,10 @@ public class ReportServlet extends HttpServlet {
 //            connection = DriverManager.getConnection(
 //                    "jdbc:postgresql://localhost:5432/sid", "uvlab",
 //                    "uvlab");
-            connection = DriverManager.getConnection(
-                    "jdbc:postgresql://ec2-107-20-245-187.compute-1.amazonaws.com:5432/d98sb9cb44b3uf",
-                    "wxprdqdkfalprs", "iisCdwiwVHa1gF2c5h2fddF3jR");
+            connection = dataSource.getConnection();
+//            connection = DriverManager.getConnection(
+//                    "jdbc:postgresql://ec2-107-20-245-187.compute-1.amazonaws.com:5432/d98sb9cb44b3uf",
+//                    "wxprdqdkfalprs", "iisCdwiwVHa1gF2c5h2fddF3jR");
             // seteamos el contentType
             response.setContentType("application/pdf");
 
