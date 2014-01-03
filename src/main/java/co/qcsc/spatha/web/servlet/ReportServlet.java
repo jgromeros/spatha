@@ -3,7 +3,6 @@ package co.qcsc.spatha.web.servlet;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashMap;
 
@@ -18,7 +17,9 @@ import net.sf.jasperreports.engine.JasperRunManager;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 
+@Configurable
 public class ReportServlet extends HttpServlet {
 
     @Autowired
