@@ -1,25 +1,18 @@
 package co.qcsc.spatha.web.mb;
 
-import co.qcsc.spatha.domain.product.Product;
-import co.qcsc.spatha.domain.purchase.OrderItem;
-import co.qcsc.spatha.domain.purchase.PurchaseOrder;
-import co.qcsc.spatha.domain.thirdparty.Client;
-import co.qcsc.spatha.domain.thirdparty.Supplier;
-import co.qcsc.spatha.service.product.ProductService;
-import co.qcsc.spatha.service.thirdparty.SupplierService;
-import co.qcsc.spatha.web.mb.converter.ClientConverter;
-import co.qcsc.spatha.web.mb.converter.SupplierConverter;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AbortProcessingException;
+import javax.faces.event.AjaxBehaviorEvent;
 
 import org.primefaces.component.autocomplete.AutoComplete;
+import org.primefaces.component.behavior.ajax.AjaxBehavior;
+import org.primefaces.component.behavior.ajax.AjaxBehaviorListenerImpl;
 import org.primefaces.component.inputtext.InputText;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
@@ -27,19 +20,48 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
+import co.qcsc.spatha.domain.product.Product;
+import co.qcsc.spatha.domain.purchase.OrderItem;
+import co.qcsc.spatha.domain.purchase.PurchaseOrder;
+import co.qcsc.spatha.domain.thirdparty.Client;
+import co.qcsc.spatha.domain.thirdparty.Supplier;
+import co.qcsc.spatha.service.product.ProductService;
+import co.qcsc.spatha.web.mb.converter.ClientConverter;
+import co.qcsc.spatha.web.mb.converter.ProductConverter;
+import co.qcsc.spatha.web.mb.converter.SupplierConverter;
+
+/**
+ * Managed Bean de Order para el manejo de la pantalla
+ * 
+ * @author jorge
+ * 
+ */
 @RooSerializable
 @RooJsfManagedBean(entity = PurchaseOrder.class, beanName = "purchaseOrderMB")
 public class PurchaseOrderMB {
 
+	/**
+	 * Panel Grid de crear order
+	 */
 	private HtmlPanelGrid createOrderItemPanelGrid;
-	
+
+	/**
+	 * Order Item activo en el sistema
+	 */
 	private OrderItem orderItem = new OrderItem();
-	
+
+	/**
+	 * Order activa en el sistema
+	 */
+	private PurchaseOrder purchaseOrder = new PurchaseOrder();
+	/**
+	 * Sevicios de productos
+	 */
 	@Autowired
 	ProductService productService;
 
 	/**
-	 * Se reescribe el metodo para cambiar la ventana modal
+	 * Se reescribe el metodo para cambiar la ventana modal de creacion
 	 * 
 	 * @return
 	 */
@@ -256,7 +278,14 @@ public class PurchaseOrderMB {
 		clientCreateInput.setValueExpression("itemValue", expressionFactory
 				.createValueExpression(elContext, "#{client}", Client.class));
 		clientCreateInput.setConverter(new ClientConverter());
-		clientCreateInput.setRequired(false);
+		clientCreateInput.setRequired(true);
+
+		// comportamiento Ajax para el cliente
+		AjaxBehavior ajaxBehavior = new AjaxBehavior();
+		ajaxBehavior.addAjaxBehaviorListener(new ClientChangeListener());
+		ajaxBehavior.setTransient(true);
+		clientCreateInput.addClientBehavior("change", ajaxBehavior);
+
 		htmlPanelGrid.getChildren().add(clientCreateInput);
 
 		Message clientCreateInputMessage = (Message) application
@@ -309,7 +338,7 @@ public class PurchaseOrderMB {
 	}
 
 	/**
-	 * Se reescribe el metodo para cambiar la ventana modal
+	 * Se reescribe el metodo para cambiar la ventana modal para items
 	 * 
 	 * @return
 	 */
@@ -336,8 +365,7 @@ public class PurchaseOrderMB {
 		quantityCreateInput.setId("quantityCreateInput");
 		quantityCreateInput.setValueExpression("value", expressionFactory
 				.createValueExpression(elContext,
-						"#{purchaseOrderMB.orderItem.quantity}",
-						String.class));
+						"#{purchaseOrderMB.orderItem.quantity}", String.class));
 		quantityCreateInput.setRequired(true);
 		htmlPanelGrid.getChildren().add(quantityCreateInput);
 
@@ -347,9 +375,9 @@ public class PurchaseOrderMB {
 		quantityCreateInputMessage.setFor("quantityCreateInput");
 		quantityCreateInputMessage.setDisplay("icon");
 		htmlPanelGrid.getChildren().add(quantityCreateInputMessage);
-		
-		//productos
-		
+
+		// productos
+
 		OutputLabel productCreateOutput = (OutputLabel) application
 				.createComponent(OutputLabel.COMPONENT_TYPE);
 		productCreateOutput.setFor("productCreateInput");
@@ -362,8 +390,7 @@ public class PurchaseOrderMB {
 		productCreateInput.setId("productCreateInput");
 		productCreateInput.setValueExpression("value", expressionFactory
 				.createValueExpression(elContext,
-						"#{purchaseOrderMB.orderItem.product}",
-						Product.class));
+						"#{purchaseOrderMB.orderItem.product}", Product.class));
 		productCreateInput.setCompleteMethod(expressionFactory
 				.createMethodExpression(elContext,
 						"#{purchaseOrderMB.completeProduct}", List.class,
@@ -373,13 +400,11 @@ public class PurchaseOrderMB {
 				.createValueExpression(elContext, "product", String.class));
 		productCreateInput.setValueExpression("itemLabel", expressionFactory
 				.createValueExpression(elContext,
-						"#{product.family} #{product.name}",
-						String.class));
-		productCreateInput.setValueExpression("itemValue",
-				expressionFactory.createValueExpression(elContext,
-						"#{product}", Supplier.class));
-		//productCreateInput.setConverter(new Produc());
-		productCreateInput.setRequired(false);
+						"#{product.family} #{product.name}", String.class));
+		productCreateInput.setValueExpression("itemValue", expressionFactory
+				.createValueExpression(elContext, "#{product}", Product.class));
+		productCreateInput.setConverter(new ProductConverter());
+		productCreateInput.setRequired(true);
 		htmlPanelGrid.getChildren().add(productCreateInput);
 
 		Message productCreateInputMessage = (Message) application
@@ -388,11 +413,26 @@ public class PurchaseOrderMB {
 		productCreateInputMessage.setFor("productCreateInput");
 		productCreateInputMessage.setDisplay("icon");
 		htmlPanelGrid.getChildren().add(productCreateInputMessage);
-		
 
 		return htmlPanelGrid;
 	}
 
+	/**
+	 * Adiciona Order Items
+	 */
+	public String addOrderItem() {
+		System.out.println("ola ke ase");
+		this.purchaseOrder.getItems().add(orderItem);
+		this.orderItem = new OrderItem();
+		this.createOrderItemPanelGrid = populateOrderItemCreatePanel();
+		return null;
+	}
+
+	/**
+	 * Se escribe elorder item Panel Grid
+	 * 
+	 * @return
+	 */
 	public HtmlPanelGrid getCreateOrderItemPanelGrid() {
 		if (createOrderItemPanelGrid == null) {
 			createOrderItemPanelGrid = populateOrderItemCreatePanel();
@@ -412,17 +452,34 @@ public class PurchaseOrderMB {
 	public void setOrderItem(OrderItem orderItem) {
 		this.orderItem = orderItem;
 	}
-	
+
+	public PurchaseOrder getPurchaseOrder() {
+		return purchaseOrder;
+	}
+
+	public void setPurchaseOrder(PurchaseOrder purchaseOrder) {
+		this.purchaseOrder = purchaseOrder;
+	}
+
 	public List<Product> completeProduct(String query) {
-        List<Product> suggestions = new ArrayList<Product>();
-        for (Product product : productService.findAllProducts()) {
-            String supplierStr = String.valueOf(product.getFamily() +  " "  + product.getName());
-            if (supplierStr.toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(product);
-            }
-        }
-        return suggestions;
-    }
-	
-	
+		List<Product> suggestions = new ArrayList<Product>();
+		for (Product product : productService
+				.findProductsByClientId(this.purchaseOrder.getClient())) {
+			String supplierStr = String.valueOf(product.getFamily() + " "
+					+ product.getName());
+			if (supplierStr.toLowerCase().startsWith(query.toLowerCase())) {
+				suggestions.add(product);
+			}
+		}
+		return suggestions;
+	}
+
+	public static class ClientChangeListener extends AjaxBehaviorListenerImpl {
+		@Override
+		public void processAjaxBehavior(AjaxBehaviorEvent event)
+				throws AbortProcessingException {
+			System.out.println("----------->>>>>>>>>>AjaxListener CALLED!!! ");
+		}
+	}
+
 }

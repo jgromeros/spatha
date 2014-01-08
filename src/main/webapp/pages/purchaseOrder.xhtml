@@ -80,15 +80,29 @@
 					<h:panelGrid id="createPanelGrid" columns="3"
 						binding="#{purchaseOrderMB.createPanelGrid}" styleClass="dialog"
 						columnClasses="col1,col2,col3" />
-					<p:panel id="orderItemData" toggleable="true" toggleSpeed="250">
-						<f:facet name="header">
-							<h:outputText value="#{purchaseOrderMB.name}" />
-						</f:facet>
-						<h:panelGrid id="createOrderItemPanelGrid" columns="3"
-						binding="#{purchaseOrderMB.createOrderItemPanelGrid}" styleClass="dialog"
-						columnClasses="col1,col2,col3" />
-						<p:dataTable></p:dataTable>
-					</p:panel>
+					<p:outputPanel id="orderItemData" toggleable="true"
+						toggleSpeed="250">
+						<h:form id="createItemForm" enctype="multipart/form-data">
+							<f:facet name="header">
+								<h:outputText value="#{purchaseOrderMB.name}" />
+							</f:facet>
+							<h:panelGrid id="createOrderItemPanelGrid" columns="3"
+								binding="#{purchaseOrderMB.createOrderItemPanelGrid}"
+								styleClass="dialog" columnClasses="col1,col2,col3">
+								<p:commandButton id="createOrderItemSaveButton"
+									action="#{purchaseOrderMB.addOrderItem}"
+									value="#{messages.label_add}" update="createOrderItemPanelGrid">
+								</p:commandButton>
+							</h:panelGrid>
+							<p:dataTable id="listItems"
+								value="#{purchaseOrderMB.purchaseOrder.items}"
+								var="purchaseOrsderItem"
+								rendered="#{purchaseOrderMB.dataVisible}"
+								resizableColumns="false" paginator="true"
+								paginatorTemplate=" {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								rowsPerPageTemplate="5,10,25,50" rows="10"></p:dataTable>
+						</h:form>
+					</p:outputPanel>
 					<p:commandButton id="createSaveButton"
 						value="#{messages.label_save}" action="#{purchaseOrderMB.persist}"
 						update="createPanelGrid :growlForm:growl" />
