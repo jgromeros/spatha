@@ -13,11 +13,8 @@ import co.qcsc.spatha.web.mb.PurchaseOrderMB;
 import co.qcsc.spatha.web.mb.converter.ClientConverter;
 import co.qcsc.spatha.web.mb.converter.SupplierConverter;
 import co.qcsc.spatha.web.mb.util.MessageFactory;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -27,7 +24,6 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
-
 import org.primefaces.component.autocomplete.AutoComplete;
 import org.primefaces.component.inputtext.InputText;
 import org.primefaces.component.message.Message;
