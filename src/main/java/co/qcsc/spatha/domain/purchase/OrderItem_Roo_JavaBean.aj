@@ -44,4 +44,20 @@ privileged aspect OrderItem_Roo_JavaBean {
         this.dossier = dossier;
     }
     
+    public String OrderItem.getTagNumber() {
+        return this.tagNumber;
+    }
+    
+    public void OrderItem.setTagNumber(String tagNumber) {
+        this.tagNumber = tagNumber;
+    }
+    
+    public String OrderItem.getSerial() {
+        return this.serial;
+    }
+    
+    public void OrderItem.setSerial(String serial) {
+        this.serial = serial;
+    }
+    
 }

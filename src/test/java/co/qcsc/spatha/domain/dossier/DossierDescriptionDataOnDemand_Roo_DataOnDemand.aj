@@ -38,12 +38,18 @@ privileged aspect DossierDescriptionDataOnDemand_Roo_DataOnDemand {
     public DossierDescription DossierDescriptionDataOnDemand.getNewTransientDossierDescription(int index) {
         DossierDescription obj = new DossierDescription();
         setName(obj, index);
+        setValid(obj, index);
         return obj;
     }
     
     public void DossierDescriptionDataOnDemand.setName(DossierDescription obj, int index) {
         String name = "name_" + index;
         obj.setName(name);
+    }
+    
+    public void DossierDescriptionDataOnDemand.setValid(DossierDescription obj, int index) {
+        Boolean valid = Boolean.TRUE;
+        obj.setValid(valid);
     }
     
     public DossierDescription DossierDescriptionDataOnDemand.getSpecificDossierDescription(int index) {

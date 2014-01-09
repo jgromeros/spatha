@@ -43,6 +43,8 @@ privileged aspect OrderItemDataOnDemand_Roo_DataOnDemand {
     public OrderItem OrderItemDataOnDemand.getNewTransientOrderItem(int index) {
         OrderItem obj = new OrderItem();
         setQuantity(obj, index);
+        setSerial(obj, index);
+        setTagNumber(obj, index);
         return obj;
     }
     
@@ -52,6 +54,16 @@ privileged aspect OrderItemDataOnDemand_Roo_DataOnDemand {
             quantity = new BigDecimal("999999999999.99");
         }
         obj.setQuantity(quantity);
+    }
+    
+    public void OrderItemDataOnDemand.setSerial(OrderItem obj, int index) {
+        String serial = "serial_" + index;
+        obj.setSerial(serial);
+    }
+    
+    public void OrderItemDataOnDemand.setTagNumber(OrderItem obj, int index) {
+        String tagNumber = "tagNumber_" + index;
+        obj.setTagNumber(tagNumber);
     }
     
     public OrderItem OrderItemDataOnDemand.getSpecificOrderItem(int index) {

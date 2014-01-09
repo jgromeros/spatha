@@ -40,4 +40,11 @@ public class OrderItem {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderItem")
     private Set<Dossier> dossier = new HashSet<Dossier>();
 
+    /**
+     */
+    private String tagNumber;
+
+    /**
+     */
+    private String serial;
 }
