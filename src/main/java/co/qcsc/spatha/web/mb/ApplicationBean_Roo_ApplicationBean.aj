@@ -4,14 +4,223 @@
 package co.qcsc.spatha.web.mb;
 
 import co.qcsc.spatha.web.mb.ApplicationBean;
+import javax.annotation.PostConstruct;
+import javax.el.ELContext;
+import javax.el.ExpressionFactory;
+import javax.faces.application.Application;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
+import org.primefaces.component.menuitem.MenuItem;
+import org.primefaces.component.submenu.Submenu;
+import org.primefaces.model.DefaultMenuModel;
+import org.primefaces.model.MenuModel;
 
 privileged aspect ApplicationBean_Roo_ApplicationBean {
     
     declare @type: ApplicationBean: @ManagedBean;
     
     declare @type: ApplicationBean: @RequestScoped;
+    
+    @PostConstruct
+    public void ApplicationBean.init() {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        Application application = facesContext.getApplication();
+        ExpressionFactory expressionFactory = application.getExpressionFactory();
+        ELContext elContext = facesContext.getELContext();
+        
+        menuModel = new DefaultMenuModel();
+        Submenu submenu;
+        MenuItem item;
+        
+        submenu = new Submenu();
+        submenu.setId("clientSubmenu");
+        submenu.setLabel("Client");
+        item = new MenuItem();
+        item.setId("createClientMenuItem");
+        item.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{messages.label_create}", String.class));
+        item.setActionExpression(expressionFactory.createMethodExpression(elContext, "#{clientMB.displayCreateDialog}", String.class, new Class[0]));
+        item.setIcon("ui-icon ui-icon-document");
+        item.setAjax(false);
+        item.setAsync(false);
+        item.setUpdate(":dataForm:data");
+        submenu.getChildren().add(item);
+        item = new MenuItem();
+        item.setId("listClientMenuItem");
+        item.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{messages.label_list}", String.class));
+        item.setActionExpression(expressionFactory.createMethodExpression(elContext, "#{clientMB.displayList}", String.class, new Class[0]));
+        item.setIcon("ui-icon ui-icon-folder-open");
+        item.setAjax(false);
+        item.setAsync(false);
+        item.setUpdate(":dataForm:data");
+        submenu.getChildren().add(item);
+        menuModel.addSubmenu(submenu);
+        
+        submenu = new Submenu();
+        submenu.setId("familySubmenu");
+        submenu.setLabel("Family");
+        item = new MenuItem();
+        item.setId("createFamilyMenuItem");
+        item.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{messages.label_create}", String.class));
+        item.setActionExpression(expressionFactory.createMethodExpression(elContext, "#{familyMB.displayCreateDialog}", String.class, new Class[0]));
+        item.setIcon("ui-icon ui-icon-document");
+        item.setAjax(false);
+        item.setAsync(false);
+        item.setUpdate(":dataForm:data");
+        submenu.getChildren().add(item);
+        item = new MenuItem();
+        item.setId("listFamilyMenuItem");
+        item.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{messages.label_list}", String.class));
+        item.setActionExpression(expressionFactory.createMethodExpression(elContext, "#{familyMB.displayList}", String.class, new Class[0]));
+        item.setIcon("ui-icon ui-icon-folder-open");
+        item.setAjax(false);
+        item.setAsync(false);
+        item.setUpdate(":dataForm:data");
+        submenu.getChildren().add(item);
+        menuModel.addSubmenu(submenu);
+        
+        submenu = new Submenu();
+        submenu.setId("orderItemSubmenu");
+        submenu.setLabel("OrderItem");
+        item = new MenuItem();
+        item.setId("createOrderItemMenuItem");
+        item.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{messages.label_create}", String.class));
+        item.setActionExpression(expressionFactory.createMethodExpression(elContext, "#{orderItemMB.displayCreateDialog}", String.class, new Class[0]));
+        item.setIcon("ui-icon ui-icon-document");
+        item.setAjax(false);
+        item.setAsync(false);
+        item.setUpdate(":dataForm:data");
+        submenu.getChildren().add(item);
+        item = new MenuItem();
+        item.setId("listOrderItemMenuItem");
+        item.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{messages.label_list}", String.class));
+        item.setActionExpression(expressionFactory.createMethodExpression(elContext, "#{orderItemMB.displayList}", String.class, new Class[0]));
+        item.setIcon("ui-icon ui-icon-folder-open");
+        item.setAjax(false);
+        item.setAsync(false);
+        item.setUpdate(":dataForm:data");
+        submenu.getChildren().add(item);
+        menuModel.addSubmenu(submenu);
+        
+        submenu = new Submenu();
+        submenu.setId("productClientSubmenu");
+        submenu.setLabel("ProductClient");
+        item = new MenuItem();
+        item.setId("createProductClientMenuItem");
+        item.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{messages.label_create}", String.class));
+        item.setActionExpression(expressionFactory.createMethodExpression(elContext, "#{productClientMB.displayCreateDialog}", String.class, new Class[0]));
+        item.setIcon("ui-icon ui-icon-document");
+        item.setAjax(false);
+        item.setAsync(false);
+        item.setUpdate(":dataForm:data");
+        submenu.getChildren().add(item);
+        item = new MenuItem();
+        item.setId("listProductClientMenuItem");
+        item.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{messages.label_list}", String.class));
+        item.setActionExpression(expressionFactory.createMethodExpression(elContext, "#{productClientMB.displayList}", String.class, new Class[0]));
+        item.setIcon("ui-icon ui-icon-folder-open");
+        item.setAjax(false);
+        item.setAsync(false);
+        item.setUpdate(":dataForm:data");
+        submenu.getChildren().add(item);
+        menuModel.addSubmenu(submenu);
+        
+        submenu = new Submenu();
+        submenu.setId("productSubmenu");
+        submenu.setLabel("Product");
+        item = new MenuItem();
+        item.setId("createProductMenuItem");
+        item.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{messages.label_create}", String.class));
+        item.setActionExpression(expressionFactory.createMethodExpression(elContext, "#{productMB.displayCreateDialog}", String.class, new Class[0]));
+        item.setIcon("ui-icon ui-icon-document");
+        item.setAjax(false);
+        item.setAsync(false);
+        item.setUpdate(":dataForm:data");
+        submenu.getChildren().add(item);
+        item = new MenuItem();
+        item.setId("listProductMenuItem");
+        item.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{messages.label_list}", String.class));
+        item.setActionExpression(expressionFactory.createMethodExpression(elContext, "#{productMB.displayList}", String.class, new Class[0]));
+        item.setIcon("ui-icon ui-icon-folder-open");
+        item.setAjax(false);
+        item.setAsync(false);
+        item.setUpdate(":dataForm:data");
+        submenu.getChildren().add(item);
+        menuModel.addSubmenu(submenu);
+        
+        submenu = new Submenu();
+        submenu.setId("purchaseOrderSubmenu");
+        submenu.setLabel("PurchaseOrder");
+        item = new MenuItem();
+        item.setId("createPurchaseOrderMenuItem");
+        item.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{messages.label_create}", String.class));
+        item.setActionExpression(expressionFactory.createMethodExpression(elContext, "#{purchaseOrderMB.displayCreateDialog}", String.class, new Class[0]));
+        item.setIcon("ui-icon ui-icon-document");
+        item.setAjax(false);
+        item.setAsync(false);
+        item.setUpdate(":dataForm:data");
+        submenu.getChildren().add(item);
+        item = new MenuItem();
+        item.setId("listPurchaseOrderMenuItem");
+        item.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{messages.label_list}", String.class));
+        item.setActionExpression(expressionFactory.createMethodExpression(elContext, "#{purchaseOrderMB.displayList}", String.class, new Class[0]));
+        item.setIcon("ui-icon ui-icon-folder-open");
+        item.setAjax(false);
+        item.setAsync(false);
+        item.setUpdate(":dataForm:data");
+        submenu.getChildren().add(item);
+        menuModel.addSubmenu(submenu);
+        
+        submenu = new Submenu();
+        submenu.setId("specialtySubmenu");
+        submenu.setLabel("Specialty");
+        item = new MenuItem();
+        item.setId("createSpecialtyMenuItem");
+        item.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{messages.label_create}", String.class));
+        item.setActionExpression(expressionFactory.createMethodExpression(elContext, "#{specialtyMB.displayCreateDialog}", String.class, new Class[0]));
+        item.setIcon("ui-icon ui-icon-document");
+        item.setAjax(false);
+        item.setAsync(false);
+        item.setUpdate(":dataForm:data");
+        submenu.getChildren().add(item);
+        item = new MenuItem();
+        item.setId("listSpecialtyMenuItem");
+        item.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{messages.label_list}", String.class));
+        item.setActionExpression(expressionFactory.createMethodExpression(elContext, "#{specialtyMB.displayList}", String.class, new Class[0]));
+        item.setIcon("ui-icon ui-icon-folder-open");
+        item.setAjax(false);
+        item.setAsync(false);
+        item.setUpdate(":dataForm:data");
+        submenu.getChildren().add(item);
+        menuModel.addSubmenu(submenu);
+        
+        submenu = new Submenu();
+        submenu.setId("supplierSubmenu");
+        submenu.setLabel("Supplier");
+        item = new MenuItem();
+        item.setId("createSupplierMenuItem");
+        item.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{messages.label_create}", String.class));
+        item.setActionExpression(expressionFactory.createMethodExpression(elContext, "#{supplierMB.displayCreateDialog}", String.class, new Class[0]));
+        item.setIcon("ui-icon ui-icon-document");
+        item.setAjax(false);
+        item.setAsync(false);
+        item.setUpdate(":dataForm:data");
+        submenu.getChildren().add(item);
+        item = new MenuItem();
+        item.setId("listSupplierMenuItem");
+        item.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{messages.label_list}", String.class));
+        item.setActionExpression(expressionFactory.createMethodExpression(elContext, "#{supplierMB.displayList}", String.class, new Class[0]));
+        item.setIcon("ui-icon ui-icon-folder-open");
+        item.setAjax(false);
+        item.setAsync(false);
+        item.setUpdate(":dataForm:data");
+        submenu.getChildren().add(item);
+        menuModel.addSubmenu(submenu);
+    }
+    
+    public MenuModel ApplicationBean.getMenuModel() {
+        return menuModel;
+    }
     
     public String ApplicationBean.getAppName() {
         return "Spatha";

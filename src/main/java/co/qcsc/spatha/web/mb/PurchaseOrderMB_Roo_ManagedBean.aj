@@ -3,6 +3,7 @@
 
 package co.qcsc.spatha.web.mb;
 
+import co.qcsc.spatha.domain.purchase.OrderItem;
 import co.qcsc.spatha.domain.purchase.PurchaseOrder;
 import co.qcsc.spatha.domain.thirdparty.Client;
 import co.qcsc.spatha.domain.thirdparty.Supplier;
@@ -13,11 +14,9 @@ import co.qcsc.spatha.web.mb.PurchaseOrderMB;
 import co.qcsc.spatha.web.mb.converter.ClientConverter;
 import co.qcsc.spatha.web.mb.converter.SupplierConverter;
 import co.qcsc.spatha.web.mb.util.MessageFactory;
-
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -27,7 +26,6 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
-
 import org.primefaces.component.autocomplete.AutoComplete;
 import org.primefaces.component.inputtext.InputText;
 import org.primefaces.component.message.Message;
@@ -53,6 +51,8 @@ privileged aspect PurchaseOrderMB_Roo_ManagedBean {
     
     private String PurchaseOrderMB.name = "PurchaseOrders";
     
+    private PurchaseOrder PurchaseOrderMB.purchaseOrder;
+    
     private List<PurchaseOrder> PurchaseOrderMB.allPurchaseOrders;
     
     private boolean PurchaseOrderMB.dataVisible = false;
@@ -66,6 +66,8 @@ privileged aspect PurchaseOrderMB_Roo_ManagedBean {
     private HtmlPanelGrid PurchaseOrderMB.viewPanelGrid;
     
     private boolean PurchaseOrderMB.createDialogVisible = false;
+    
+    private List<OrderItem> PurchaseOrderMB.selectedItems;
     
     @PostConstruct
     public void PurchaseOrderMB.init() {
@@ -319,16 +321,14 @@ privileged aspect PurchaseOrderMB_Roo_ManagedBean {
         supplierEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(supplierEditInputMessage);
         
-        OutputLabel itemsEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        itemsEditOutput.setFor("itemsEditInput");
+        HtmlOutputText itemsEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         itemsEditOutput.setId("itemsEditOutput");
         itemsEditOutput.setValue("Items:");
         htmlPanelGrid.getChildren().add(itemsEditOutput);
         
-        InputText itemsEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        HtmlOutputText itemsEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         itemsEditInput.setId("itemsEditInput");
-        itemsEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{purchaseOrderMB.purchaseOrder.items}", Set.class));
-        itemsEditInput.setRequired(false);
+        itemsEditInput.setValue("This relationship is managed from the OrderItem side");
         htmlPanelGrid.getChildren().add(itemsEditInput);
         
         Message itemsEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -444,10 +444,22 @@ privileged aspect PurchaseOrderMB_Roo_ManagedBean {
         htmlPanelGrid.getChildren().add(itemsLabel);
         
         HtmlOutputText itemsValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        itemsValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{purchaseOrderMB.purchaseOrder.items}", String.class));
+        itemsValue.setId("itemsValue");
+        itemsValue.setValue("This relationship is managed from the OrderItem side");
         htmlPanelGrid.getChildren().add(itemsValue);
         
         return htmlPanelGrid;
+    }
+    
+    public PurchaseOrder PurchaseOrderMB.getPurchaseOrder() {
+        if (purchaseOrder == null) {
+            purchaseOrder = new PurchaseOrder();
+        }
+        return purchaseOrder;
+    }
+    
+    public void PurchaseOrderMB.setPurchaseOrder(PurchaseOrder purchaseOrder) {
+        this.purchaseOrder = purchaseOrder;
     }
     
     public List<Client> PurchaseOrderMB.completeClient(String query) {
@@ -472,7 +484,21 @@ privileged aspect PurchaseOrderMB_Roo_ManagedBean {
         return suggestions;
     }
     
+    public List<OrderItem> PurchaseOrderMB.getSelectedItems() {
+        return selectedItems;
+    }
+    
+    public void PurchaseOrderMB.setSelectedItems(List<OrderItem> selectedItems) {
+        if (selectedItems != null) {
+            purchaseOrder.setItems(new HashSet<OrderItem>(selectedItems));
+        }
+        this.selectedItems = selectedItems;
+    }
+    
     public String PurchaseOrderMB.onEdit() {
+        if (purchaseOrder != null && purchaseOrder.getItems() != null) {
+            selectedItems = new ArrayList<OrderItem>(purchaseOrder.getItems());
+        }
         return null;
     }
     
@@ -525,6 +551,7 @@ privileged aspect PurchaseOrderMB_Roo_ManagedBean {
     
     public void PurchaseOrderMB.reset() {
         purchaseOrder = null;
+        selectedItems = null;
         createDialogVisible = false;
     }
     
