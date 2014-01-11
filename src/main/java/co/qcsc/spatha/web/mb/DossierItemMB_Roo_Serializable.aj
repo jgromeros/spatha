@@ -3,13 +3,13 @@
 
 package co.qcsc.spatha.web.mb;
 
-import co.qcsc.spatha.web.mb.ClientMB;
+import co.qcsc.spatha.web.mb.DossierItemMB;
 import java.io.Serializable;
 
-privileged aspect ClientMB_Roo_Serializable {
+privileged aspect DossierItemMB_Roo_Serializable {
     
-    declare parents: ClientMB implements Serializable;
+    declare parents: DossierItemMB implements Serializable;
     
-    private static final long ClientMB.serialVersionUID = 1L;
+    private static final long DossierItemMB.serialVersionUID = 1L;
     
 }

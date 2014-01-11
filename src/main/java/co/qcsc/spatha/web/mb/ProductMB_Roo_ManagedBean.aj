@@ -6,17 +6,15 @@ package co.qcsc.spatha.web.mb;
 import co.qcsc.spatha.domain.product.Family;
 import co.qcsc.spatha.domain.product.Product;
 import co.qcsc.spatha.domain.product.ProductClient;
+import co.qcsc.spatha.domain.product.ProductSpecialty;
 import co.qcsc.spatha.service.product.FamilyService;
 import co.qcsc.spatha.service.product.ProductService;
 import co.qcsc.spatha.web.mb.ProductMB;
 import co.qcsc.spatha.web.mb.converter.FamilyConverter;
 import co.qcsc.spatha.web.mb.util.MessageFactory;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -27,7 +25,6 @@ import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.LengthValidator;
-
 import org.primefaces.component.autocomplete.AutoComplete;
 import org.primefaces.component.inputtext.InputText;
 import org.primefaces.component.message.Message;
@@ -67,6 +64,8 @@ privileged aspect ProductMB_Roo_ManagedBean {
     private boolean ProductMB.createDialogVisible = false;
     
     private List<ProductClient> ProductMB.selectedClientProducts;
+    
+    private List<ProductSpecialty> ProductMB.selectedSpecialties;
     
     @PostConstruct
     public void ProductMB.init() {
@@ -351,16 +350,14 @@ privileged aspect ProductMB_Roo_ManagedBean {
         clientProductsCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(clientProductsCreateInputMessage);
         
-        OutputLabel specialtiesCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        specialtiesCreateOutput.setFor("specialtiesCreateInput");
+        HtmlOutputText specialtiesCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         specialtiesCreateOutput.setId("specialtiesCreateOutput");
         specialtiesCreateOutput.setValue("Specialties:");
         htmlPanelGrid.getChildren().add(specialtiesCreateOutput);
         
-        InputText specialtiesCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        HtmlOutputText specialtiesCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         specialtiesCreateInput.setId("specialtiesCreateInput");
-        specialtiesCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{productMB.product.specialties}", Set.class));
-        specialtiesCreateInput.setRequired(false);
+        specialtiesCreateInput.setValue("This relationship is managed from the ProductSpecialty side");
         htmlPanelGrid.getChildren().add(specialtiesCreateInput);
         
         Message specialtiesCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -585,16 +582,14 @@ privileged aspect ProductMB_Roo_ManagedBean {
         clientProductsEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(clientProductsEditInputMessage);
         
-        OutputLabel specialtiesEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        specialtiesEditOutput.setFor("specialtiesEditInput");
+        HtmlOutputText specialtiesEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         specialtiesEditOutput.setId("specialtiesEditOutput");
         specialtiesEditOutput.setValue("Specialties:");
         htmlPanelGrid.getChildren().add(specialtiesEditOutput);
         
-        InputText specialtiesEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        HtmlOutputText specialtiesEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         specialtiesEditInput.setId("specialtiesEditInput");
-        specialtiesEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{productMB.product.specialties}", Set.class));
-        specialtiesEditInput.setRequired(false);
+        specialtiesEditInput.setValue("This relationship is managed from the ProductSpecialty side");
         htmlPanelGrid.getChildren().add(specialtiesEditInput);
         
         Message specialtiesEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -730,7 +725,8 @@ privileged aspect ProductMB_Roo_ManagedBean {
         htmlPanelGrid.getChildren().add(specialtiesLabel);
         
         HtmlOutputText specialtiesValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        specialtiesValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{productMB.product.specialties}", String.class));
+        specialtiesValue.setId("specialtiesValue");
+        specialtiesValue.setValue("This relationship is managed from the ProductSpecialty side");
         htmlPanelGrid.getChildren().add(specialtiesValue);
         
         return htmlPanelGrid;
@@ -769,9 +765,23 @@ privileged aspect ProductMB_Roo_ManagedBean {
         this.selectedClientProducts = selectedClientProducts;
     }
     
+    public List<ProductSpecialty> ProductMB.getSelectedSpecialties() {
+        return selectedSpecialties;
+    }
+    
+    public void ProductMB.setSelectedSpecialties(List<ProductSpecialty> selectedSpecialties) {
+        if (selectedSpecialties != null) {
+            product.setSpecialties(new HashSet<ProductSpecialty>(selectedSpecialties));
+        }
+        this.selectedSpecialties = selectedSpecialties;
+    }
+    
     public String ProductMB.onEdit() {
         if (product != null && product.getClientProducts() != null) {
             selectedClientProducts = new ArrayList<ProductClient>(product.getClientProducts());
+        }
+        if (product != null && product.getSpecialties() != null) {
+            selectedSpecialties = new ArrayList<ProductSpecialty>(product.getSpecialties());
         }
         return null;
     }
@@ -826,6 +836,7 @@ privileged aspect ProductMB_Roo_ManagedBean {
     public void ProductMB.reset() {
         product = null;
         selectedClientProducts = null;
+        selectedSpecialties = null;
         createDialogVisible = false;
     }
     
