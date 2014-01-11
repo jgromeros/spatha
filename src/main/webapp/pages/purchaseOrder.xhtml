@@ -82,8 +82,8 @@
 						columnClasses="col1,col2,col3" />
 						<p></p>
 					<p:dataTable id="listOrderItem"
-						value="#{orderItemMB.allOrderItems}" var="orderItem"
-						rendered="#{orderItemMB.dataVisible}" resizableColumns="false"
+						value="#{purchaseOrderMB.purchaseOrder.items}" var="orderItem"
+						rendered="#{not empty purchaseOrderMB.purchaseOrder.items}" resizableColumns="false"
 						paginator="true"
 						paginatorTemplate=" {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
 						rowsPerPageTemplate="5,10,25,50" rows="10">
@@ -129,10 +129,10 @@
 					<p:outputPanel id="createPanelOrderItem">
 						<h:form id="createFormOrderItem" enctype="multipart/form-data">
 							<h:panelGrid id="createPanelGridOrderItem" columns="3"
-								binding="#{orderItemMB.createPanelGrid}" styleClass="dialog"
+								binding="#{purchaseOrderMB.createOrderItemPanelGrid}" styleClass="dialog"
 								columnClasses="col1,col2,col3" />
 							<p:commandButton id="createOrderItemSaveButton"
-								value="#{messages.label_save}" action="#{orderItemMB.persist}"
+								value="#{messages.label_add}" action="#{purchaseOrderMB.addOrderItem}"
 								update="createPanelGridOrderItem :growlForm:growl" />
 							<p:commandButton id="createOrderItemCloseButton"
 								value="#{messages.label_close}"

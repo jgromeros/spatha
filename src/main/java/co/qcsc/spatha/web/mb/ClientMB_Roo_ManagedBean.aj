@@ -3,12 +3,14 @@
 
 package co.qcsc.spatha.web.mb;
 
+import co.qcsc.spatha.domain.product.ProductClient;
 import co.qcsc.spatha.domain.thirdparty.Client;
 import co.qcsc.spatha.service.thirdparty.ClientService;
 import co.qcsc.spatha.web.mb.ClientMB;
 import co.qcsc.spatha.web.mb.util.MessageFactory;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -56,6 +58,8 @@ privileged aspect ClientMB_Roo_ManagedBean {
     private HtmlPanelGrid ClientMB.viewPanelGrid;
     
     private boolean ClientMB.createDialogVisible = false;
+    
+    private List<ProductClient> ClientMB.selectedProducts;
     
     @PostConstruct
     public void ClientMB.init() {
@@ -192,16 +196,14 @@ privileged aspect ClientMB_Roo_ManagedBean {
         dossierDescriptionsCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(dossierDescriptionsCreateInputMessage);
         
-        OutputLabel productsCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        productsCreateOutput.setFor("productsCreateInput");
+        HtmlOutputText productsCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         productsCreateOutput.setId("productsCreateOutput");
         productsCreateOutput.setValue("Products:");
         htmlPanelGrid.getChildren().add(productsCreateOutput);
         
-        InputText productsCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        HtmlOutputText productsCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         productsCreateInput.setId("productsCreateInput");
-        productsCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{clientMB.client.products}", Set.class));
-        productsCreateInput.setRequired(false);
+        productsCreateInput.setValue("This relationship is managed from the ProductClient side");
         htmlPanelGrid.getChildren().add(productsCreateInput);
         
         Message productsCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -281,16 +283,14 @@ privileged aspect ClientMB_Roo_ManagedBean {
         dossierDescriptionsEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(dossierDescriptionsEditInputMessage);
         
-        OutputLabel productsEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        productsEditOutput.setFor("productsEditInput");
+        HtmlOutputText productsEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         productsEditOutput.setId("productsEditOutput");
         productsEditOutput.setValue("Products:");
         htmlPanelGrid.getChildren().add(productsEditOutput);
         
-        InputText productsEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        HtmlOutputText productsEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         productsEditInput.setId("productsEditInput");
-        productsEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{clientMB.client.products}", Set.class));
-        productsEditInput.setRequired(false);
+        productsEditInput.setValue("This relationship is managed from the ProductClient side");
         htmlPanelGrid.getChildren().add(productsEditInput);
         
         Message productsEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -345,7 +345,8 @@ privileged aspect ClientMB_Roo_ManagedBean {
         htmlPanelGrid.getChildren().add(productsLabel);
         
         HtmlOutputText productsValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        productsValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{clientMB.client.products}", String.class));
+        productsValue.setId("productsValue");
+        productsValue.setValue("This relationship is managed from the ProductClient side");
         htmlPanelGrid.getChildren().add(productsValue);
         
         return htmlPanelGrid;
@@ -362,7 +363,21 @@ privileged aspect ClientMB_Roo_ManagedBean {
         this.client = client;
     }
     
+    public List<ProductClient> ClientMB.getSelectedProducts() {
+        return selectedProducts;
+    }
+    
+    public void ClientMB.setSelectedProducts(List<ProductClient> selectedProducts) {
+        if (selectedProducts != null) {
+            client.setProducts(new HashSet<ProductClient>(selectedProducts));
+        }
+        this.selectedProducts = selectedProducts;
+    }
+    
     public String ClientMB.onEdit() {
+        if (client != null && client.getProducts() != null) {
+            selectedProducts = new ArrayList<ProductClient>(client.getProducts());
+        }
         return null;
     }
     
@@ -415,6 +430,7 @@ privileged aspect ClientMB_Roo_ManagedBean {
     
     public void ClientMB.reset() {
         client = null;
+        selectedProducts = null;
         createDialogVisible = false;
     }
     

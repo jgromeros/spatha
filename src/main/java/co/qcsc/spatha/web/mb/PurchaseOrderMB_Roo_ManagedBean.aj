@@ -51,8 +51,6 @@ privileged aspect PurchaseOrderMB_Roo_ManagedBean {
     
     private String PurchaseOrderMB.name = "PurchaseOrders";
     
-    private PurchaseOrder PurchaseOrderMB.purchaseOrder;
-    
     private List<PurchaseOrder> PurchaseOrderMB.allPurchaseOrders;
     
     private boolean PurchaseOrderMB.dataVisible = false;
@@ -449,17 +447,6 @@ privileged aspect PurchaseOrderMB_Roo_ManagedBean {
         htmlPanelGrid.getChildren().add(itemsValue);
         
         return htmlPanelGrid;
-    }
-    
-    public PurchaseOrder PurchaseOrderMB.getPurchaseOrder() {
-        if (purchaseOrder == null) {
-            purchaseOrder = new PurchaseOrder();
-        }
-        return purchaseOrder;
-    }
-    
-    public void PurchaseOrderMB.setPurchaseOrder(PurchaseOrder purchaseOrder) {
-        this.purchaseOrder = purchaseOrder;
     }
     
     public List<Client> PurchaseOrderMB.completeClient(String query) {

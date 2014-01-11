@@ -80,29 +80,6 @@ privileged aspect ApplicationBean_Roo_ApplicationBean {
         menuModel.addSubmenu(submenu);
         
         submenu = new Submenu();
-        submenu.setId("orderItemSubmenu");
-        submenu.setLabel("OrderItem");
-        item = new MenuItem();
-        item.setId("createOrderItemMenuItem");
-        item.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{messages.label_create}", String.class));
-        item.setActionExpression(expressionFactory.createMethodExpression(elContext, "#{orderItemMB.displayCreateDialog}", String.class, new Class[0]));
-        item.setIcon("ui-icon ui-icon-document");
-        item.setAjax(false);
-        item.setAsync(false);
-        item.setUpdate(":dataForm:data");
-        submenu.getChildren().add(item);
-        item = new MenuItem();
-        item.setId("listOrderItemMenuItem");
-        item.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{messages.label_list}", String.class));
-        item.setActionExpression(expressionFactory.createMethodExpression(elContext, "#{orderItemMB.displayList}", String.class, new Class[0]));
-        item.setIcon("ui-icon ui-icon-folder-open");
-        item.setAjax(false);
-        item.setAsync(false);
-        item.setUpdate(":dataForm:data");
-        submenu.getChildren().add(item);
-        menuModel.addSubmenu(submenu);
-        
-        submenu = new Submenu();
         submenu.setId("productClientSubmenu");
         submenu.setLabel("ProductClient");
         item = new MenuItem();
