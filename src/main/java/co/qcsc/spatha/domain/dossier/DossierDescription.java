@@ -35,4 +35,8 @@ public class DossierDescription {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "dossierDescription")
     private Set<DocumentType> documentTypes = new HashSet<DocumentType>();
 
+    /**
+     */
+    @NotNull
+    private Boolean valid;
 }

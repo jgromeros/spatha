@@ -34,4 +34,12 @@ privileged aspect DossierDescription_Roo_JavaBean {
         this.documentTypes = documentTypes;
     }
     
+    public Boolean DossierDescription.getValid() {
+        return this.valid;
+    }
+    
+    public void DossierDescription.setValid(Boolean valid) {
+        this.valid = valid;
+    }
+    
 }

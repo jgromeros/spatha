@@ -3,11 +3,11 @@
 
 package co.qcsc.spatha.web.mb;
 
-import co.qcsc.spatha.web.mb.ClientMB;
+import co.qcsc.spatha.web.mb.DossierItemFileMB;
 import org.springframework.beans.factory.annotation.Configurable;
 
-privileged aspect ClientMB_Roo_Configurable {
+privileged aspect DossierItemFileMB_Roo_Configurable {
     
-    declare @type: ClientMB: @Configurable;
+    declare @type: DossierItemFileMB: @Configurable;
     
 }
