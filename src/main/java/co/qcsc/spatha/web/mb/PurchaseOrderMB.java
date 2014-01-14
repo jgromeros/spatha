@@ -1,9 +1,11 @@
 package co.qcsc.spatha.web.mb;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.faces.application.FacesMessage;
@@ -16,6 +18,7 @@ import org.primefaces.component.inputtext.InputText;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
 import org.primefaces.context.RequestContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
@@ -24,6 +27,7 @@ import co.qcsc.spatha.domain.purchase.OrderItem;
 import co.qcsc.spatha.domain.purchase.PurchaseOrder;
 import co.qcsc.spatha.domain.thirdparty.Client;
 import co.qcsc.spatha.domain.thirdparty.Supplier;
+import co.qcsc.spatha.service.product.ProductClientService;
 import co.qcsc.spatha.web.mb.converter.ClientConverter;
 import co.qcsc.spatha.web.mb.converter.ProductClientConverter;
 import co.qcsc.spatha.web.mb.converter.SupplierConverter;
@@ -42,6 +46,23 @@ public class PurchaseOrderMB {
 	private OrderItem orderItem;
 
 	private PurchaseOrder purchaseOrder;
+	private List<String> columns;
+	private List<String> orderItemColumns;
+
+	@Autowired
+	ProductClientService productClientService;
+
+	@PostConstruct
+	public void init() {
+		columns = new ArrayList<String>();
+		columns.add("numberOrder");
+		columns.add("supplierContact");
+		columns.add("clientContact");
+		columns.add("supplierPhone");
+		columns.add("clientPhone");
+		orderItemColumns = new ArrayList<String>();
+		orderItemColumns.add("quantity");
+	}
 
 	public HtmlPanelGrid populateCreatePanel() {
 		FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -310,7 +331,6 @@ public class PurchaseOrderMB {
 		itemsCreateOutput.setId("itemsCreateOutput");
 		itemsCreateOutput.setValue("Items:");
 		htmlPanelGrid.getChildren().add(itemsCreateOutput);
-
 		return htmlPanelGrid;
 	}
 
@@ -339,7 +359,8 @@ public class PurchaseOrderMB {
 		quantityCreateInput.setId("quantityCreateInput");
 		quantityCreateInput.setValueExpression("value", expressionFactory
 				.createValueExpression(elContext,
-						"#{purchaseOrderMB.orderItem.quantity}", BigDecimal.class));
+						"#{purchaseOrderMB.orderItem.quantity}",
+						BigDecimal.class));
 		quantityCreateInput.setRequired(false);
 		htmlPanelGrid.getChildren().add(quantityCreateInput);
 
@@ -360,14 +381,13 @@ public class PurchaseOrderMB {
 		AutoComplete productCreateInput = (AutoComplete) application
 				.createComponent(AutoComplete.COMPONENT_TYPE);
 		productCreateInput.setId("productCreateInput");
-		productCreateInput.setValueExpression("value",
-				expressionFactory
-						.createValueExpression(elContext,
-								"#{purchaseOrderMB.orderItem.product}",
-								ProductClient.class));
+		productCreateInput.setValueExpression("value", expressionFactory
+				.createValueExpression(elContext,
+						"#{purchaseOrderMB.orderItem.product}",
+						ProductClient.class));
 		productCreateInput.setCompleteMethod(expressionFactory
 				.createMethodExpression(elContext,
-						"#{orderItemMB.completeProduct}", List.class,
+						"#{purchaseOrderMB.completeProduct}", List.class,
 						new Class[] { String.class }));
 		productCreateInput.setDropdown(true);
 		productCreateInput.setValueExpression("var", expressionFactory
@@ -394,8 +414,7 @@ public class PurchaseOrderMB {
 
 	public String addOrderItem() {
 		String message = "";
-		if(purchaseOrder.getItems() == null)
-		{
+		if (purchaseOrder.getItems() == null) {
 			purchaseOrder.setItems(new HashSet<OrderItem>());
 		}
 		purchaseOrder.getItems().add(orderItem);
@@ -422,20 +441,19 @@ public class PurchaseOrderMB {
 		this.createOrderItemPanelGrid = createOrderItemPanelGrid;
 	}
 
-	/**
-	 * @return the orderItem
-	 */
-	public OrderItem getOrderItem() {
-		return orderItem;
+	public List<ProductClient> completeProduct(String query) {
+		List<ProductClient> suggestions = new ArrayList<ProductClient>();
+		for (ProductClient productClient : productClientService
+				.findAllProductClients()) {
+			String productClientStr = String.valueOf(productClient.getCode());
+			if (productClientStr.toLowerCase().startsWith(query.toLowerCase())) {
+				suggestions.add(productClient);
+			}
+		}
+		return suggestions;
 	}
 
-	/**
-	 * @param orderItem
-	 *            the orderItem to set
-	 */
-	public void setOrderItem(OrderItem orderItem) {
-		this.orderItem = orderItem;
-	}
+
 
 	/**
 	 * @return the purchaseOrder
@@ -452,4 +470,50 @@ public class PurchaseOrderMB {
 		this.purchaseOrder = purchaseOrder;
 	}
 
+	/**
+	 * @return the orderItemColumns
+	 */
+	public List<String> getOrderItemColumns() {
+		return orderItemColumns;
+	}
+
+	/**
+	 * @param orderItemColumns
+	 *            the orderItemColumns to set
+	 */
+	public void setOrderItemColumns(List<String> orderItemColumns) {
+		orderItemColumns = orderItemColumns;
+	}
+
+	/**
+	 * @return the columns
+	 */
+	public List<String> getColumns() {
+		return columns;
+	}
+
+	/**
+	 * @param columns
+	 *            the columns to set
+	 */
+	public void setColumns(List<String> columns) {
+		this.columns = columns;
+	}
+
+	/**
+	 * @return
+	 */
+	public OrderItem getOrderItem() {
+		if (orderItem == null) {
+			orderItem = new OrderItem();
+		}
+		return orderItem;
+	}
+
+	/**
+	 * @param orderItem
+	 */
+	public void setOrderItem(OrderItem orderItem) {
+		this.orderItem = orderItem;
+	}
 }
