@@ -417,6 +417,7 @@ public class PurchaseOrderMB {
 		if (purchaseOrder.getItems() == null) {
 			purchaseOrder.setItems(new HashSet<OrderItem>());
 		}
+		orderItem.setPurchaseOrder(this.getPurchaseOrder());
 		purchaseOrder.getItems().add(orderItem);
 		orderItem = new OrderItem();
 		message = "message_successfully_updated";
@@ -452,8 +453,6 @@ public class PurchaseOrderMB {
 		}
 		return suggestions;
 	}
-
-
 
 	/**
 	 * @return the purchaseOrder
@@ -515,5 +514,11 @@ public class PurchaseOrderMB {
 	 */
 	public void setOrderItem(OrderItem orderItem) {
 		this.orderItem = orderItem;
+	}
+	
+	public List<OrderItem> getPurchaseOrderItemList(){
+		List<OrderItem> list = new ArrayList<OrderItem>();
+		list.addAll(this.purchaseOrder.getItems());
+		return list;
 	}
 }
