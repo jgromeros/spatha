@@ -9,6 +9,7 @@ import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.SessionScoped;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
@@ -62,6 +63,8 @@ public class PurchaseOrderMB {
 		columns.add("clientPhone");
 		orderItemColumns = new ArrayList<String>();
 		orderItemColumns.add("quantity");
+		purchaseOrder= new PurchaseOrder();
+		orderItem = new OrderItem();
 	}
 
 	public HtmlPanelGrid populateCreatePanel() {
@@ -426,7 +429,7 @@ public class PurchaseOrderMB {
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
 				"OrderItem");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-		reset();
+		//ssreset();
 		return null;
 	}
 
