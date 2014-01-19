@@ -80,56 +80,55 @@
 					<h:panelGrid id="createPanelGrid" columns="3"
 						binding="#{purchaseOrderMB.createPanelGrid}" styleClass="dialog"
 						columnClasses="col1,col2,col3" />
-						<p></p>
-					<p:dataTable id="listOrderItem"
-						value="#{purchaseOrderMB.purchaseOrder.items}" var="orderItem"
-						rendered="#{not empty purchaseOrderMB.purchaseOrder.items}" resizableColumns="false"
-						paginator="true"
-						paginatorTemplate=" {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-						rowsPerPageTemplate="5,10,25,50" rows="10">
-						<p:columns value="#{purchaseOrderMB.orderItemColumns}" var="column"
-							columnIndexVar="colIndex">
-							<f:facet name="header">
-								<h:outputText value="#{applicationBean.getColumnName(column)}" />
-							</f:facet>
-							<h:outputText value="#{orderItem[column]}" />
-						</p:columns>
-						<p:column styleClass="action-column">
-							<f:facet name="header">
-								<h:outputText value="Actions" />
-							</f:facet>
-							<p:commandButton id="viewButton" icon="ui-icon-zoomin"
-								update=":viewForm:viewPanelGrid"
-								oncomplete="viewDialogWidget.show()"
-								title="#{messages.label_view}">
-								<f:setPropertyActionListener value="#{orderItem}"
-									target="#{purchaseOrderMB.orderItem}" />
-							</p:commandButton>
-							<p:tooltip for="viewButton" value="#{messages.label_view}"
-								showEffect="fade" hideEffect="fade" />
-							<p:tooltip for="editButton" value="#{messages.label_edit}"
-								showEffect="fade" hideEffect="fade" />
-							<p:commandButton id="deleteButton" icon="ui-icon-trash"
-								oncomplete="deleteDialogWidget.show()"
-								title="#{messages.label_delete}">
-								<f:setPropertyActionListener value="#{orderItem}"
-									target="#{purchaseOrderMB.orderItem}" />
-							</p:commandButton>
-							<p:tooltip for="deleteButton" value="#{messages.label_delete}"
-								showEffect="fade" hideEffect="fade" />
-						</p:column>
-					</p:dataTable>
+					<p></p>
+
 					<p:outputPanel id="createPanelOrderItem">
 						<h:form id="createFormOrderItem" enctype="multipart/form-data">
+							<p:dataTable id="listOrderItem"
+								value="#{purchaseOrderMB.purchaseOrderItemList}" var="orderItem"
+								resizableColumns="false" paginator="true"
+								paginatorTemplate=" {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								rowsPerPageTemplate="5,10,25,50" rows="10">
+								<p:columns value="#{purchaseOrderMB.orderItemColumns}"
+									var="column" columnIndexVar="colIndex">
+									<f:facet name="header">
+										<h:outputText value="#{applicationBean.getColumnName(column)}" />
+									</f:facet>
+									<h:outputText value="#{orderItem[column]}" />
+								</p:columns>
+								<p:column styleClass="action-column">
+									<f:facet name="header">
+										<h:outputText value="Actions" />
+									</f:facet>
+									<p:commandButton id="viewButton" icon="ui-icon-zoomin"
+										update=":viewForm:viewPanelGrid"
+										oncomplete="viewDialogWidget.show()"
+										title="#{messages.label_view}">
+										<f:setPropertyActionListener value="#{orderItem}"
+											target="#{purchaseOrderMB.orderItem}" />
+									</p:commandButton>
+									<p:tooltip for="viewButton" value="#{messages.label_view}"
+										showEffect="fade" hideEffect="fade" />
+									<p:tooltip for="editButton" value="#{messages.label_edit}"
+										showEffect="fade" hideEffect="fade" />
+									<p:commandButton id="deleteButton" icon="ui-icon-trash"
+										oncomplete="deleteDialogWidget.show()"
+										title="#{messages.label_delete}">
+										<f:setPropertyActionListener value="#{orderItem}"
+											target="#{purchaseOrderMB.orderItem}" />
+									</p:commandButton>
+									<p:tooltip for="deleteButton" value="#{messages.label_delete}"
+										showEffect="fade" hideEffect="fade" />
+								</p:column>
+							</p:dataTable>
+
 							<h:panelGrid id="createPanelGridOrderItem" columns="3"
-								binding="#{purchaseOrderMB.createOrderItemPanelGrid}" styleClass="dialog"
-								columnClasses="col1,col2,col3" />
+								binding="#{purchaseOrderMB.createOrderItemPanelGrid}"
+								styleClass="dialog" columnClasses="col1,col2,col3" />
 							<p:commandButton id="createOrderItemSaveButton"
-								value="#{messages.label_add}" action="#{purchaseOrderMB.addOrderItem}"
-								update="createPanelGridOrderItem :growlForm:growl" />
-							<p:commandButton id="createOrderItemCloseButton"
-								value="#{messages.label_close}"
-								onclick="createDialogWidget.hide()" type="button" />
+								value="#{messages.label_add}"
+								action="#{purchaseOrderMB.addOrderItem}"
+								update="listOrderItem,createPanelGridOrderItem :growlForm:growl" />
 						</h:form>
 					</p:outputPanel>
 					<p:commandButton id="createSaveButton"
