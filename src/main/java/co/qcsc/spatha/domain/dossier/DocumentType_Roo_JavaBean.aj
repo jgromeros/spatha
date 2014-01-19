@@ -5,6 +5,7 @@ package co.qcsc.spatha.domain.dossier;
 
 import co.qcsc.spatha.domain.dossier.DocumentType;
 import co.qcsc.spatha.domain.dossier.DossierDescription;
+import java.util.Set;
 
 privileged aspect DocumentType_Roo_JavaBean {
     
@@ -38,6 +39,22 @@ privileged aspect DocumentType_Roo_JavaBean {
     
     public void DocumentType.setDossierDescription(DossierDescription dossierDescription) {
         this.dossierDescription = dossierDescription;
+    }
+    
+    public Set<DocumentType> DocumentType.getDocumentTypes() {
+        return this.documentTypes;
+    }
+    
+    public void DocumentType.setDocumentTypes(Set<DocumentType> documentTypes) {
+        this.documentTypes = documentTypes;
+    }
+    
+    public DocumentType DocumentType.getDocumentParent() {
+        return this.documentParent;
+    }
+    
+    public void DocumentType.setDocumentParent(DocumentType documentParent) {
+        this.documentParent = documentParent;
     }
     
 }

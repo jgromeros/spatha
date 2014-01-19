@@ -39,6 +39,7 @@ privileged aspect DocumentTypeDataOnDemand_Roo_DataOnDemand {
         DocumentType obj = new DocumentType();
         setCode(obj, index);
         setDocumentOrder(obj, index);
+        setDocumentParent(obj, index);
         setName(obj, index);
         return obj;
     }
@@ -51,6 +52,11 @@ privileged aspect DocumentTypeDataOnDemand_Roo_DataOnDemand {
     public void DocumentTypeDataOnDemand.setDocumentOrder(DocumentType obj, int index) {
         Integer documentOrder = new Integer(index);
         obj.setDocumentOrder(documentOrder);
+    }
+    
+    public void DocumentTypeDataOnDemand.setDocumentParent(DocumentType obj, int index) {
+        DocumentType documentParent = obj;
+        obj.setDocumentParent(documentParent);
     }
     
     public void DocumentTypeDataOnDemand.setName(DocumentType obj, int index) {

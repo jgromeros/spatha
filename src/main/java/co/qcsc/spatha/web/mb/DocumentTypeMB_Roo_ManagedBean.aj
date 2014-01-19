@@ -8,9 +8,11 @@ import co.qcsc.spatha.domain.dossier.DossierDescription;
 import co.qcsc.spatha.service.dossier.DocumentTypeService;
 import co.qcsc.spatha.service.dossier.DossierDescriptionService;
 import co.qcsc.spatha.web.mb.DocumentTypeMB;
+import co.qcsc.spatha.web.mb.converter.DocumentTypeConverter;
 import co.qcsc.spatha.web.mb.converter.DossierDescriptionConverter;
 import co.qcsc.spatha.web.mb.util.MessageFactory;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
@@ -60,6 +62,8 @@ privileged aspect DocumentTypeMB_Roo_ManagedBean {
     private HtmlPanelGrid DocumentTypeMB.viewPanelGrid;
     
     private boolean DocumentTypeMB.createDialogVisible = false;
+    
+    private List<DocumentType> DocumentTypeMB.selectedDocumentTypes;
     
     @PostConstruct
     public void DocumentTypeMB.init() {
@@ -222,6 +226,46 @@ privileged aspect DocumentTypeMB_Roo_ManagedBean {
         dossierDescriptionCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(dossierDescriptionCreateInputMessage);
         
+        HtmlOutputText documentTypesCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        documentTypesCreateOutput.setId("documentTypesCreateOutput");
+        documentTypesCreateOutput.setValue("Document Types:");
+        htmlPanelGrid.getChildren().add(documentTypesCreateOutput);
+        
+        HtmlOutputText documentTypesCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        documentTypesCreateInput.setId("documentTypesCreateInput");
+        documentTypesCreateInput.setValue("This relationship is managed from the DocumentType side");
+        htmlPanelGrid.getChildren().add(documentTypesCreateInput);
+        
+        Message documentTypesCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        documentTypesCreateInputMessage.setId("documentTypesCreateInputMessage");
+        documentTypesCreateInputMessage.setFor("documentTypesCreateInput");
+        documentTypesCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(documentTypesCreateInputMessage);
+        
+        OutputLabel documentParentCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        documentParentCreateOutput.setFor("documentParentCreateInput");
+        documentParentCreateOutput.setId("documentParentCreateOutput");
+        documentParentCreateOutput.setValue("Document Parent:");
+        htmlPanelGrid.getChildren().add(documentParentCreateOutput);
+        
+        AutoComplete documentParentCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        documentParentCreateInput.setId("documentParentCreateInput");
+        documentParentCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{documentTypeMB.documentType.documentParent}", DocumentType.class));
+        documentParentCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{documentTypeMB.completeDocumentParent}", List.class, new Class[] { String.class }));
+        documentParentCreateInput.setDropdown(true);
+        documentParentCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "documentParent", String.class));
+        documentParentCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{documentParent.code} #{documentParent.name} #{documentParent.documentOrder}", String.class));
+        documentParentCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{documentParent}", DocumentType.class));
+        documentParentCreateInput.setConverter(new DocumentTypeConverter());
+        documentParentCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(documentParentCreateInput);
+        
+        Message documentParentCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        documentParentCreateInputMessage.setId("documentParentCreateInputMessage");
+        documentParentCreateInputMessage.setFor("documentParentCreateInput");
+        documentParentCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(documentParentCreateInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -318,6 +362,46 @@ privileged aspect DocumentTypeMB_Roo_ManagedBean {
         dossierDescriptionEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(dossierDescriptionEditInputMessage);
         
+        HtmlOutputText documentTypesEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        documentTypesEditOutput.setId("documentTypesEditOutput");
+        documentTypesEditOutput.setValue("Document Types:");
+        htmlPanelGrid.getChildren().add(documentTypesEditOutput);
+        
+        HtmlOutputText documentTypesEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        documentTypesEditInput.setId("documentTypesEditInput");
+        documentTypesEditInput.setValue("This relationship is managed from the DocumentType side");
+        htmlPanelGrid.getChildren().add(documentTypesEditInput);
+        
+        Message documentTypesEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        documentTypesEditInputMessage.setId("documentTypesEditInputMessage");
+        documentTypesEditInputMessage.setFor("documentTypesEditInput");
+        documentTypesEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(documentTypesEditInputMessage);
+        
+        OutputLabel documentParentEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        documentParentEditOutput.setFor("documentParentEditInput");
+        documentParentEditOutput.setId("documentParentEditOutput");
+        documentParentEditOutput.setValue("Document Parent:");
+        htmlPanelGrid.getChildren().add(documentParentEditOutput);
+        
+        AutoComplete documentParentEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
+        documentParentEditInput.setId("documentParentEditInput");
+        documentParentEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{documentTypeMB.documentType.documentParent}", DocumentType.class));
+        documentParentEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{documentTypeMB.completeDocumentParent}", List.class, new Class[] { String.class }));
+        documentParentEditInput.setDropdown(true);
+        documentParentEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "documentParent", String.class));
+        documentParentEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{documentParent.code} #{documentParent.name} #{documentParent.documentOrder}", String.class));
+        documentParentEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{documentParent}", DocumentType.class));
+        documentParentEditInput.setConverter(new DocumentTypeConverter());
+        documentParentEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(documentParentEditInput);
+        
+        Message documentParentEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        documentParentEditInputMessage.setId("documentParentEditInputMessage");
+        documentParentEditInputMessage.setFor("documentParentEditInput");
+        documentParentEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(documentParentEditInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -368,6 +452,26 @@ privileged aspect DocumentTypeMB_Roo_ManagedBean {
         dossierDescriptionValue.setConverter(new DossierDescriptionConverter());
         htmlPanelGrid.getChildren().add(dossierDescriptionValue);
         
+        HtmlOutputText documentTypesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        documentTypesLabel.setId("documentTypesLabel");
+        documentTypesLabel.setValue("Document Types:");
+        htmlPanelGrid.getChildren().add(documentTypesLabel);
+        
+        HtmlOutputText documentTypesValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        documentTypesValue.setId("documentTypesValue");
+        documentTypesValue.setValue("This relationship is managed from the DocumentType side");
+        htmlPanelGrid.getChildren().add(documentTypesValue);
+        
+        HtmlOutputText documentParentLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        documentParentLabel.setId("documentParentLabel");
+        documentParentLabel.setValue("Document Parent:");
+        htmlPanelGrid.getChildren().add(documentParentLabel);
+        
+        HtmlOutputText documentParentValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        documentParentValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{documentTypeMB.documentType.documentParent}", DocumentType.class));
+        documentParentValue.setConverter(new DocumentTypeConverter());
+        htmlPanelGrid.getChildren().add(documentParentValue);
+        
         return htmlPanelGrid;
     }
     
@@ -393,7 +497,32 @@ privileged aspect DocumentTypeMB_Roo_ManagedBean {
         return suggestions;
     }
     
+    public List<DocumentType> DocumentTypeMB.getSelectedDocumentTypes() {
+        return selectedDocumentTypes;
+    }
+    
+    public void DocumentTypeMB.setSelectedDocumentTypes(List<DocumentType> selectedDocumentTypes) {
+        if (selectedDocumentTypes != null) {
+            documentType.setDocumentTypes(new HashSet<DocumentType>(selectedDocumentTypes));
+        }
+        this.selectedDocumentTypes = selectedDocumentTypes;
+    }
+    
+    public List<DocumentType> DocumentTypeMB.completeDocumentParent(String query) {
+        List<DocumentType> suggestions = new ArrayList<DocumentType>();
+        for (DocumentType documentType : documentTypeService.findAllDocumentTypes()) {
+            String documentTypeStr = String.valueOf(documentType.getCode() +  " "  + documentType.getName() +  " "  + documentType.getDocumentOrder());
+            if (documentTypeStr.toLowerCase().startsWith(query.toLowerCase())) {
+                suggestions.add(documentType);
+            }
+        }
+        return suggestions;
+    }
+    
     public String DocumentTypeMB.onEdit() {
+        if (documentType != null && documentType.getDocumentTypes() != null) {
+            selectedDocumentTypes = new ArrayList<DocumentType>(documentType.getDocumentTypes());
+        }
         return null;
     }
     
@@ -446,6 +575,7 @@ privileged aspect DocumentTypeMB_Roo_ManagedBean {
     
     public void DocumentTypeMB.reset() {
         documentType = null;
+        selectedDocumentTypes = null;
         createDialogVisible = false;
     }
     
