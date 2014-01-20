@@ -9,7 +9,6 @@ import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.SessionScoped;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
@@ -23,14 +22,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
+import co.qcsc.spatha.domain.product.Product;
 import co.qcsc.spatha.domain.product.ProductClient;
 import co.qcsc.spatha.domain.purchase.OrderItem;
 import co.qcsc.spatha.domain.purchase.PurchaseOrder;
 import co.qcsc.spatha.domain.thirdparty.Client;
 import co.qcsc.spatha.domain.thirdparty.Supplier;
 import co.qcsc.spatha.service.product.ProductClientService;
+import co.qcsc.spatha.service.purchase.PurchaseOrderService;
 import co.qcsc.spatha.web.mb.converter.ClientConverter;
 import co.qcsc.spatha.web.mb.converter.ProductClientConverter;
+import co.qcsc.spatha.web.mb.converter.PurchaseOrderConverter;
 import co.qcsc.spatha.web.mb.converter.SupplierConverter;
 import co.qcsc.spatha.web.mb.util.MessageFactory;
 
@@ -50,8 +52,13 @@ public class PurchaseOrderMB {
 	private List<String> columns;
 	private List<String> orderItemColumns;
 
+	private HtmlPanelGrid viewOrderItemPanelGrid;
+
 	@Autowired
 	ProductClientService productClientService;
+
+	@Autowired
+	PurchaseOrderService purchaseOrderService;
 
 	@PostConstruct
 	public void init() {
@@ -63,7 +70,8 @@ public class PurchaseOrderMB {
 		columns.add("clientPhone");
 		orderItemColumns = new ArrayList<String>();
 		orderItemColumns.add("quantity");
-		purchaseOrder= new PurchaseOrder();
+		orderItemColumns.add("product");
+		purchaseOrder = new PurchaseOrder();
 		orderItem = new OrderItem();
 	}
 
@@ -429,7 +437,7 @@ public class PurchaseOrderMB {
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
 				"OrderItem");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-		//ssreset();
+		// ssreset();
 		return null;
 	}
 
@@ -518,10 +526,94 @@ public class PurchaseOrderMB {
 	public void setOrderItem(OrderItem orderItem) {
 		this.orderItem = orderItem;
 	}
-	
-	public List<OrderItem> getPurchaseOrderItemList(){
+
+	public List<OrderItem> getPurchaseOrderItemList() {
 		List<OrderItem> list = new ArrayList<OrderItem>();
 		list.addAll(this.purchaseOrder.getItems());
 		return list;
+	}
+
+	public HtmlPanelGrid getViewOrderItemPanelGrid() {
+		return populateViewOrderItemPanel();
+	}
+
+	public HtmlPanelGrid populateViewOrderItemPanel() {
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+		javax.faces.application.Application application = facesContext
+				.getApplication();
+		ExpressionFactory expressionFactory = application
+				.getExpressionFactory();
+		ELContext elContext = facesContext.getELContext();
+
+		HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) application
+				.createComponent(HtmlPanelGrid.COMPONENT_TYPE);
+
+		HtmlOutputText quantityLabel = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		quantityLabel.setId("quantityLabel");
+		quantityLabel.setValue("Quantity:");
+		htmlPanelGrid.getChildren().add(quantityLabel);
+
+		HtmlOutputText quantityValue = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		quantityValue.setValueExpression("value", expressionFactory
+				.createValueExpression(elContext,
+						"#{purchaseOrderMB.orderItem.quantity}", String.class));
+		htmlPanelGrid.getChildren().add(quantityValue);
+
+		HtmlOutputText productLabel = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		productLabel.setId("productLabel");
+		productLabel.setValue("Product:");
+		htmlPanelGrid.getChildren().add(productLabel);
+
+		HtmlOutputText productValue = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		productValue.setValueExpression("value", expressionFactory
+				.createValueExpression(elContext,
+						"#{purchaseOrderMB.orderItem.product}",
+						ProductClient.class));
+		productValue.setConverter(new ProductClientConverter());
+		htmlPanelGrid.getChildren().add(productValue);
+
+		HtmlOutputText dossierLabel = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		dossierLabel.setId("dossierLabel");
+		dossierLabel.setValue("Dossier:");
+		htmlPanelGrid.getChildren().add(dossierLabel);
+
+		HtmlOutputText dossierValue = (HtmlOutputText) application
+				.createComponent(HtmlOutputText.COMPONENT_TYPE);
+		dossierValue.setId("dossierValue");
+		dossierValue
+				.setValue("This relationship is managed from the Dossier side");
+		htmlPanelGrid.getChildren().add(dossierValue);
+
+		return htmlPanelGrid;
+	}
+
+	public String persist() {
+		String message = "";
+		if (purchaseOrder.getId() != null) {
+			purchaseOrderService.updatePurchaseOrder(purchaseOrder);
+			message = "message_successfully_updated";
+		} else {
+			purchaseOrderService.savePurchaseOrder(purchaseOrder);
+			message = "message_successfully_created";
+		}
+		RequestContext context = RequestContext.getCurrentInstance();
+		context.execute("createDialogWidget.hide()");
+		context.execute("editDialogWidget.hide()");
+
+		FacesMessage facesMessage = MessageFactory.getMessage(message,
+				"PurchaseOrder");
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		// reset();
+		// return findAllPurchaseOrders();
+		return null;
+	}
+
+	public void setViewOrderItemPanelGrid(HtmlPanelGrid viewOrderItemPanelGrid) {
+		this.viewOrderItemPanelGrid = viewOrderItemPanelGrid;
 	}
 }

@@ -1,4 +1,5 @@
 package co.qcsc.spatha.domain.product;
+
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Size;
 
@@ -13,19 +14,29 @@ import co.qcsc.spatha.domain.thirdparty.Client;
 @RooJpaEntity
 public class ProductClient {
 
-    /**
+	/**
      */
-    @Size(min = 2)
-    private String code;
+	@Size(min = 2)
+	private String code;
 
-    /**
+	/**
      */
-    @ManyToOne
-    private Client client;
+	@ManyToOne
+	private Client client;
 
-    /**
+	/**
      */
-    @ManyToOne
-    private Product product;
+	@ManyToOne
+	private Product product;
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return client.getName() + " - " + product.getName();
+	}
 
 }

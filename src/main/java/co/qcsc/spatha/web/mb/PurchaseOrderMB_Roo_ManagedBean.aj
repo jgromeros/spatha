@@ -6,7 +6,6 @@ package co.qcsc.spatha.web.mb;
 import co.qcsc.spatha.domain.purchase.PurchaseOrder;
 import co.qcsc.spatha.domain.thirdparty.Client;
 import co.qcsc.spatha.domain.thirdparty.Supplier;
-import co.qcsc.spatha.service.purchase.PurchaseOrderService;
 import co.qcsc.spatha.service.thirdparty.ClientService;
 import co.qcsc.spatha.service.thirdparty.SupplierService;
 import co.qcsc.spatha.web.mb.PurchaseOrderMB;
@@ -31,7 +30,6 @@ import org.primefaces.component.autocomplete.AutoComplete;
 import org.primefaces.component.inputtext.InputText;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
-import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -40,9 +38,6 @@ privileged aspect PurchaseOrderMB_Roo_ManagedBean {
     declare @type: PurchaseOrderMB: @ManagedBean(name = "purchaseOrderMB");
     
     declare @type: PurchaseOrderMB: @SessionScoped;
-    
-    @Autowired
-    PurchaseOrderService PurchaseOrderMB.purchaseOrderService;
     
     @Autowired
     ClientService PurchaseOrderMB.clientService;
@@ -477,25 +472,6 @@ privileged aspect PurchaseOrderMB_Roo_ManagedBean {
         purchaseOrder = new PurchaseOrder();
         createDialogVisible = true;
         return "purchaseOrder";
-    }
-    
-    public String PurchaseOrderMB.persist() {
-        String message = "";
-        if (purchaseOrder.getId() != null) {
-            purchaseOrderService.updatePurchaseOrder(purchaseOrder);
-            message = "message_successfully_updated";
-        } else {
-            purchaseOrderService.savePurchaseOrder(purchaseOrder);
-            message = "message_successfully_created";
-        }
-        RequestContext context = RequestContext.getCurrentInstance();
-        context.execute("createDialogWidget.hide()");
-        context.execute("editDialogWidget.hide()");
-        
-        FacesMessage facesMessage = MessageFactory.getMessage(message, "PurchaseOrder");
-        FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-        reset();
-        return findAllPurchaseOrders();
     }
     
     public String PurchaseOrderMB.delete() {
