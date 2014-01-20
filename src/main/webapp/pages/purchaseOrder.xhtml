@@ -183,8 +183,8 @@
 						binding="#{purchaseOrderMB.viewOrderItemPanelGrid}"
 						styleClass="dialog" columnClasses="col1,col2" />
 					<p:commandButton id="viewOrderItemCloseButton"
-						value="#{messages.label_close}" onclick="viewOrderItemDialogWidget.hide()"
-						type="button" />
+						value="#{messages.label_close}"
+						onclick="viewOrderItemDialogWidget.hide()" type="button" />
 				</h:form>
 			</p:outputPanel>
 		</p:dialog>
@@ -200,6 +200,23 @@
 						oncomplete="deleteDialogWidget.hide()" />
 					<p:commandButton id="deleteNoButton" value="#{messages.label_no}"
 						onclick="deleteDialogWidget.hide()" type="button" />
+				</h:form>
+			</p:outputPanel>
+		</p:confirmDialog>
+
+		<p:confirmDialog id="deleteOrderItemDialog"
+			widgetVar="deleteOrderItemDialogWidget"
+			message="#{messages.label_delete_record}" showEffect="fade"
+			hideEffect="explode" header="#{messages.label_confirm_deletion}"
+			severity="alarm">
+			<p:outputPanel id="deleteOrderItemPanel">
+				<h:form id="deleteOrderItemForm">
+					<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"
+						action="#{purchaseOrderMB.deleteOrderItem}"
+						update=":dataForm:data :growlForm:growl"
+						oncomplete="deleteOrderItemDialogWidget.hide()" />
+					<p:commandButton id="deleteNoButton" value="#{messages.label_no}"
+						onclick="deleteOrderItemDialogWidget.hide()" type="button" />
 				</h:form>
 			</p:outputPanel>
 		</p:confirmDialog>

@@ -616,4 +616,13 @@ public class PurchaseOrderMB {
 	public void setViewOrderItemPanelGrid(HtmlPanelGrid viewOrderItemPanelGrid) {
 		this.viewOrderItemPanelGrid = viewOrderItemPanelGrid;
 	}
+
+	public String deleteOrderItem() {
+		this.purchaseOrder.getItems().remove(orderItem);
+		FacesMessage facesMessage = MessageFactory.getMessage(
+				"message_successfully_deleted", "OrderItem");
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		// return findAllOrderItems();
+		return null;
+	}
 }
