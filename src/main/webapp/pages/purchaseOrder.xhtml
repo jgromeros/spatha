@@ -109,13 +109,13 @@
 									</p:commandButton>
 									<p:tooltip for="viewButton" value="#{messages.label_view}"
 										showEffect="fade" hideEffect="fade" />
-									<p:commandButton id="deleteButton" icon="ui-icon-trash"
-										oncomplete="deleteDialogWidget.show()"
+									<p:commandButton id="deleteOrderItemButton" icon="ui-icon-trash"
+										oncomplete="deleteOrderItemDialogWidget.show()"
 										title="#{messages.label_delete}">
 										<f:setPropertyActionListener value="#{orderItem}"
-											target="#{purchaseOrderMB.orderItem}" />
+											target="#{purchaseOrderMB.orderItemDelete}" />
 									</p:commandButton>
-									<p:tooltip for="deleteButton" value="#{messages.label_delete}"
+									<p:tooltip for="deleteOrderItemButton" value="#{messages.label_delete}"
 										showEffect="fade" hideEffect="fade" />
 								</p:column>
 							</p:dataTable>
@@ -213,7 +213,7 @@
 				<h:form id="deleteOrderItemForm">
 					<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"
 						action="#{purchaseOrderMB.deleteOrderItem}"
-						update=":dataForm:data :growlForm:growl"
+						update=":createDialog"
 						oncomplete="deleteOrderItemDialogWidget.hide()" />
 					<p:commandButton id="deleteNoButton" value="#{messages.label_no}"
 						onclick="deleteOrderItemDialogWidget.hide()" type="button" />

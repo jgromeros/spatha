@@ -22,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
-import co.qcsc.spatha.domain.product.Product;
 import co.qcsc.spatha.domain.product.ProductClient;
 import co.qcsc.spatha.domain.purchase.OrderItem;
 import co.qcsc.spatha.domain.purchase.PurchaseOrder;
@@ -32,7 +31,6 @@ import co.qcsc.spatha.service.product.ProductClientService;
 import co.qcsc.spatha.service.purchase.PurchaseOrderService;
 import co.qcsc.spatha.web.mb.converter.ClientConverter;
 import co.qcsc.spatha.web.mb.converter.ProductClientConverter;
-import co.qcsc.spatha.web.mb.converter.PurchaseOrderConverter;
 import co.qcsc.spatha.web.mb.converter.SupplierConverter;
 import co.qcsc.spatha.web.mb.util.MessageFactory;
 
@@ -47,6 +45,7 @@ import co.qcsc.spatha.web.mb.util.MessageFactory;
 public class PurchaseOrderMB {
 
 	private OrderItem orderItem;
+	private OrderItem orderItemDelete;
 
 	private PurchaseOrder purchaseOrder;
 	private List<String> columns;
@@ -576,19 +575,6 @@ public class PurchaseOrderMB {
 		productValue.setConverter(new ProductClientConverter());
 		htmlPanelGrid.getChildren().add(productValue);
 
-		HtmlOutputText dossierLabel = (HtmlOutputText) application
-				.createComponent(HtmlOutputText.COMPONENT_TYPE);
-		dossierLabel.setId("dossierLabel");
-		dossierLabel.setValue("Dossier:");
-		htmlPanelGrid.getChildren().add(dossierLabel);
-
-		HtmlOutputText dossierValue = (HtmlOutputText) application
-				.createComponent(HtmlOutputText.COMPONENT_TYPE);
-		dossierValue.setId("dossierValue");
-		dossierValue
-				.setValue("This relationship is managed from the Dossier side");
-		htmlPanelGrid.getChildren().add(dossierValue);
-
 		return htmlPanelGrid;
 	}
 
@@ -618,11 +604,27 @@ public class PurchaseOrderMB {
 	}
 
 	public String deleteOrderItem() {
-		this.purchaseOrder.getItems().remove(orderItem);
+		this.purchaseOrder.getItems().remove(orderItemDelete);
 		FacesMessage facesMessage = MessageFactory.getMessage(
 				"message_successfully_deleted", "OrderItem");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
 		// return findAllOrderItems();
 		return null;
 	}
+
+	/**
+	 * @return the orderItemDelete
+	 */
+	public OrderItem getOrderItemDelete() {
+		return orderItemDelete;
+	}
+
+	/**
+	 * @param orderItemDelete
+	 *            the orderItemDelete to set
+	 */
+	public void setOrderItemDelete(OrderItem orderItemDelete) {
+		this.orderItemDelete = orderItemDelete;
+	}
+
 }
