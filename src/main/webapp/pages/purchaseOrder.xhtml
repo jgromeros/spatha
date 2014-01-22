@@ -83,7 +83,7 @@
 					<p></p>
 
 					<p:outputPanel id="createPanelOrderItem">
-						<h:form id="createFormOrderItem" enctype="multipart/form-data">
+<!-- 						<h:form id="createFormOrderItem" enctype="multipart/form-data"> -->
 							<p:dataTable id="listOrderItem"
 								value="#{purchaseOrderMB.purchaseOrderItemList}" var="orderItem"
 								resizableColumns="false" paginator="true"
@@ -127,14 +127,16 @@
 								value="#{messages.label_add}"
 								action="#{purchaseOrderMB.addOrderItem}"
 								update="listOrderItem,createPanelGridOrderItem :growlForm:growl" />
-						</h:form>
+<!-- 						</h:form> -->
 					</p:outputPanel>
+					<p:outputPanel>
 					<p:commandButton id="createSaveButton"
 						value="#{messages.label_save}" action="#{purchaseOrderMB.persist}"
 						update="createPanelGrid :growlForm:growl" />
 					<p:commandButton id="createCloseButton"
 						value="#{messages.label_close}"
 						onclick="createDialogWidget.hide()" type="button" />
+						</p:outputPanel>
 				</h:form>
 			</p:outputPanel>
 		</p:dialog>
