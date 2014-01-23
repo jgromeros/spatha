@@ -1,10 +1,10 @@
 package co.qcsc.spatha.domain.purchase;
 
-
 import java.util.Set;
 import java.util.HashSet;
 
 import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
@@ -62,7 +62,7 @@ public class PurchaseOrder {
 
 	/**
      */
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "purchaseOrder")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "purchaseOrder", fetch = FetchType.EAGER)
 	private Set<OrderItem> items = new HashSet<OrderItem>();
 
 }

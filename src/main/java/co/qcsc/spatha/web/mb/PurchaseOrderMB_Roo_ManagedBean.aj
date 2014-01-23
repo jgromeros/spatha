@@ -107,10 +107,6 @@ privileged aspect PurchaseOrderMB_Roo_ManagedBean {
         this.editPanelGrid = editPanelGrid;
     }
     
-    public HtmlPanelGrid PurchaseOrderMB.getViewPanelGrid() {
-        return populateViewPanel();
-    }
-    
     public void PurchaseOrderMB.setViewPanelGrid(HtmlPanelGrid viewPanelGrid) {
         this.viewPanelGrid = viewPanelGrid;
     }
@@ -314,116 +310,6 @@ privileged aspect PurchaseOrderMB_Roo_ManagedBean {
         itemsEditInputMessage.setFor("itemsEditInput");
         itemsEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(itemsEditInputMessage);
-        
-        return htmlPanelGrid;
-    }
-    
-    public HtmlPanelGrid PurchaseOrderMB.populateViewPanel() {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        javax.faces.application.Application application = facesContext.getApplication();
-        ExpressionFactory expressionFactory = application.getExpressionFactory();
-        ELContext elContext = facesContext.getELContext();
-        
-        HtmlPanelGrid htmlPanelGrid = (HtmlPanelGrid) application.createComponent(HtmlPanelGrid.COMPONENT_TYPE);
-        
-        HtmlOutputText numberOrderLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        numberOrderLabel.setId("numberOrderLabel");
-        numberOrderLabel.setValue("Number Order:");
-        htmlPanelGrid.getChildren().add(numberOrderLabel);
-        
-        HtmlOutputText numberOrderValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        numberOrderValue.setId("numberOrderValue");
-        numberOrderValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{purchaseOrderMB.purchaseOrder.numberOrder}", String.class));
-        htmlPanelGrid.getChildren().add(numberOrderValue);
-        
-        HtmlOutputText supplierContactLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        supplierContactLabel.setId("supplierContactLabel");
-        supplierContactLabel.setValue("Supplier Contact:");
-        htmlPanelGrid.getChildren().add(supplierContactLabel);
-        
-        HtmlOutputText supplierContactValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        supplierContactValue.setId("supplierContactValue");
-        supplierContactValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{purchaseOrderMB.purchaseOrder.supplierContact}", String.class));
-        htmlPanelGrid.getChildren().add(supplierContactValue);
-        
-        HtmlOutputText clientContactLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        clientContactLabel.setId("clientContactLabel");
-        clientContactLabel.setValue("Client Contact:");
-        htmlPanelGrid.getChildren().add(clientContactLabel);
-        
-        HtmlOutputText clientContactValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        clientContactValue.setId("clientContactValue");
-        clientContactValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{purchaseOrderMB.purchaseOrder.clientContact}", String.class));
-        htmlPanelGrid.getChildren().add(clientContactValue);
-        
-        HtmlOutputText supplierPhoneLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        supplierPhoneLabel.setId("supplierPhoneLabel");
-        supplierPhoneLabel.setValue("Supplier Phone:");
-        htmlPanelGrid.getChildren().add(supplierPhoneLabel);
-        
-        HtmlOutputText supplierPhoneValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        supplierPhoneValue.setId("supplierPhoneValue");
-        supplierPhoneValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{purchaseOrderMB.purchaseOrder.supplierPhone}", String.class));
-        htmlPanelGrid.getChildren().add(supplierPhoneValue);
-        
-        HtmlOutputText clientPhoneLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        clientPhoneLabel.setId("clientPhoneLabel");
-        clientPhoneLabel.setValue("Client Phone:");
-        htmlPanelGrid.getChildren().add(clientPhoneLabel);
-        
-        HtmlOutputText clientPhoneValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        clientPhoneValue.setId("clientPhoneValue");
-        clientPhoneValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{purchaseOrderMB.purchaseOrder.clientPhone}", String.class));
-        htmlPanelGrid.getChildren().add(clientPhoneValue);
-        
-        HtmlOutputText supplierEmailLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        supplierEmailLabel.setId("supplierEmailLabel");
-        supplierEmailLabel.setValue("Supplier Email:");
-        htmlPanelGrid.getChildren().add(supplierEmailLabel);
-        
-        HtmlOutputText supplierEmailValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        supplierEmailValue.setId("supplierEmailValue");
-        supplierEmailValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{purchaseOrderMB.purchaseOrder.supplierEmail}", String.class));
-        htmlPanelGrid.getChildren().add(supplierEmailValue);
-        
-        HtmlOutputText clientEmailLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        clientEmailLabel.setId("clientEmailLabel");
-        clientEmailLabel.setValue("Client Email:");
-        htmlPanelGrid.getChildren().add(clientEmailLabel);
-        
-        HtmlOutputText clientEmailValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        clientEmailValue.setId("clientEmailValue");
-        clientEmailValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{purchaseOrderMB.purchaseOrder.clientEmail}", String.class));
-        htmlPanelGrid.getChildren().add(clientEmailValue);
-        
-        HtmlOutputText clientLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        clientLabel.setId("clientLabel");
-        clientLabel.setValue("Client:");
-        htmlPanelGrid.getChildren().add(clientLabel);
-        
-        HtmlOutputText clientValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        clientValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{purchaseOrderMB.purchaseOrder.client}", Client.class));
-        clientValue.setConverter(new ClientConverter());
-        htmlPanelGrid.getChildren().add(clientValue);
-        
-        HtmlOutputText supplierLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        supplierLabel.setId("supplierLabel");
-        supplierLabel.setValue("Supplier:");
-        htmlPanelGrid.getChildren().add(supplierLabel);
-        
-        HtmlOutputText supplierValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        supplierValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{purchaseOrderMB.purchaseOrder.supplier}", Supplier.class));
-        supplierValue.setConverter(new SupplierConverter());
-        htmlPanelGrid.getChildren().add(supplierValue);
-        
-        HtmlOutputText itemsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        itemsLabel.setId("itemsLabel");
-        itemsLabel.setValue("Items:");
-        htmlPanelGrid.getChildren().add(itemsLabel);
-        
-        HtmlOutputText itemsValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        itemsValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{purchaseOrderMB.purchaseOrder.items}", String.class));
-        htmlPanelGrid.getChildren().add(itemsValue);
         
         return htmlPanelGrid;
     }
