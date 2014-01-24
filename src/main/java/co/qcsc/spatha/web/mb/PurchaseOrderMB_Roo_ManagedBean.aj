@@ -12,11 +12,8 @@ import co.qcsc.spatha.web.mb.PurchaseOrderMB;
 import co.qcsc.spatha.web.mb.converter.ClientConverter;
 import co.qcsc.spatha.web.mb.converter.SupplierConverter;
 import co.qcsc.spatha.web.mb.util.MessageFactory;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.faces.application.FacesMessage;
@@ -25,7 +22,6 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
-
 import org.primefaces.component.autocomplete.AutoComplete;
 import org.primefaces.component.inputtext.InputText;
 import org.primefaces.component.message.Message;
@@ -47,10 +43,6 @@ privileged aspect PurchaseOrderMB_Roo_ManagedBean {
     
     private String PurchaseOrderMB.name = "PurchaseOrders";
     
-    private List<PurchaseOrder> PurchaseOrderMB.allPurchaseOrders;
-    
-    private boolean PurchaseOrderMB.dataVisible = false;
-    
     private HtmlPanelGrid PurchaseOrderMB.createPanelGrid;
     
     private HtmlPanelGrid PurchaseOrderMB.editPanelGrid;
@@ -69,12 +61,6 @@ privileged aspect PurchaseOrderMB_Roo_ManagedBean {
     
     public void PurchaseOrderMB.setAllPurchaseOrders(List<PurchaseOrder> allPurchaseOrders) {
         this.allPurchaseOrders = allPurchaseOrders;
-    }
-    
-    public String PurchaseOrderMB.findAllPurchaseOrders() {
-        allPurchaseOrders = purchaseOrderService.findAllPurchaseOrders();
-        dataVisible = !allPurchaseOrders.isEmpty();
-        return null;
     }
     
     public boolean PurchaseOrderMB.isDataVisible() {
