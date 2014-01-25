@@ -3,6 +3,7 @@
 
 package co.qcsc.spatha.web.mb;
 
+import co.qcsc.spatha.domain.dossier.DossierDescription;
 import co.qcsc.spatha.domain.product.ProductClient;
 import co.qcsc.spatha.domain.thirdparty.Client;
 import co.qcsc.spatha.service.thirdparty.ClientService;
@@ -54,6 +55,8 @@ privileged aspect ClientMB_Roo_ManagedBean {
     private HtmlPanelGrid ClientMB.viewPanelGrid;
     
     private boolean ClientMB.createDialogVisible = false;
+    
+    private List<DossierDescription> ClientMB.selectedDossierDescriptions;
     
     private List<ProductClient> ClientMB.selectedProducts;
     
@@ -174,16 +177,14 @@ privileged aspect ClientMB_Roo_ManagedBean {
         nameCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(nameCreateInputMessage);
         
-        OutputLabel dossierDescriptionsCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        dossierDescriptionsCreateOutput.setFor("dossierDescriptionsCreateInput");
+        HtmlOutputText dossierDescriptionsCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         dossierDescriptionsCreateOutput.setId("dossierDescriptionsCreateOutput");
         dossierDescriptionsCreateOutput.setValue("Dossier Descriptions:");
         htmlPanelGrid.getChildren().add(dossierDescriptionsCreateOutput);
         
-        InputText dossierDescriptionsCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        HtmlOutputText dossierDescriptionsCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         dossierDescriptionsCreateInput.setId("dossierDescriptionsCreateInput");
-        dossierDescriptionsCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{clientMB.client.dossierDescriptions}", Set.class));
-        dossierDescriptionsCreateInput.setRequired(false);
+        dossierDescriptionsCreateInput.setValue("This relationship is managed from the DossierDescription side");
         htmlPanelGrid.getChildren().add(dossierDescriptionsCreateInput);
         
         Message dossierDescriptionsCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -261,16 +262,14 @@ privileged aspect ClientMB_Roo_ManagedBean {
         nameEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(nameEditInputMessage);
         
-        OutputLabel dossierDescriptionsEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
-        dossierDescriptionsEditOutput.setFor("dossierDescriptionsEditInput");
+        HtmlOutputText dossierDescriptionsEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         dossierDescriptionsEditOutput.setId("dossierDescriptionsEditOutput");
         dossierDescriptionsEditOutput.setValue("Dossier Descriptions:");
         htmlPanelGrid.getChildren().add(dossierDescriptionsEditOutput);
         
-        InputText dossierDescriptionsEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        HtmlOutputText dossierDescriptionsEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         dossierDescriptionsEditInput.setId("dossierDescriptionsEditInput");
-        dossierDescriptionsEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{clientMB.client.dossierDescriptions}", Set.class));
-        dossierDescriptionsEditInput.setRequired(false);
+        dossierDescriptionsEditInput.setValue("This relationship is managed from the DossierDescription side");
         htmlPanelGrid.getChildren().add(dossierDescriptionsEditInput);
         
         Message dossierDescriptionsEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
@@ -332,7 +331,8 @@ privileged aspect ClientMB_Roo_ManagedBean {
         htmlPanelGrid.getChildren().add(dossierDescriptionsLabel);
         
         HtmlOutputText dossierDescriptionsValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        dossierDescriptionsValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{clientMB.client.dossierDescriptions}", String.class));
+        dossierDescriptionsValue.setId("dossierDescriptionsValue");
+        dossierDescriptionsValue.setValue("This relationship is managed from the DossierDescription side");
         htmlPanelGrid.getChildren().add(dossierDescriptionsValue);
         
         HtmlOutputText productsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -359,6 +359,17 @@ privileged aspect ClientMB_Roo_ManagedBean {
         this.client = client;
     }
     
+    public List<DossierDescription> ClientMB.getSelectedDossierDescriptions() {
+        return selectedDossierDescriptions;
+    }
+    
+    public void ClientMB.setSelectedDossierDescriptions(List<DossierDescription> selectedDossierDescriptions) {
+        if (selectedDossierDescriptions != null) {
+            client.setDossierDescriptions(new HashSet<DossierDescription>(selectedDossierDescriptions));
+        }
+        this.selectedDossierDescriptions = selectedDossierDescriptions;
+    }
+    
     public List<ProductClient> ClientMB.getSelectedProducts() {
         return selectedProducts;
     }
@@ -371,6 +382,9 @@ privileged aspect ClientMB_Roo_ManagedBean {
     }
     
     public String ClientMB.onEdit() {
+        if (client != null && client.getDossierDescriptions() != null) {
+            selectedDossierDescriptions = new ArrayList<DossierDescription>(client.getDossierDescriptions());
+        }
         if (client != null && client.getProducts() != null) {
             selectedProducts = new ArrayList<ProductClient>(client.getProducts());
         }
@@ -426,6 +440,7 @@ privileged aspect ClientMB_Roo_ManagedBean {
     
     public void ClientMB.reset() {
         client = null;
+        selectedDossierDescriptions = null;
         selectedProducts = null;
         createDialogVisible = false;
     }
