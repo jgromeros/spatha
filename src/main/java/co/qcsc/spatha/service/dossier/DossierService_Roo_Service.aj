@@ -4,11 +4,19 @@
 package co.qcsc.spatha.service.dossier;
 
 import co.qcsc.spatha.domain.dossier.Dossier;
+import co.qcsc.spatha.domain.thirdparty.Client;
 import co.qcsc.spatha.service.dossier.DossierService;
 import java.util.List;
 
 privileged aspect DossierService_Roo_Service {
     
+    public abstract long DossierService.countAllClients();    
+    public abstract void DossierService.deleteClient(Client client);    
+    public abstract Client DossierService.findClient(Long id);    
+    public abstract List<Client> DossierService.findAllClients();    
+    public abstract List<Client> DossierService.findClientEntries(int firstResult, int maxResults);    
+    public abstract void DossierService.saveClient(Client client);    
+    public abstract Client DossierService.updateClient(Client client);    
     public abstract long DossierService.countAllDossiers();    
     public abstract void DossierService.deleteDossier(Dossier dossier);    
     public abstract Dossier DossierService.findDossier(Long id);    

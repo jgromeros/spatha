@@ -160,7 +160,17 @@ public class ApplicationBean {
         item.setUpdate(":dataForm:data");
         submenu.getChildren().add(item);
         menuModel.addSubmenu(submenu);
-        
+
+        item = new MenuItem();
+        item.setId("consultPOMenuItem");
+        item.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{messages.label_consult}", String.class));
+        item.setActionExpression(expressionFactory.createMethodExpression(elContext, "#{dossierMB.displayConsultPO}", String.class, new Class[0]));
+        item.setIcon("ui-icon ui-icon-document");
+        item.setAjax(false);
+        item.setAsync(false);
+        item.setUpdate(":dataForm:data");
+        submenu.getChildren().add(item);
+
 //        submenu = new Submenu();
 //        submenu.setId("familySubmenu");
 //        submenu.setLabel("Family");
