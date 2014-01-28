@@ -802,4 +802,9 @@ public class PurchaseOrderMB {
 		dataVisible = !allPurchaseOrders.isEmpty();
 		return null;
 	}
+
+	public String displayCreateDialog() {
+        purchaseOrder = new PurchaseOrder();
+        return "/pages/createPurchaseOrder.xhtml";
+    }
 }

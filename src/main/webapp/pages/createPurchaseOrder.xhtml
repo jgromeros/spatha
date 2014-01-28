@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="../templates/layout.xhtml">
+	<ui:define name="content">
+		<h:form prependId="false" id="growlForm">
+			<p:growl id="growl" showDetail="false" />
+		</h:form>
+		<p:panel toggleable="true" toggleSpeed="250">
+			<p:outputPanel id="createPanel">
+				<h:form id="createForm" enctype="multipart/form-data">
+					<h:panelGrid id="createPanelGrid" columns="3"
+						binding="#{purchaseOrderMB.createPanelGrid}" styleClass="dialog"
+						columnClasses="col1,col2,col3" />
+					<p></p>
+
+					<p:outputPanel id="createPanelOrderItem">
+						<p:dataTable id="listOrderItem"
+							value="#{purchaseOrderMB.purchaseOrderItemList}" var="orderItem"
+							resizableColumns="false" paginator="true"
+							paginatorTemplate=" {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							rowsPerPageTemplate="5,10,25,50" rows="10">
+							<p:columns value="#{purchaseOrderMB.orderItemColumns}"
+								var="column" columnIndexVar="colIndex">
+								<f:facet name="header">
+									<h:outputText value="#{applicationBean.getColumnName(column)}" />
+								</f:facet>
+								<h:outputText value="#{orderItem[column]}" />
+							</p:columns>
+							<p:column styleClass="action-column">
+								<f:facet name="header">
+									<h:outputText value="Actions" />
+								</f:facet>
+								<p:commandButton id="viewButton" icon="ui-icon-zoomin"
+									oncomplete="viewOrderItemDialogWidget.show()"
+									title="#{messages.label_view}">
+									<f:setPropertyActionListener value="#{orderItem}"
+										target="#{purchaseOrderMB.orderItem}" />
+								</p:commandButton>
+								<p:tooltip for="viewButton" value="#{messages.label_view}"
+									showEffect="fade" hideEffect="fade" />
+								<p:commandButton id="deleteOrderItemButton" icon="ui-icon-trash"
+									oncomplete="deleteOrderItemDialogWidget.show()"
+									title="#{messages.label_delete}">
+									<f:setPropertyActionListener value="#{orderItem}"
+										target="#{purchaseOrderMB.orderItemDelete}" />
+								</p:commandButton>
+								<p:tooltip for="deleteOrderItemButton"
+									value="#{messages.label_delete}" showEffect="fade"
+									hideEffect="fade" />
+							</p:column>
+						</p:dataTable>
+
+						<h:panelGrid id="createPanelGridOrderItem" columns="3"
+							binding="#{purchaseOrderMB.createOrderItemPanelGrid}"
+							styleClass="dialog" columnClasses="col1,col2,col3" />
+						<p:commandButton id="createOrderItemSaveButton"
+							value="#{messages.label_add}"
+							action="#{purchaseOrderMB.addOrderItem}"
+							update="listOrderItem,createPanelGridOrderItem :growlForm:growl" />
+					</p:outputPanel>
+					<p:outputPanel>
+						<p:commandButton id="createSaveButton"
+							value="#{messages.label_save}"
+							action="#{purchaseOrderMB.persist}"
+							update="createPanelGrid :growlForm:growl" />
+					</p:outputPanel>
+				</h:form>
+			</p:outputPanel>
+		</p:panel>
+		<p:dialog id="viewOrderItemDialog"
+			header="#{messages.label_view} OrderItem" modal="true"
+			widgetVar="viewOrderItemDialogWidget" dynamic="true" resizable="true"
+			maximizable="true" showEffect="fade" hideEffect="explode">
+			<p:outputPanel id="viewOrderItemPanel">
+				<h:form id="viewOrderItemForm" enctype="multipart/form-data">
+					<h:panelGrid id="viewOrderItemPanelGrid" columns="2"
+						binding="#{purchaseOrderMB.viewOrderItemPanelGrid}"
+						styleClass="dialog" columnClasses="col1,col2" />
+					<p:commandButton id="viewOrderItemCloseButton"
+						value="#{messages.label_close}"
+						onclick="viewOrderItemDialogWidget.hide()" type="button" />
+				</h:form>
+			</p:outputPanel>
+		</p:dialog>
+
+		<p:confirmDialog id="deleteOrderItemDialog"
+			widgetVar="deleteOrderItemDialogWidget"
+			message="#{messages.label_delete_record}" showEffect="fade"
+			hideEffect="explode" header="#{messages.label_confirm_deletion}"
+			severity="alarm">
+			<p:outputPanel id="deleteOrderItemPanel">
+				<h:form id="deleteOrderItemForm">
+					<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"
+						action="#{purchaseOrderMB.deleteOrderItem}" update=":createPanel"
+						oncomplete="deleteOrderItemDialogWidget.hide()" />
+					<p:commandButton id="deleteNoButton" value="#{messages.label_no}"
+						onclick="deleteOrderItemDialogWidget.hide()" type="button" />
+				</h:form>
+			</p:outputPanel>
+		</p:confirmDialog>
+	</ui:define>
+</ui:composition>
+</html>
