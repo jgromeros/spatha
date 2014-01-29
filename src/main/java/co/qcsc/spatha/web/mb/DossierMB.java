@@ -33,7 +33,7 @@ public class DossierMB {
     }
 
     public String findPurchaseOrders() {
-        purchaseOrders = poService.findAllPurchaseOrders();
+        purchaseOrders = poService.findPurchaseOrderByClient(client);
         return "consultPO";
     }
 

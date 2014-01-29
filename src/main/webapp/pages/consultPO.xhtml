@@ -16,7 +16,9 @@
     			<h:outputText value="#{messages.label_client}" />
     			<h:selectOneMenu id="clientSelect" value="#{dossierMB.client}" required="false">
                 	<f:selectItem itemLabel="#{messages.select_message}" itemValue="" />
-                	<f:selectItems value="#{dossierMB.clients}" />
+                	<f:selectItems value="#{dossierMB.clients}" var="client"
+                            itemValue="#{client}" itemLabel="#{client.name}"/>
+                    <f:converter converterId="co.qcsc.spatha.web.mb.converter.ClientConverter"/>
             	</h:selectOneMenu>
                 <p:commandButton id="consultPOButton" value="#{messages.label_consult}"
                         action="#{dossierMB.findPurchaseOrders}" ajax="false"/>
