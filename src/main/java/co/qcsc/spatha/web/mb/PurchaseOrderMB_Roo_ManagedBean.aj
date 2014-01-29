@@ -356,12 +356,6 @@ privileged aspect PurchaseOrderMB_Roo_ManagedBean {
         return "purchaseOrder";
     }
     
-    public String PurchaseOrderMB.displayCreateDialog() {
-        purchaseOrder = new PurchaseOrder();
-        createDialogVisible = true;
-        return "purchaseOrder";
-    }
-    
     public String PurchaseOrderMB.delete() {
         purchaseOrderService.deletePurchaseOrder(purchaseOrder);
         FacesMessage facesMessage = MessageFactory.getMessage("message_successfully_deleted", "PurchaseOrder");
