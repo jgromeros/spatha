@@ -37,7 +37,7 @@ public class Client {
 
 	/**
      */
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "client")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "client", fetch = FetchType.LAZY)
 	private Set<DossierDescription> dossierDescriptions = new HashSet<DossierDescription>();
 
 	/**

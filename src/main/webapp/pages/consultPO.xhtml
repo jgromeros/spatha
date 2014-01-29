@@ -14,12 +14,41 @@
     	<h:form prependId="false" id="dataForm">
     		<p:panel id="data" toggleable="true" toggleSpeed="250">
     			<h:outputText value="#{messages.label_client}" />
-    			<h:selectOneMenu id="clientSelect" value="#{dossierMB.client}" required="true">
+    			<h:selectOneMenu id="clientSelect" value="#{dossierMB.client}" required="false">
                 	<f:selectItem itemLabel="#{messages.select_message}" itemValue="" />
                 	<f:selectItems value="#{dossierMB.clients}" />
             	</h:selectOneMenu>
+                <p:commandButton id="consultPOButton" value="#{messages.label_consult}"
+                        action="#{dossierMB.findPurchaseOrders}" ajax="false"/>
             </p:panel>
         </h:form>
+        
+        <p:panel id="poData" toggleable="true" toggleSpeed="250">
+            <h:form prependId="false" id="poForm">
+    			<p:dataTable id="poList" value="#{dossierMB.purchaseOrders}"
+    				var="purchaseOrder"
+    				resizableColumns="false" paginator="true"
+    				paginatorTemplate=" {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+    				rowsPerPageTemplate="5,10,25,50" rows="10">
+    				<p:column>
+    					<f:facet name="header">
+    						<h:outputText value="Id" />
+    					</f:facet>
+                            <h:outputText value="#{purchaseOrder.id}"/>
+    				</p:column>
+                    <p:column styleClass="action-column">
+                        <f:facet name="header">
+                            <h:outputText value="Actions" />
+                        </f:facet>
+                        <p:commandButton id="viewButton" icon="ui-icon-zoomin"
+                                title="#{messages.label_view}" ajax="false" action="dossierMB.viewPO">
+                        </p:commandButton>
+                        <p:tooltip for="viewButton" value="#{messages.label_view}"
+                            showEffect="fade" hideEffect="fade" />
+                    </p:column>
+    			</p:dataTable>
+            </h:form>
+        </p:panel>
       </ui:define>
     </ui:composition>
 </html>
