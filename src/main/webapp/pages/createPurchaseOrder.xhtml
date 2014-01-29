@@ -15,8 +15,43 @@
 			<p:outputPanel id="createPanel">
 				<h:form id="createForm" enctype="multipart/form-data">
 					<h:panelGrid id="createPanelGrid" columns="3"
-						binding="#{purchaseOrderMB.createPanelGrid}" styleClass="dialog"
-						columnClasses="col1,col2,col3" />
+						columnClasses="col1,col2,col3">
+						<p:outputLabel for="numberOrderCreateInput"
+							id="numberOrderCreateOutput" value="Number Order:"></p:outputLabel>
+						<p:inputText id="numberOrderCreateInput"
+							value="#{purchaseOrderMB.purchaseOrder.numberOrder}"
+							required="true"></p:inputText>
+						<p:message id="numberOrderCreateInputMessage"
+							for="numberOrderCreateInput" display="icon"></p:message>
+						<p:outputLabel for="supplierContactCreateInput"
+							id="supplierContactCreateOutput" value="Supplier Contact:"></p:outputLabel>
+						<p:inputText id="supplierContactCreateInput"
+							value="#{purchaseOrderMB.purchaseOrder.supplierContact}"
+							required="false"></p:inputText>
+						<p:message id="supplierContactCreateInputMessage"
+							for="supplierContactCreateInput" display="icon"></p:message>
+						<p:outputLabel for="clientContactCreateInput"
+							id="clientContactCreateOutput" value="Client Contact:"></p:outputLabel>
+						<p:inputText id="clientContactCreateInput"
+							value="#{purchaseOrderMB.purchaseOrder.clientContact}"
+							required="false"></p:inputText>
+						<p:message id="clientContactCreateInputMessage"
+							for="clientContactCreateInput" display="icon"></p:message>
+						<p:outputLabel for="supplierPhoneCreateInput"
+							id="supplierPhoneCreateOutput" value="Supplier Phone:"></p:outputLabel>
+						<p:inputText id="supplierPhoneCreateInput"
+							value="#{purchaseOrderMB.purchaseOrder.supplierPhone}"
+							required="false"></p:inputText>
+						<p:message id="supplierPhoneCreateInputMessage"
+							for="supplierPhoneCreateInput" display="icon"></p:message>
+						<p:outputLabel for="clientPhoneCreateInput"
+							id="clientPhoneCreateOutput" value="Client Phone:"></p:outputLabel>
+						<p:inputText id="clientPhoneCreateInput"
+							value="#{purchaseOrderMB.purchaseOrder.clientPhone}"
+							required="false"></p:inputText>
+						<p:message id="clientPhoneCreateInputMessage"
+							for="clientPhoneCreateInput" display="icon"></p:message>
+					</h:panelGrid>
 					<p></p>
 
 					<p:outputPanel id="createPanelOrderItem">
