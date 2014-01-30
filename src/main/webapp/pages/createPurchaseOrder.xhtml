@@ -51,6 +51,45 @@
 							required="false"></p:inputText>
 						<p:message id="clientPhoneCreateInputMessage"
 							for="clientPhoneCreateInput" display="icon"></p:message>
+						<p:outputLabel for="supplierEmailCreateInput"
+							id="supplierEmailCreateOutput" value="Supplier Email:"></p:outputLabel>
+						<p:inputText id="supplierEmailCreateInput"
+							value="#{purchaseOrderMB.purchaseOrder.supplierEmail}"
+							required="false"></p:inputText>
+						<p:message id="supplierEmailCreateInputMessage"
+							for="supplierEmailCreateInput" display="icon"></p:message>
+						<p:outputLabel for="clientEmailCreateInput"
+							id="clientEmailCreateOutput" value="Client Email:"></p:outputLabel>
+						<p:inputText id="clientEmailCreateInput"
+							value="#{purchaseOrderMB.purchaseOrder.clientEmail}"
+							required="false"></p:inputText>
+						<p:message id="clientEmailCreateInputMessage"
+							for="clientEmailCreateInput" display="icon"></p:message>
+						<p:outputLabel for="clientCreateInput" id="clientCreateOutput"
+							value="Client:"></p:outputLabel>
+						<p:autoComplete id="clientCreateInput"
+							value="#{purchaseOrderMB.purchaseOrder.client}"
+							completeMethod="#{purchaseOrderMB.completeClient}"
+							dropdown="true" var="client"
+							itemLabel="#{client.identification} #{client.name}"
+							itemValue="#{client}"
+							converter="co.qcsc.spatha.web.mb.converter.ClientConverter"
+							required="false"></p:autoComplete>
+						<p:message id="clientCreateInputMessage" for="clientCreateInput"
+							display="icon"></p:message>
+						<p:outputLabel for="supplierCreateInput" id="supplierCreateOutput"
+							value="Supplier:"></p:outputLabel>
+						<p:autoComplete id="supplierCreateInput"
+							value="#{purchaseOrderMB.purchaseOrder.supplier}"
+							completeMethod="#{purchaseOrderMB.completeSupplier}"
+							dropdown="true" var="supplier"
+							itemLabel="#{supplier.identification} #{supplier.name}"
+							itemValue="#{supplier}"
+							converter="co.qcsc.spatha.web.mb.converter.SupplierConverter"
+							required="false"></p:autoComplete>
+						<p:message id="supplierCreateInputMessage"
+							for="supplierCreateInput" display="icon"></p:message>
+						<h:outputText id="itemsCreateOutput" value="Items:"></h:outputText>
 					</h:panelGrid>
 					<p></p>
 

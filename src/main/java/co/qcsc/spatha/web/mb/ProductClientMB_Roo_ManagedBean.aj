@@ -70,6 +70,7 @@ privileged aspect ProductClientMB_Roo_ManagedBean {
     public void ProductClientMB.init() {
         columns = new ArrayList<String>();
         columns.add("code");
+        columns.add("clientDescription");
     }
     
     public String ProductClientMB.getName() {
@@ -209,6 +210,24 @@ privileged aspect ProductClientMB_Roo_ManagedBean {
         productCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(productCreateInputMessage);
         
+        OutputLabel clientDescriptionCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        clientDescriptionCreateOutput.setFor("clientDescriptionCreateInput");
+        clientDescriptionCreateOutput.setId("clientDescriptionCreateOutput");
+        clientDescriptionCreateOutput.setValue("Client Description:");
+        htmlPanelGrid.getChildren().add(clientDescriptionCreateOutput);
+        
+        InputText clientDescriptionCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        clientDescriptionCreateInput.setId("clientDescriptionCreateInput");
+        clientDescriptionCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{productClientMB.productClient.clientDescription}", String.class));
+        clientDescriptionCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(clientDescriptionCreateInput);
+        
+        Message clientDescriptionCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        clientDescriptionCreateInputMessage.setId("clientDescriptionCreateInputMessage");
+        clientDescriptionCreateInputMessage.setFor("clientDescriptionCreateInput");
+        clientDescriptionCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(clientDescriptionCreateInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -289,6 +308,24 @@ privileged aspect ProductClientMB_Roo_ManagedBean {
         productEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(productEditInputMessage);
         
+        OutputLabel clientDescriptionEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        clientDescriptionEditOutput.setFor("clientDescriptionEditInput");
+        clientDescriptionEditOutput.setId("clientDescriptionEditOutput");
+        clientDescriptionEditOutput.setValue("Client Description:");
+        htmlPanelGrid.getChildren().add(clientDescriptionEditOutput);
+        
+        InputText clientDescriptionEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        clientDescriptionEditInput.setId("clientDescriptionEditInput");
+        clientDescriptionEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{productClientMB.productClient.clientDescription}", String.class));
+        clientDescriptionEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(clientDescriptionEditInput);
+        
+        Message clientDescriptionEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        clientDescriptionEditInputMessage.setId("clientDescriptionEditInputMessage");
+        clientDescriptionEditInputMessage.setFor("clientDescriptionEditInput");
+        clientDescriptionEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(clientDescriptionEditInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -329,6 +366,16 @@ privileged aspect ProductClientMB_Roo_ManagedBean {
         productValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{productClientMB.productClient.product}", Product.class));
         productValue.setConverter(new ProductConverter());
         htmlPanelGrid.getChildren().add(productValue);
+        
+        HtmlOutputText clientDescriptionLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        clientDescriptionLabel.setId("clientDescriptionLabel");
+        clientDescriptionLabel.setValue("Client Description:");
+        htmlPanelGrid.getChildren().add(clientDescriptionLabel);
+        
+        HtmlOutputText clientDescriptionValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        clientDescriptionValue.setId("clientDescriptionValue");
+        clientDescriptionValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{productClientMB.productClient.clientDescription}", String.class));
+        htmlPanelGrid.getChildren().add(clientDescriptionValue);
         
         return htmlPanelGrid;
     }
