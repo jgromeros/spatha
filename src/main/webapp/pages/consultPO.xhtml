@@ -13,7 +13,7 @@
         </h:form>
     	<h:form prependId="false" id="dataForm">
     		<p:panel id="data" toggleable="true" toggleSpeed="250">
-    			<h:outputText value="#{messages.label_client}" />
+    			<h:outputText value="#{app.label_client}" />
     			<h:selectOneMenu id="clientSelect" value="#{dossierMB.client}" required="false">
                 	<f:selectItem itemLabel="#{messages.select_message}" itemValue="" />
                 	<f:selectItems value="#{dossierMB.clients}" var="client"
@@ -28,25 +28,36 @@
         <p:panel id="poData" toggleable="true" toggleSpeed="250">
             <h:form prependId="false" id="poForm">
     			<p:dataTable id="poList" value="#{dossierMB.purchaseOrders}"
-    				var="purchaseOrder"
-    				resizableColumns="false" paginator="true"
-    				paginatorTemplate=" {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-    				rowsPerPageTemplate="5,10,25,50" rows="10">
+        				var="purchaseOrder"
+        				resizableColumns="false" paginator="true"
+        				paginatorTemplate=" {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+        				rowsPerPageTemplate="5,10,25,50" rows="10">
     				<p:column>
     					<f:facet name="header">
-    						<h:outputText value="Id" />
+    						<h:outputText value="#{app.label_purchaseOrder_number}" />
     					</f:facet>
-                            <h:outputText value="#{purchaseOrder.id}"/>
+                        <h:outputText value="#{purchaseOrder.numberOrder}"/>
     				</p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{app.label_purchaseOrder_supplier}" />
+                        </f:facet>
+                        <h:outputText value="#{purchaseOrder.supplier.name}"/>
+                    </p:column>
                     <p:column styleClass="action-column">
                         <f:facet name="header">
                             <h:outputText value="Actions" />
                         </f:facet>
                         <p:commandButton id="viewButton" icon="ui-icon-zoomin"
-                                title="#{messages.label_view}" ajax="false" action="dossierMB.viewPO">
+                                title="#{messages.label_view}" ajax="false" action="#{dossierMB.viewPO}">
                         </p:commandButton>
                         <p:tooltip for="viewButton" value="#{messages.label_view}"
                             showEffect="fade" hideEffect="fade" />
+                        <p:commandButton id="indexButton" icon="ui-icon-zoomin"
+                                title="#{app.label_dossier_idx}" ajax="false" action="#{dossierMB.viewIndex}">
+                        </p:commandButton>
+                        <p:tooltip for="indexButton" value="#{app.label_dossier_idx}"
+                                showEffect="fade" hideEffect="fade" />
                     </p:column>
     			</p:dataTable>
             </h:form>

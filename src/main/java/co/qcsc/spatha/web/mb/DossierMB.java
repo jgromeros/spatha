@@ -41,6 +41,10 @@ public class DossierMB {
         return "purchaseOrder";
     }
 
+    public String viewIndex() {
+        return "dossierIndex";
+    }
+
     public Client getClient() {
         return client;
     }

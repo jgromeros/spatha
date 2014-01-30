@@ -9,6 +9,10 @@
             <base-name>co.qcsc.spatha.web.mb.i18n.messages</base-name>
             <var>messages</var>
         </resource-bundle>
+        <resource-bundle>
+            <base-name>co.qcsc.spatha.web.mb.i18n.application</base-name>
+            <var>app</var>
+        </resource-bundle>
         <locale-config>
             <default-locale>en</default-locale>
             <supported-locale>en</supported-locale>
