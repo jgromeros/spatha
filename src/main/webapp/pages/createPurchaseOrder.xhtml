@@ -72,7 +72,8 @@
 							completeMethod="#{purchaseOrderMB.completeClient}"
 							dropdown="true" var="client"
 							itemLabel="#{client.identification} #{client.name}"
-							itemValue="#{client}" converter="#{clientConverter}"
+							itemValue="#{client}"
+							converter="co.qcsc.spatha.web.mb.converter.ClientConverter"
 							required="false"></p:autoComplete>
 						<p:message id="clientCreateInputMessage" for="clientCreateInput"
 							display="icon"></p:message>
@@ -83,7 +84,8 @@
 							completeMethod="#{purchaseOrderMB.completeSupplier}"
 							dropdown="true" var="supplier"
 							itemLabel="#{supplier.identification} #{supplier.name}"
-							itemValue="#{supplier}" converter="#{supplierConverter}"
+							itemValue="#{supplier}"
+							converter="co.qcsc.spatha.web.mb.converter.SupplierConverter"
 							required="false"></p:autoComplete>
 						<p:message id="supplierCreateInputMessage"
 							for="supplierCreateInput" display="icon"></p:message>
