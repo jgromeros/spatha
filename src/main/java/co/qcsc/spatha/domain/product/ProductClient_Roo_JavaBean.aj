@@ -33,4 +33,12 @@ privileged aspect ProductClient_Roo_JavaBean {
         this.product = product;
     }
     
+    public String ProductClient.getClientDescription() {
+        return this.clientDescription;
+    }
+    
+    public void ProductClient.setClientDescription(String clientDescription) {
+        this.clientDescription = clientDescription;
+    }
+    
 }

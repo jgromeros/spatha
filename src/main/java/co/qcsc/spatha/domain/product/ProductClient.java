@@ -29,6 +29,12 @@ public class ProductClient {
 	@ManyToOne
 	private Product product;
 
+	/**
+	 * Client Desciption from Product
+	 */
+	private String clientDescription;
+
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -36,7 +42,7 @@ public class ProductClient {
 	 */
 	@Override
 	public String toString() {
-		return client.getName() + " - " + product.getName();
+		return this.clientDescription;
 	}
 
 }

@@ -41,8 +41,14 @@ privileged aspect ProductClientDataOnDemand_Roo_DataOnDemand {
     
     public ProductClient ProductClientDataOnDemand.getNewTransientProductClient(int index) {
         ProductClient obj = new ProductClient();
+        setClientDescription(obj, index);
         setCode(obj, index);
         return obj;
+    }
+    
+    public void ProductClientDataOnDemand.setClientDescription(ProductClient obj, int index) {
+        String clientDescription = "clientDescription_" + index;
+        obj.setClientDescription(clientDescription);
     }
     
     public void ProductClientDataOnDemand.setCode(ProductClient obj, int index) {
