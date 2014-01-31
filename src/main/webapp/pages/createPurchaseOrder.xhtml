@@ -12,6 +12,9 @@
 			<p:growl id="growl" showDetail="false" />
 		</h:form>
 		<p:panel toggleable="true" toggleSpeed="250">
+			<f:facet name="header">
+				<h:outputText value="#{purchaseOrderMB.name}" />
+			</f:facet>
 			<p:outputPanel id="createPanel">
 				<h:form id="createForm" enctype="multipart/form-data">
 					<h:panelGrid id="createPanelGrid" columns="3"
@@ -19,6 +22,7 @@
 						<p:outputLabel for="numberOrderCreateInput"
 							id="numberOrderCreateOutput" value="Number Order:"></p:outputLabel>
 						<p:inputText id="numberOrderCreateInput"
+							disabled="#{purchaseOrderMB.formDisabled}"
 							value="#{purchaseOrderMB.purchaseOrder.numberOrder}"
 							required="true"></p:inputText>
 						<p:message id="numberOrderCreateInputMessage"
@@ -26,6 +30,7 @@
 						<p:outputLabel for="supplierContactCreateInput"
 							id="supplierContactCreateOutput" value="Supplier Contact:"></p:outputLabel>
 						<p:inputText id="supplierContactCreateInput"
+							disabled="#{purchaseOrderMB.formDisabled}"
 							value="#{purchaseOrderMB.purchaseOrder.supplierContact}"
 							required="false"></p:inputText>
 						<p:message id="supplierContactCreateInputMessage"
@@ -33,6 +38,7 @@
 						<p:outputLabel for="clientContactCreateInput"
 							id="clientContactCreateOutput" value="Client Contact:"></p:outputLabel>
 						<p:inputText id="clientContactCreateInput"
+							disabled="#{purchaseOrderMB.formDisabled}"
 							value="#{purchaseOrderMB.purchaseOrder.clientContact}"
 							required="false"></p:inputText>
 						<p:message id="clientContactCreateInputMessage"
@@ -40,6 +46,7 @@
 						<p:outputLabel for="supplierPhoneCreateInput"
 							id="supplierPhoneCreateOutput" value="Supplier Phone:"></p:outputLabel>
 						<p:inputText id="supplierPhoneCreateInput"
+							disabled="#{purchaseOrderMB.formDisabled}"
 							value="#{purchaseOrderMB.purchaseOrder.supplierPhone}"
 							required="false"></p:inputText>
 						<p:message id="supplierPhoneCreateInputMessage"
@@ -47,6 +54,7 @@
 						<p:outputLabel for="clientPhoneCreateInput"
 							id="clientPhoneCreateOutput" value="Client Phone:"></p:outputLabel>
 						<p:inputText id="clientPhoneCreateInput"
+							disabled="#{purchaseOrderMB.formDisabled}"
 							value="#{purchaseOrderMB.purchaseOrder.clientPhone}"
 							required="false"></p:inputText>
 						<p:message id="clientPhoneCreateInputMessage"
@@ -54,6 +62,7 @@
 						<p:outputLabel for="supplierEmailCreateInput"
 							id="supplierEmailCreateOutput" value="Supplier Email:"></p:outputLabel>
 						<p:inputText id="supplierEmailCreateInput"
+							disabled="#{purchaseOrderMB.formDisabled}"
 							value="#{purchaseOrderMB.purchaseOrder.supplierEmail}"
 							required="false"></p:inputText>
 						<p:message id="supplierEmailCreateInputMessage"
@@ -61,6 +70,7 @@
 						<p:outputLabel for="clientEmailCreateInput"
 							id="clientEmailCreateOutput" value="Client Email:"></p:outputLabel>
 						<p:inputText id="clientEmailCreateInput"
+							disabled="#{purchaseOrderMB.formDisabled}"
 							value="#{purchaseOrderMB.purchaseOrder.clientEmail}"
 							required="false"></p:inputText>
 						<p:message id="clientEmailCreateInputMessage"
@@ -68,6 +78,7 @@
 						<p:outputLabel for="clientCreateInput" id="clientCreateOutput"
 							value="Client:"></p:outputLabel>
 						<p:autoComplete id="clientCreateInput"
+							disabled="#{purchaseOrderMB.formDisabled}"
 							value="#{purchaseOrderMB.purchaseOrder.client}"
 							completeMethod="#{purchaseOrderMB.completeClient}"
 							dropdown="true" var="client"
@@ -80,6 +91,7 @@
 						<p:outputLabel for="supplierCreateInput" id="supplierCreateOutput"
 							value="Supplier:"></p:outputLabel>
 						<p:autoComplete id="supplierCreateInput"
+							disabled="#{purchaseOrderMB.formDisabled}"
 							value="#{purchaseOrderMB.purchaseOrder.supplier}"
 							completeMethod="#{purchaseOrderMB.completeSupplier}"
 							dropdown="true" var="supplier"
@@ -119,6 +131,7 @@
 								<p:tooltip for="viewButton" value="#{messages.label_view}"
 									showEffect="fade" hideEffect="fade" />
 								<p:commandButton id="deleteOrderItemButton" icon="ui-icon-trash"
+									disabled="#{purchaseOrderMB.formDisabled}"
 									oncomplete="deleteOrderItemDialogWidget.show()"
 									title="#{messages.label_delete}">
 									<f:setPropertyActionListener value="#{orderItem}"
@@ -134,6 +147,7 @@
 							binding="#{purchaseOrderMB.createOrderItemPanelGrid}"
 							styleClass="dialog" columnClasses="col1,col2,col3" />
 						<p:commandButton id="createOrderItemSaveButton"
+							disabled="#{purchaseOrderMB.formDisabled}"
 							value="#{messages.label_add}"
 							action="#{purchaseOrderMB.addOrderItem}"
 							update="listOrderItem,createPanelGridOrderItem :growlForm:growl" />
@@ -141,8 +155,7 @@
 					<p:outputPanel>
 						<p:commandButton id="createSaveButton"
 							value="#{messages.label_save}"
-							action="#{purchaseOrderMB.persist}"
-							update="createPanelGrid :growlForm:growl" />
+							action="#{purchaseOrderMB.persist}" update="createPanelGrid" />
 					</p:outputPanel>
 				</h:form>
 			</p:outputPanel>
