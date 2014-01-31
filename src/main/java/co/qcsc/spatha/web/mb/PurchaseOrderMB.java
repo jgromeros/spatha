@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
@@ -11,6 +12,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
+
 import org.primefaces.component.autocomplete.AutoComplete;
 import org.primefaces.component.inputtext.InputText;
 import org.primefaces.component.message.Message;
@@ -19,6 +21,7 @@ import org.primefaces.context.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
+
 import co.qcsc.spatha.domain.product.ProductClient;
 import co.qcsc.spatha.domain.purchase.OrderItem;
 import co.qcsc.spatha.domain.purchase.PurchaseOrder;
@@ -51,6 +54,7 @@ public class PurchaseOrderMB {
 	private HtmlPanelGrid viewOrderItemPanelGrid;
 
 	private boolean dataVisible = false;
+	private boolean formDisabled = false;
 
 	@Autowired
 	ProductClientService productClientService;
@@ -579,12 +583,17 @@ public class PurchaseOrderMB {
 
 	public String persist() {
 		String message = "";
-		if (purchaseOrder.getId() != null) {
-			purchaseOrderService.updatePurchaseOrder(purchaseOrder);
-			message = "message_successfully_updated";
+		if (purchaseOrder.getItems().isEmpty()) {
+			message = "message_need_items";
 		} else {
-			purchaseOrderService.savePurchaseOrder(purchaseOrder);
-			message = "message_successfully_created";
+			if (purchaseOrder.getId() != null) {
+				purchaseOrderService.updatePurchaseOrder(purchaseOrder);
+				message = "message_successfully_updated";
+			} else {
+				purchaseOrderService.savePurchaseOrder(purchaseOrder);
+				message = "message_successfully_created";
+			}
+			formDisabled = true;
 		}
 		RequestContext context = RequestContext.getCurrentInstance();
 		context.execute("createDialogWidget.hide()");
@@ -593,6 +602,7 @@ public class PurchaseOrderMB {
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
 				"PurchaseOrder");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		
 		// reset();
 		// return findAllPurchaseOrders();
 		return null;
@@ -804,7 +814,24 @@ public class PurchaseOrderMB {
 	}
 
 	public String displayCreateDialog() {
-        purchaseOrder = new PurchaseOrder();
-        return "/pages/createPurchaseOrder.xhtml";
-    }
+		purchaseOrder = new PurchaseOrder();
+		formDisabled = false;
+		return "/pages/createPurchaseOrder.xhtml";
+	}
+
+	/**
+	 * @return the formDisabled
+	 */
+	public boolean isFormDisabled() {
+		return formDisabled;
+	}
+
+	/**
+	 * @param formDisabled
+	 *            the formDisabled to set
+	 */
+	public void setFormDisabled(boolean formDisabled) {
+		this.formDisabled = formDisabled;
+	}
+
 }

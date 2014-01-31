@@ -19,6 +19,7 @@
 						<p:outputLabel for="numberOrderCreateInput"
 							id="numberOrderCreateOutput" value="Number Order:"></p:outputLabel>
 						<p:inputText id="numberOrderCreateInput"
+							disabled="#{purchaseOrderMB.formDisabled}"
 							value="#{purchaseOrderMB.purchaseOrder.numberOrder}"
 							required="true"></p:inputText>
 						<p:message id="numberOrderCreateInputMessage"
@@ -26,6 +27,7 @@
 						<p:outputLabel for="supplierContactCreateInput"
 							id="supplierContactCreateOutput" value="Supplier Contact:"></p:outputLabel>
 						<p:inputText id="supplierContactCreateInput"
+							disabled="#{purchaseOrderMB.formDisabled}"
 							value="#{purchaseOrderMB.purchaseOrder.supplierContact}"
 							required="false"></p:inputText>
 						<p:message id="supplierContactCreateInputMessage"
@@ -33,6 +35,7 @@
 						<p:outputLabel for="clientContactCreateInput"
 							id="clientContactCreateOutput" value="Client Contact:"></p:outputLabel>
 						<p:inputText id="clientContactCreateInput"
+							disabled="#{purchaseOrderMB.formDisabled}"
 							value="#{purchaseOrderMB.purchaseOrder.clientContact}"
 							required="false"></p:inputText>
 						<p:message id="clientContactCreateInputMessage"
@@ -40,6 +43,7 @@
 						<p:outputLabel for="supplierPhoneCreateInput"
 							id="supplierPhoneCreateOutput" value="Supplier Phone:"></p:outputLabel>
 						<p:inputText id="supplierPhoneCreateInput"
+							disabled="#{purchaseOrderMB.formDisabled}"
 							value="#{purchaseOrderMB.purchaseOrder.supplierPhone}"
 							required="false"></p:inputText>
 						<p:message id="supplierPhoneCreateInputMessage"
@@ -47,6 +51,7 @@
 						<p:outputLabel for="clientPhoneCreateInput"
 							id="clientPhoneCreateOutput" value="Client Phone:"></p:outputLabel>
 						<p:inputText id="clientPhoneCreateInput"
+							disabled="#{purchaseOrderMB.formDisabled}"
 							value="#{purchaseOrderMB.purchaseOrder.clientPhone}"
 							required="false"></p:inputText>
 						<p:message id="clientPhoneCreateInputMessage"
@@ -54,6 +59,7 @@
 						<p:outputLabel for="supplierEmailCreateInput"
 							id="supplierEmailCreateOutput" value="Supplier Email:"></p:outputLabel>
 						<p:inputText id="supplierEmailCreateInput"
+							disabled="#{purchaseOrderMB.formDisabled}"
 							value="#{purchaseOrderMB.purchaseOrder.supplierEmail}"
 							required="false"></p:inputText>
 						<p:message id="supplierEmailCreateInputMessage"
@@ -61,6 +67,7 @@
 						<p:outputLabel for="clientEmailCreateInput"
 							id="clientEmailCreateOutput" value="Client Email:"></p:outputLabel>
 						<p:inputText id="clientEmailCreateInput"
+							disabled="#{purchaseOrderMB.formDisabled}"
 							value="#{purchaseOrderMB.purchaseOrder.clientEmail}"
 							required="false"></p:inputText>
 						<p:message id="clientEmailCreateInputMessage"
@@ -68,6 +75,7 @@
 						<p:outputLabel for="clientCreateInput" id="clientCreateOutput"
 							value="Client:"></p:outputLabel>
 						<p:autoComplete id="clientCreateInput"
+							disabled="#{purchaseOrderMB.formDisabled}"
 							value="#{purchaseOrderMB.purchaseOrder.client}"
 							completeMethod="#{purchaseOrderMB.completeClient}"
 							dropdown="true" var="client"
@@ -80,6 +88,7 @@
 						<p:outputLabel for="supplierCreateInput" id="supplierCreateOutput"
 							value="Supplier:"></p:outputLabel>
 						<p:autoComplete id="supplierCreateInput"
+							disabled="#{purchaseOrderMB.formDisabled}"
 							value="#{purchaseOrderMB.purchaseOrder.supplier}"
 							completeMethod="#{purchaseOrderMB.completeSupplier}"
 							dropdown="true" var="supplier"

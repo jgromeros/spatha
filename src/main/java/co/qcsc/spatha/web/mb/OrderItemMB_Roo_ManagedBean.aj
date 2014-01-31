@@ -198,7 +198,7 @@ privileged aspect OrderItemMB_Roo_ManagedBean {
         productCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{orderItemMB.completeProduct}", List.class, new Class[] { String.class }));
         productCreateInput.setDropdown(true);
         productCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "product", String.class));
-        productCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{product.code}", String.class));
+        productCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{product.code} #{product.clientDescription}", String.class));
         productCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{product}", ProductClient.class));
         productCreateInput.setConverter(new ProductClientConverter());
         productCreateInput.setRequired(false);
@@ -291,7 +291,7 @@ privileged aspect OrderItemMB_Roo_ManagedBean {
         productEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{orderItemMB.completeProduct}", List.class, new Class[] { String.class }));
         productEditInput.setDropdown(true);
         productEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "product", String.class));
-        productEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{product.code}", String.class));
+        productEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{product.code} #{product.clientDescription}", String.class));
         productEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{product}", ProductClient.class));
         productEditInput.setConverter(new ProductClientConverter());
         productEditInput.setRequired(false);
@@ -397,7 +397,7 @@ privileged aspect OrderItemMB_Roo_ManagedBean {
     public List<ProductClient> OrderItemMB.completeProduct(String query) {
         List<ProductClient> suggestions = new ArrayList<ProductClient>();
         for (ProductClient productClient : productClientService.findAllProductClients()) {
-            String productClientStr = String.valueOf(productClient.getCode());
+            String productClientStr = String.valueOf(productClient.getCode() +  " "  + productClient.getClientDescription());
             if (productClientStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(productClient);
             }
