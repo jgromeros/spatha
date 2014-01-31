@@ -12,6 +12,9 @@
 			<p:growl id="growl" showDetail="false" />
 		</h:form>
 		<p:panel toggleable="true" toggleSpeed="250">
+			<f:facet name="header">
+				<h:outputText value="#{purchaseOrderMB.name}" />
+			</f:facet>
 			<p:outputPanel id="createPanel">
 				<h:form id="createForm" enctype="multipart/form-data">
 					<h:panelGrid id="createPanelGrid" columns="3"
@@ -128,6 +131,7 @@
 								<p:tooltip for="viewButton" value="#{messages.label_view}"
 									showEffect="fade" hideEffect="fade" />
 								<p:commandButton id="deleteOrderItemButton" icon="ui-icon-trash"
+									disabled="#{purchaseOrderMB.formDisabled}"
 									oncomplete="deleteOrderItemDialogWidget.show()"
 									title="#{messages.label_delete}">
 									<f:setPropertyActionListener value="#{orderItem}"
@@ -143,6 +147,7 @@
 							binding="#{purchaseOrderMB.createOrderItemPanelGrid}"
 							styleClass="dialog" columnClasses="col1,col2,col3" />
 						<p:commandButton id="createOrderItemSaveButton"
+							disabled="#{purchaseOrderMB.formDisabled}"
 							value="#{messages.label_add}"
 							action="#{purchaseOrderMB.addOrderItem}"
 							update="listOrderItem,createPanelGridOrderItem :growlForm:growl" />
@@ -150,8 +155,7 @@
 					<p:outputPanel>
 						<p:commandButton id="createSaveButton"
 							value="#{messages.label_save}"
-							action="#{purchaseOrderMB.persist}"
-							update="createPanelGrid :growlForm:growl" />
+							action="#{purchaseOrderMB.persist}" update="createPanelGrid" />
 					</p:outputPanel>
 				</h:form>
 			</p:outputPanel>
