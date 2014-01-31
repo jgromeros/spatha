@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Digits;
@@ -37,7 +38,7 @@ public class OrderItem {
 
     /**
      */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderItem")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderItem", fetch = FetchType.LAZY)
     private Set<Dossier> dossier = new HashSet<Dossier>();
 
 }

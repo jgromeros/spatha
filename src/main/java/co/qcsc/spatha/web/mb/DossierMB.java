@@ -1,4 +1,5 @@
 package co.qcsc.spatha.web.mb;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -6,6 +7,7 @@ import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
 import co.qcsc.spatha.domain.dossier.Dossier;
+import co.qcsc.spatha.domain.purchase.OrderItem;
 import co.qcsc.spatha.domain.purchase.PurchaseOrder;
 import co.qcsc.spatha.domain.thirdparty.Client;
 import co.qcsc.spatha.service.purchase.PurchaseOrderService;
@@ -23,6 +25,7 @@ public class DossierMB {
 
     private Client client;
     private List<PurchaseOrder> purchaseOrders;
+    private PurchaseOrder purchaseOrder;
 
     public List<Client> getClients() {
         return clientService.findAllClients();
@@ -59,6 +62,20 @@ public class DossierMB {
 
     public void setPurchaseOrders(List<PurchaseOrder> purchaseOrders) {
         this.purchaseOrders = purchaseOrders;
+    }
+
+    public PurchaseOrder getPurchaseOrder() {
+        return purchaseOrder;
+    }
+
+    public void setPurchaseOrder(PurchaseOrder purchaseOrder) {
+        this.purchaseOrder = purchaseOrder;
+    }
+
+    public List<OrderItem> getPurchaseOrderItemList() {
+        List<OrderItem> list = new ArrayList<OrderItem>();
+        list.addAll(this.purchaseOrder.getItems());
+        return list;
     }
 
 }

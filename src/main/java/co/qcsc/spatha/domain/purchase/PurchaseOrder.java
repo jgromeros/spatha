@@ -1,5 +1,7 @@
 package co.qcsc.spatha.domain.purchase;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
 
@@ -64,5 +66,16 @@ public class PurchaseOrder {
      */
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "purchaseOrder", fetch = FetchType.EAGER)
 	private Set<OrderItem> items = new HashSet<OrderItem>();
+
+	/**
+	 * Method to return the set of orderItems as a List (Used for rendering purposes with
+	 * PrimeFaces components).
+	 * @return
+	 */
+    public List<OrderItem> getOrderItemList() {
+        List<OrderItem> list = new ArrayList<OrderItem>();
+        list.addAll(getItems());
+        return list;
+    }
 
 }

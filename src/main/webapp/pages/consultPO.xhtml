@@ -48,20 +48,53 @@
                         <f:facet name="header">
                             <h:outputText value="Actions" />
                         </f:facet>
-                        <p:commandButton id="viewButton" icon="ui-icon-zoomin"
-                                title="#{messages.label_view}" ajax="false" action="#{dossierMB.viewPO}">
-                        </p:commandButton>
-                        <p:tooltip for="viewButton" value="#{messages.label_view}"
-                            showEffect="fade" hideEffect="fade" />
                         <p:commandButton id="indexButton" icon="ui-icon-zoomin"
                                 title="#{app.label_dossier_idx}" ajax="false" action="#{dossierMB.viewIndex}">
                         </p:commandButton>
                         <p:tooltip for="indexButton" value="#{app.label_dossier_idx}"
                                 showEffect="fade" hideEffect="fade" />
+                        <p:commandButton id="viewButton" icon="ui-icon-zoomin"
+                                oncomplete="viewOrderItemDialogWidget.show()"
+                                title="#{messages.label_view}" update=":viewOrderItemForm:oiList">
+                            <f:setPropertyActionListener value="#{purchaseOrder}"
+                                target="#{dossierMB.purchaseOrder}" />
+                        </p:commandButton>
+                        <p:tooltip for="viewButton" value="#{app.label_dossier_idx}"
+                                showEffect="fade" hideEffect="fade" />
                     </p:column>
     			</p:dataTable>
             </h:form>
         </p:panel>
+
+        <p:dialog id="viewOrderItemDialog"
+                header="#{messages.label_view} OrderItem" modal="true"
+                widgetVar="viewOrderItemDialogWidget" dynamic="true" resizable="true"
+                maximizable="true" showEffect="fade" hideEffect="explode">
+            <p:outputPanel id="viewOrderItemPanel">
+                <h:form id="viewOrderItemForm" enctype="multipart/form-data">
+                    <h:panelGrid id="viewOrderItemPanelGrid" columns="1" styleClass="dialog"/>
+                    <h:outputText value="#{dossierMB.purchaseOrder.supplier}"></h:outputText>
+        			<p:dataTable id="oiList" value="#{dossierMB.purchaseOrder.orderItemList}"
+            				var="orderItem" resizableColumns="false" paginator="true"
+            				paginatorTemplate=" {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+            				rowsPerPageTemplate="5,10,25,50" rows="10">
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{app.label_order_item_product}" />
+                            </f:facet>
+                            <h:outputText value="#{orderItem.product}"/>
+                        </p:column>
+        				<p:column>
+        					<f:facet name="header">
+        						<h:outputText value="#{app.label_order_item_quantity}" />
+        					</f:facet>
+                            <h:outputText value="#{orderItem.quantity}"/>
+        				</p:column>
+                    </p:dataTable>
+                </h:form>
+            </p:outputPanel>
+        </p:dialog>
+
       </ui:define>
     </ui:composition>
 </html>

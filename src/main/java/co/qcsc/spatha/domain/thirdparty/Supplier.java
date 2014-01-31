@@ -23,4 +23,10 @@ public class Supplier {
     @NotNull
     @Size(min = 2)
     private String name;
+
+    @Override
+    public String toString() {
+        return name;
+    }
+
 }
