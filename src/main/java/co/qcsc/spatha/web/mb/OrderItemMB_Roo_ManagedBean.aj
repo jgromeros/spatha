@@ -68,7 +68,7 @@ privileged aspect OrderItemMB_Roo_ManagedBean {
     
     private boolean OrderItemMB.createDialogVisible = false;
     
-    private List<Dossier> OrderItemMB.selectedDossier;
+    private List<Dossier> OrderItemMB.selectedDossiers;
     
     @PostConstruct
     public void OrderItemMB.init() {
@@ -210,21 +210,21 @@ privileged aspect OrderItemMB_Roo_ManagedBean {
         productCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(productCreateInputMessage);
         
-        HtmlOutputText dossierCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        dossierCreateOutput.setId("dossierCreateOutput");
-        dossierCreateOutput.setValue("Dossier:");
-        htmlPanelGrid.getChildren().add(dossierCreateOutput);
+        HtmlOutputText dossiersCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        dossiersCreateOutput.setId("dossiersCreateOutput");
+        dossiersCreateOutput.setValue("Dossiers:");
+        htmlPanelGrid.getChildren().add(dossiersCreateOutput);
         
-        HtmlOutputText dossierCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        dossierCreateInput.setId("dossierCreateInput");
-        dossierCreateInput.setValue("This relationship is managed from the Dossier side");
-        htmlPanelGrid.getChildren().add(dossierCreateInput);
+        HtmlOutputText dossiersCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        dossiersCreateInput.setId("dossiersCreateInput");
+        dossiersCreateInput.setValue("This relationship is managed from the Dossier side");
+        htmlPanelGrid.getChildren().add(dossiersCreateInput);
         
-        Message dossierCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        dossierCreateInputMessage.setId("dossierCreateInputMessage");
-        dossierCreateInputMessage.setFor("dossierCreateInput");
-        dossierCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(dossierCreateInputMessage);
+        Message dossiersCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        dossiersCreateInputMessage.setId("dossiersCreateInputMessage");
+        dossiersCreateInputMessage.setFor("dossiersCreateInput");
+        dossiersCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(dossiersCreateInputMessage);
         
         return htmlPanelGrid;
     }
@@ -303,21 +303,21 @@ privileged aspect OrderItemMB_Roo_ManagedBean {
         productEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(productEditInputMessage);
         
-        HtmlOutputText dossierEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        dossierEditOutput.setId("dossierEditOutput");
-        dossierEditOutput.setValue("Dossier:");
-        htmlPanelGrid.getChildren().add(dossierEditOutput);
+        HtmlOutputText dossiersEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        dossiersEditOutput.setId("dossiersEditOutput");
+        dossiersEditOutput.setValue("Dossiers:");
+        htmlPanelGrid.getChildren().add(dossiersEditOutput);
         
-        HtmlOutputText dossierEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        dossierEditInput.setId("dossierEditInput");
-        dossierEditInput.setValue("This relationship is managed from the Dossier side");
-        htmlPanelGrid.getChildren().add(dossierEditInput);
+        HtmlOutputText dossiersEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        dossiersEditInput.setId("dossiersEditInput");
+        dossiersEditInput.setValue("This relationship is managed from the Dossier side");
+        htmlPanelGrid.getChildren().add(dossiersEditInput);
         
-        Message dossierEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        dossierEditInputMessage.setId("dossierEditInputMessage");
-        dossierEditInputMessage.setFor("dossierEditInput");
-        dossierEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(dossierEditInputMessage);
+        Message dossiersEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        dossiersEditInputMessage.setId("dossiersEditInputMessage");
+        dossiersEditInputMessage.setFor("dossiersEditInput");
+        dossiersEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(dossiersEditInputMessage);
         
         return htmlPanelGrid;
     }
@@ -359,15 +359,15 @@ privileged aspect OrderItemMB_Roo_ManagedBean {
         productValue.setConverter(new ProductClientConverter());
         htmlPanelGrid.getChildren().add(productValue);
         
-        HtmlOutputText dossierLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        dossierLabel.setId("dossierLabel");
-        dossierLabel.setValue("Dossier:");
-        htmlPanelGrid.getChildren().add(dossierLabel);
+        HtmlOutputText dossiersLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        dossiersLabel.setId("dossiersLabel");
+        dossiersLabel.setValue("Dossiers:");
+        htmlPanelGrid.getChildren().add(dossiersLabel);
         
-        HtmlOutputText dossierValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        dossierValue.setId("dossierValue");
-        dossierValue.setValue("This relationship is managed from the Dossier side");
-        htmlPanelGrid.getChildren().add(dossierValue);
+        HtmlOutputText dossiersValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        dossiersValue.setId("dossiersValue");
+        dossiersValue.setValue("This relationship is managed from the Dossier side");
+        htmlPanelGrid.getChildren().add(dossiersValue);
         
         return htmlPanelGrid;
     }
@@ -405,20 +405,20 @@ privileged aspect OrderItemMB_Roo_ManagedBean {
         return suggestions;
     }
     
-    public List<Dossier> OrderItemMB.getSelectedDossier() {
-        return selectedDossier;
+    public List<Dossier> OrderItemMB.getSelectedDossiers() {
+        return selectedDossiers;
     }
     
-    public void OrderItemMB.setSelectedDossier(List<Dossier> selectedDossier) {
-        if (selectedDossier != null) {
-            orderItem.setDossier(new HashSet<Dossier>(selectedDossier));
+    public void OrderItemMB.setSelectedDossiers(List<Dossier> selectedDossiers) {
+        if (selectedDossiers != null) {
+            orderItem.setDossiers(new HashSet<Dossier>(selectedDossiers));
         }
-        this.selectedDossier = selectedDossier;
+        this.selectedDossiers = selectedDossiers;
     }
     
     public String OrderItemMB.onEdit() {
-        if (orderItem != null && orderItem.getDossier() != null) {
-            selectedDossier = new ArrayList<Dossier>(orderItem.getDossier());
+        if (orderItem != null && orderItem.getDossiers() != null) {
+            selectedDossiers = new ArrayList<Dossier>(orderItem.getDossiers());
         }
         return null;
     }
@@ -472,7 +472,7 @@ privileged aspect OrderItemMB_Roo_ManagedBean {
     
     public void OrderItemMB.reset() {
         orderItem = null;
-        selectedDossier = null;
+        selectedDossiers = null;
         createDialogVisible = false;
     }
     

@@ -5,7 +5,7 @@ package co.qcsc.spatha.domain.dossier;
 
 import co.qcsc.spatha.domain.dossier.Dossier;
 import co.qcsc.spatha.domain.dossier.DossierItem;
-import co.qcsc.spatha.domain.product.ProductSpecialty;
+import co.qcsc.spatha.domain.product.Specialty;
 import co.qcsc.spatha.domain.purchase.OrderItem;
 import java.util.Set;
 
@@ -27,11 +27,11 @@ privileged aspect Dossier_Roo_JavaBean {
         this.orderItem = orderItem;
     }
     
-    public ProductSpecialty Dossier.getSpecialty() {
+    public Specialty Dossier.getSpecialty() {
         return this.specialty;
     }
     
-    public void Dossier.setSpecialty(ProductSpecialty specialty) {
+    public void Dossier.setSpecialty(Specialty specialty) {
         this.specialty = specialty;
     }
     

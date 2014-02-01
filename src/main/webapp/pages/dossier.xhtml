@@ -16,10 +16,20 @@
         <f:facet name="header">
           <h:outputText value="#{dossierMB.name}" />
         </f:facet>
-        <h:outputFormat id="noRecordsFound" value="#{messages.label_no_records_found}" rendered="#{!dossierMB.dataVisible}">
-          <f:param value="Dossiers" />
-        </h:outputFormat>
-        <p:dataTable id="list" value="#{dossierMB.allDossiers}" var="dossier" rendered="#{dossierMB.dataVisible}" resizableColumns="false" paginator="true" paginatorTemplate=" {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="5,10,25,50" rows="10">
+        <h:panelGrid id="oiPanelGrid" columns="2">
+            <h:outputText value="#{dossierMB.client.name}" />
+            <h:outputText value="#{dossierMB.orderItem.product.clientDescription}" />
+            <p:commandButton id="newDossierButton" update=":createForm:createPanelGrid"
+                    value="#{messages.label_create}" oncomplete="dossierDialogWidget.show()"
+                    title="#{messages.label_create}">
+            </p:commandButton>
+            <p:tooltip for="newDossierButton" value="#{messages.label_create}"
+                    showEffect="fade" hideEffect="fade" />
+        </h:panelGrid>
+        <p:dataTable id="list" value="#{dossierMB.orderItem.dossiersList}" var="dossier"
+                rendered="#{dossierMB.dataVisible}" resizableColumns="false" paginator="true"
+                paginatorTemplate=" {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                rowsPerPageTemplate="5,10,25,50" rows="10">
           <p:columns value="#{dossierMB.columns}" var="column" columnIndexVar="colIndex">
             <f:facet name="header">
               <h:outputText value="#{applicationBean.getColumnName(column)}" />
@@ -30,14 +40,10 @@
             <f:facet name="header">
               <h:outputText value="Actions" />
             </f:facet>
-            <p:commandButton id="viewButton" icon="ui-icon-zoomin" update=":viewForm:viewPanelGrid" oncomplete="viewDialogWidget.show()" title="#{messages.label_view}">
+            <p:commandButton id="viewButton" icon="ui-icon-zoomin" update=":createForm:createPanelGrid" oncomplete="viewDialogWidget.show()" title="#{messages.label_view}">
               <f:setPropertyActionListener value="#{dossier}" target="#{dossierMB.dossier}" />
             </p:commandButton>
             <p:tooltip for="viewButton" value="#{messages.label_view}" showEffect="fade" hideEffect="fade" />
-            <p:commandButton id="editButton" icon="ui-icon-pencil" update=":editForm:editPanelGrid" action="#{dossierMB.onEdit}" oncomplete="editDialogWidget.show()" title="#{messages.label_edit}">
-              <f:setPropertyActionListener value="#{dossier}" target="#{dossierMB.dossier}" />
-            </p:commandButton>
-            <p:tooltip for="editButton" value="#{messages.label_edit}" showEffect="fade" hideEffect="fade" />
             <p:commandButton id="deleteButton" icon="ui-icon-trash" oncomplete="deleteDialogWidget.show()" title="#{messages.label_delete}">
               <f:setPropertyActionListener value="#{dossier}" target="#{dossierMB.dossier}" />
             </p:commandButton>
@@ -46,31 +52,41 @@
         </p:dataTable>
       </p:panel>
     </h:form>
-    <p:dialog id="createDialog" header="#{messages.label_create} Dossier" modal="true" widgetVar="createDialogWidget" dynamic="true" visible="#{dossierMB.createDialogVisible}" resizable="true" maximizable="true" showEffect="fade" hideEffect="explode">
+    <p:dialog id="createDialog" header="#{messages.label_create} Dossier" modal="true"
+            widgetVar="dossierDialogWidget" dynamic="true" visible="#{dossierMB.createDialogVisible}"
+            resizable="true" maximizable="true" showEffect="fade" hideEffect="explode">
       <p:ajax event="close" update=":dataForm:data" listener="#{dossierMB.handleDialogClose}" />
       <p:outputPanel id="createPanel">
         <h:form id="createForm" enctype="multipart/form-data">
-          <h:panelGrid id="createPanelGrid" columns="3" binding="#{dossierMB.createPanelGrid}" styleClass="dialog" columnClasses="col1,col2,col3" />
+
+          <h:panelGrid id="createPanelGrid" columns="2" styleClass="dialog" columnClasses="col1,col2">
+            <h:outputText value="#{app.label_specialty}" />
+            <p:autoComplete id="specialtyInput"
+                    value="#{dossierMB.dossier.specialty.specialty}"
+                    completeMethod="#{dossierMB.completeSpecialty}"
+                    dropdown="true" var="specialty" required="false"
+                    itemLabel="#{specialty.name}" itemValue="#{specialty}"
+                    converter="co.qcsc.spatha.web.mb.converter.SpecialtyConverter"/>
+            <p:tabView id="dossierDescriptionsTabView" var="dossierDescription"
+                    value="#{dossierMB.client.dossierDescriptionsList}">
+                <p:tab id="dossierDescriptionTab" title="#{dossierDescription.name}">
+                </p:tab>
+            </p:tabView>
+<!--             <p:dataTable id="dossierList" value="#{dossierMB.client.dossierDescriptions}" -->
+<!--                     var="documentType" resizableColumns="false" paginator="true" -->
+<!--                     paginatorTemplate=" {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" -->
+<!--                     rowsPerPageTemplate="5,10,25,50" rows="10"> -->
+<!-- 				<p:column> -->
+<!-- 					<f:facet name="header"> -->
+<!-- 						<h:outputText value="#{app.label_documentType}" /> -->
+<!-- 					</f:facet> -->
+<!--                     <h:outputText value="#{documentType.name}"/> -->
+<!-- 				</p:column> -->
+<!--             </p:dataTable> -->
+          </h:panelGrid>
+
           <p:commandButton id="createSaveButton" value="#{messages.label_save}" action="#{dossierMB.persist}" update="createPanelGrid :growlForm:growl" />
           <p:commandButton id="createCloseButton" value="#{messages.label_close}" onclick="createDialogWidget.hide()" type="button" />
-        </h:form>
-      </p:outputPanel>
-    </p:dialog>
-    <p:dialog id="editDialog" header="#{messages.label_edit} Dossier" modal="true" widgetVar="editDialogWidget" dynamic="true" resizable="true" maximizable="true" showEffect="fade" hideEffect="explode">
-      <p:ajax event="close" update=":dataForm:data" listener="#{dossierMB.handleDialogClose}" />
-      <p:outputPanel id="editPanel">
-        <h:form id="editForm" enctype="multipart/form-data">
-          <h:panelGrid id="editPanelGrid" columns="3" binding="#{dossierMB.editPanelGrid}" styleClass="dialog" columnClasses="col1,col2,col3" />
-          <p:commandButton id="editSaveButton" value="#{messages.label_save}" action="#{dossierMB.persist}" update="editPanelGrid :growlForm:growl" />
-          <p:commandButton id="editCloseButton" value="#{messages.label_close}" onclick="editDialogWidget.hide()" type="button" />
-        </h:form>
-      </p:outputPanel>
-    </p:dialog>
-    <p:dialog id="viewDialog" header="#{messages.label_view} Dossier" modal="true" widgetVar="viewDialogWidget" dynamic="true" resizable="true" maximizable="true" showEffect="fade" hideEffect="explode">
-      <p:outputPanel id="viewPanel">
-        <h:form id="viewForm" enctype="multipart/form-data">
-          <h:panelGrid id="viewPanelGrid" columns="2" binding="#{dossierMB.viewPanelGrid}" styleClass="dialog" columnClasses="col1,col2" />
-          <p:commandButton id="viewCloseButton" value="#{messages.label_close}" onclick="viewDialogWidget.hide()" type="button" />
         </h:form>
       </p:outputPanel>
     </p:dialog>

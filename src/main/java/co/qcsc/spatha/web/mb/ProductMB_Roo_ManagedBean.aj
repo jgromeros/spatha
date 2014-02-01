@@ -6,7 +6,6 @@ package co.qcsc.spatha.web.mb;
 import co.qcsc.spatha.domain.product.Family;
 import co.qcsc.spatha.domain.product.Product;
 import co.qcsc.spatha.domain.product.ProductClient;
-import co.qcsc.spatha.domain.product.ProductSpecialty;
 import co.qcsc.spatha.service.product.FamilyService;
 import co.qcsc.spatha.service.product.ProductService;
 import co.qcsc.spatha.web.mb.ProductMB;
@@ -64,8 +63,6 @@ privileged aspect ProductMB_Roo_ManagedBean {
     private boolean ProductMB.createDialogVisible = false;
     
     private List<ProductClient> ProductMB.selectedClientProducts;
-    
-    private List<ProductSpecialty> ProductMB.selectedSpecialties;
     
     @PostConstruct
     public void ProductMB.init() {
@@ -350,22 +347,6 @@ privileged aspect ProductMB_Roo_ManagedBean {
         clientProductsCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(clientProductsCreateInputMessage);
         
-        HtmlOutputText specialtiesCreateOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        specialtiesCreateOutput.setId("specialtiesCreateOutput");
-        specialtiesCreateOutput.setValue("Specialties:");
-        htmlPanelGrid.getChildren().add(specialtiesCreateOutput);
-        
-        HtmlOutputText specialtiesCreateInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        specialtiesCreateInput.setId("specialtiesCreateInput");
-        specialtiesCreateInput.setValue("This relationship is managed from the ProductSpecialty side");
-        htmlPanelGrid.getChildren().add(specialtiesCreateInput);
-        
-        Message specialtiesCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        specialtiesCreateInputMessage.setId("specialtiesCreateInputMessage");
-        specialtiesCreateInputMessage.setFor("specialtiesCreateInput");
-        specialtiesCreateInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(specialtiesCreateInputMessage);
-        
         return htmlPanelGrid;
     }
     
@@ -582,22 +563,6 @@ privileged aspect ProductMB_Roo_ManagedBean {
         clientProductsEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(clientProductsEditInputMessage);
         
-        HtmlOutputText specialtiesEditOutput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        specialtiesEditOutput.setId("specialtiesEditOutput");
-        specialtiesEditOutput.setValue("Specialties:");
-        htmlPanelGrid.getChildren().add(specialtiesEditOutput);
-        
-        HtmlOutputText specialtiesEditInput = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        specialtiesEditInput.setId("specialtiesEditInput");
-        specialtiesEditInput.setValue("This relationship is managed from the ProductSpecialty side");
-        htmlPanelGrid.getChildren().add(specialtiesEditInput);
-        
-        Message specialtiesEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
-        specialtiesEditInputMessage.setId("specialtiesEditInputMessage");
-        specialtiesEditInputMessage.setFor("specialtiesEditInput");
-        specialtiesEditInputMessage.setDisplay("icon");
-        htmlPanelGrid.getChildren().add(specialtiesEditInputMessage);
-        
         return htmlPanelGrid;
     }
     
@@ -719,16 +684,6 @@ privileged aspect ProductMB_Roo_ManagedBean {
         clientProductsValue.setValue("This relationship is managed from the ProductClient side");
         htmlPanelGrid.getChildren().add(clientProductsValue);
         
-        HtmlOutputText specialtiesLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        specialtiesLabel.setId("specialtiesLabel");
-        specialtiesLabel.setValue("Specialties:");
-        htmlPanelGrid.getChildren().add(specialtiesLabel);
-        
-        HtmlOutputText specialtiesValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        specialtiesValue.setId("specialtiesValue");
-        specialtiesValue.setValue("This relationship is managed from the ProductSpecialty side");
-        htmlPanelGrid.getChildren().add(specialtiesValue);
-        
         return htmlPanelGrid;
     }
     
@@ -765,23 +720,9 @@ privileged aspect ProductMB_Roo_ManagedBean {
         this.selectedClientProducts = selectedClientProducts;
     }
     
-    public List<ProductSpecialty> ProductMB.getSelectedSpecialties() {
-        return selectedSpecialties;
-    }
-    
-    public void ProductMB.setSelectedSpecialties(List<ProductSpecialty> selectedSpecialties) {
-        if (selectedSpecialties != null) {
-            product.setSpecialties(new HashSet<ProductSpecialty>(selectedSpecialties));
-        }
-        this.selectedSpecialties = selectedSpecialties;
-    }
-    
     public String ProductMB.onEdit() {
         if (product != null && product.getClientProducts() != null) {
             selectedClientProducts = new ArrayList<ProductClient>(product.getClientProducts());
-        }
-        if (product != null && product.getSpecialties() != null) {
-            selectedSpecialties = new ArrayList<ProductSpecialty>(product.getSpecialties());
         }
         return null;
     }
@@ -836,7 +777,6 @@ privileged aspect ProductMB_Roo_ManagedBean {
     public void ProductMB.reset() {
         product = null;
         selectedClientProducts = null;
-        selectedSpecialties = null;
         createDialogVisible = false;
     }
     

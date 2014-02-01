@@ -1,7 +1,0 @@
-package co.qcsc.spatha.web.mb.converter;
-import co.qcsc.spatha.domain.product.ProductSpecialty;
-import org.springframework.roo.addon.jsf.converter.RooJsfConverter;
-
-@RooJsfConverter(entity = ProductSpecialty.class)
-public class ProductSpecialtyConverter {
-}

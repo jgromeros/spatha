@@ -5,14 +5,13 @@ package co.qcsc.spatha.web.mb;
 
 import co.qcsc.spatha.domain.dossier.Dossier;
 import co.qcsc.spatha.domain.dossier.DossierItem;
-import co.qcsc.spatha.domain.product.ProductSpecialty;
+import co.qcsc.spatha.domain.product.Specialty;
 import co.qcsc.spatha.domain.purchase.OrderItem;
 import co.qcsc.spatha.service.dossier.DossierService;
-import co.qcsc.spatha.service.product.ProductSpecialtyService;
 import co.qcsc.spatha.service.purchase.OrderItemService;
 import co.qcsc.spatha.web.mb.DossierMB;
 import co.qcsc.spatha.web.mb.converter.OrderItemConverter;
-import co.qcsc.spatha.web.mb.converter.ProductSpecialtyConverter;
+import co.qcsc.spatha.web.mb.converter.SpecialtyConverter;
 import co.qcsc.spatha.web.mb.util.MessageFactory;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -46,12 +45,7 @@ privileged aspect DossierMB_Roo_ManagedBean {
     @Autowired
     OrderItemService DossierMB.orderItemService;
     
-    @Autowired
-    ProductSpecialtyService DossierMB.productSpecialtyService;
-    
     private String DossierMB.name = "Dossiers";
-    
-    private Dossier DossierMB.dossier;
     
     private List<Dossier> DossierMB.allDossiers;
     
@@ -192,13 +186,13 @@ privileged aspect DossierMB_Roo_ManagedBean {
         
         AutoComplete specialtyCreateInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
         specialtyCreateInput.setId("specialtyCreateInput");
-        specialtyCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{dossierMB.dossier.specialty}", ProductSpecialty.class));
+        specialtyCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{dossierMB.dossier.specialty}", Specialty.class));
         specialtyCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{dossierMB.completeSpecialty}", List.class, new Class[] { String.class }));
         specialtyCreateInput.setDropdown(true);
         specialtyCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "specialty", String.class));
-        specialtyCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{specialty.id}", String.class));
-        specialtyCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{specialty}", ProductSpecialty.class));
-        specialtyCreateInput.setConverter(new ProductSpecialtyConverter());
+        specialtyCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{specialty.name}", String.class));
+        specialtyCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{specialty}", Specialty.class));
+        specialtyCreateInput.setConverter(new SpecialtyConverter());
         specialtyCreateInput.setRequired(false);
         htmlPanelGrid.getChildren().add(specialtyCreateInput);
         
@@ -285,13 +279,13 @@ privileged aspect DossierMB_Roo_ManagedBean {
         
         AutoComplete specialtyEditInput = (AutoComplete) application.createComponent(AutoComplete.COMPONENT_TYPE);
         specialtyEditInput.setId("specialtyEditInput");
-        specialtyEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{dossierMB.dossier.specialty}", ProductSpecialty.class));
+        specialtyEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{dossierMB.dossier.specialty}", Specialty.class));
         specialtyEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{dossierMB.completeSpecialty}", List.class, new Class[] { String.class }));
         specialtyEditInput.setDropdown(true);
         specialtyEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "specialty", String.class));
-        specialtyEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{specialty.id}", String.class));
-        specialtyEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{specialty}", ProductSpecialty.class));
-        specialtyEditInput.setConverter(new ProductSpecialtyConverter());
+        specialtyEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{specialty.name}", String.class));
+        specialtyEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{specialty}", Specialty.class));
+        specialtyEditInput.setConverter(new SpecialtyConverter());
         specialtyEditInput.setRequired(false);
         htmlPanelGrid.getChildren().add(specialtyEditInput);
         
@@ -353,8 +347,8 @@ privileged aspect DossierMB_Roo_ManagedBean {
         htmlPanelGrid.getChildren().add(specialtyLabel);
         
         HtmlOutputText specialtyValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        specialtyValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{dossierMB.dossier.specialty}", ProductSpecialty.class));
-        specialtyValue.setConverter(new ProductSpecialtyConverter());
+        specialtyValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{dossierMB.dossier.specialty}", Specialty.class));
+        specialtyValue.setConverter(new SpecialtyConverter());
         htmlPanelGrid.getChildren().add(specialtyValue);
         
         HtmlOutputText itemsLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
@@ -392,17 +386,6 @@ privileged aspect DossierMB_Roo_ManagedBean {
         return suggestions;
     }
     
-    public List<ProductSpecialty> DossierMB.completeSpecialty(String query) {
-        List<ProductSpecialty> suggestions = new ArrayList<ProductSpecialty>();
-        for (ProductSpecialty productSpecialty : productSpecialtyService.findAllProductSpecialtys()) {
-            String productSpecialtyStr = String.valueOf(productSpecialty.getId());
-            if (productSpecialtyStr.toLowerCase().startsWith(query.toLowerCase())) {
-                suggestions.add(productSpecialty);
-            }
-        }
-        return suggestions;
-    }
-    
     public List<DossierItem> DossierMB.getSelectedItems() {
         return selectedItems;
     }
@@ -432,12 +415,6 @@ privileged aspect DossierMB_Roo_ManagedBean {
     public String DossierMB.displayList() {
         createDialogVisible = false;
         findAllDossiers();
-        return "dossier";
-    }
-    
-    public String DossierMB.displayCreateDialog() {
-        dossier = new Dossier();
-        createDialogVisible = true;
         return "dossier";
     }
     

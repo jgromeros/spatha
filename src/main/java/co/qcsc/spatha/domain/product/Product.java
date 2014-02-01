@@ -65,9 +65,4 @@ public class Product {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
     private Set<ProductClient> clientProducts = new HashSet<ProductClient>();
 
-    /**
-     */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "product")
-    private Set<ProductSpecialty> specialties = new HashSet<ProductSpecialty>();
-
 }

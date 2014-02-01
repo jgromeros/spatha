@@ -1,6 +1,8 @@
 package co.qcsc.spatha.domain.purchase;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -39,6 +41,17 @@ public class OrderItem {
     /**
      */
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderItem", fetch = FetchType.LAZY)
-    private Set<Dossier> dossier = new HashSet<Dossier>();
+    private Set<Dossier> dossiers = new HashSet<Dossier>();
+
+    /**
+     * Method to return the set of dossiers as a List (Used for rendering purposes with
+     * PrimeFaces components).
+     * @return
+     */
+    public List<Dossier> getDossiersList() {
+        List<Dossier> list = new ArrayList<Dossier>();
+        list.addAll(getDossiers());
+        return list;
+    }
 
 }

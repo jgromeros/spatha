@@ -6,7 +6,6 @@ package co.qcsc.spatha.domain.product;
 import co.qcsc.spatha.domain.product.Family;
 import co.qcsc.spatha.domain.product.Product;
 import co.qcsc.spatha.domain.product.ProductClient;
-import co.qcsc.spatha.domain.product.ProductSpecialty;
 import java.util.Set;
 
 privileged aspect Product_Roo_JavaBean {
@@ -97,14 +96,6 @@ privileged aspect Product_Roo_JavaBean {
     
     public void Product.setClientProducts(Set<ProductClient> clientProducts) {
         this.clientProducts = clientProducts;
-    }
-    
-    public Set<ProductSpecialty> Product.getSpecialties() {
-        return this.specialties;
-    }
-    
-    public void Product.setSpecialties(Set<ProductSpecialty> specialties) {
-        this.specialties = specialties;
     }
     
 }

@@ -1,5 +1,7 @@
 package co.qcsc.spatha.domain.dossier;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -39,4 +41,16 @@ public class DossierDescription {
      */
     @NotNull
     private Boolean valid;
+
+    /**
+     * Method to return the set of documentTypes as a List (Used for rendering purposes with
+     * PrimeFaces components).
+     * @return
+     */
+    public List<DocumentType> getDocumentTypesList() {
+        List<DocumentType> list = new ArrayList<DocumentType>();
+        list.addAll(getDocumentTypes());
+        return list;
+    }
+
 }

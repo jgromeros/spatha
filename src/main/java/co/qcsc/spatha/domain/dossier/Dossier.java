@@ -10,7 +10,7 @@ import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.tostring.RooToString;
 
-import co.qcsc.spatha.domain.product.ProductSpecialty;
+import co.qcsc.spatha.domain.product.Specialty;
 import co.qcsc.spatha.domain.purchase.OrderItem;
 
 @RooJavaBean
@@ -30,7 +30,7 @@ public class Dossier {
     /**
      */
     @ManyToOne
-    private ProductSpecialty specialty;
+    private Specialty specialty;
 
     /**
      */

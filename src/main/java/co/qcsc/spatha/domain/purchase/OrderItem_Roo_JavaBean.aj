@@ -36,12 +36,12 @@ privileged aspect OrderItem_Roo_JavaBean {
         this.product = product;
     }
     
-    public Set<Dossier> OrderItem.getDossier() {
-        return this.dossier;
+    public Set<Dossier> OrderItem.getDossiers() {
+        return this.dossiers;
     }
     
-    public void OrderItem.setDossier(Set<Dossier> dossier) {
-        this.dossier = dossier;
+    public void OrderItem.setDossiers(Set<Dossier> dossiers) {
+        this.dossiers = dossiers;
     }
     
 }

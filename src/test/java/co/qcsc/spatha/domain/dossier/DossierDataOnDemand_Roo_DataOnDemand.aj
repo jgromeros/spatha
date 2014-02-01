@@ -6,7 +6,7 @@ package co.qcsc.spatha.domain.dossier;
 import co.qcsc.spatha.db.dossier.DossierRepository;
 import co.qcsc.spatha.domain.dossier.Dossier;
 import co.qcsc.spatha.domain.dossier.DossierDataOnDemand;
-import co.qcsc.spatha.domain.product.ProductSpecialtyDataOnDemand;
+import co.qcsc.spatha.domain.product.SpecialtyDataOnDemand;
 import co.qcsc.spatha.domain.purchase.OrderItemDataOnDemand;
 import co.qcsc.spatha.service.dossier.DossierService;
 import java.security.SecureRandom;
@@ -31,7 +31,7 @@ privileged aspect DossierDataOnDemand_Roo_DataOnDemand {
     OrderItemDataOnDemand DossierDataOnDemand.orderItemDataOnDemand;
     
     @Autowired
-    ProductSpecialtyDataOnDemand DossierDataOnDemand.productSpecialtyDataOnDemand;
+    SpecialtyDataOnDemand DossierDataOnDemand.specialtyDataOnDemand;
     
     @Autowired
     DossierService DossierDataOnDemand.dossierService;
