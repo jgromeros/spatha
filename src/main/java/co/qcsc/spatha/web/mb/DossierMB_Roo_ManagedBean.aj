@@ -47,6 +47,8 @@ privileged aspect DossierMB_Roo_ManagedBean {
     
     private String DossierMB.name = "Dossiers";
     
+    private Dossier DossierMB.dossier;
+    
     private List<Dossier> DossierMB.allDossiers;
     
     private boolean DossierMB.dataVisible = false;

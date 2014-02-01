@@ -29,6 +29,7 @@ import javax.faces.context.FacesContext;
 import org.primefaces.component.autocomplete.AutoComplete;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
+import org.primefaces.component.selectbooleancheckbox.SelectBooleanCheckbox;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -205,6 +206,24 @@ privileged aspect DossierItemMB_Roo_ManagedBean {
         filesCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(filesCreateInputMessage);
         
+        OutputLabel addedCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        addedCreateOutput.setFor("addedCreateInput");
+        addedCreateOutput.setId("addedCreateOutput");
+        addedCreateOutput.setValue("Added:");
+        htmlPanelGrid.getChildren().add(addedCreateOutput);
+        
+        SelectBooleanCheckbox addedCreateInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        addedCreateInput.setId("addedCreateInput");
+        addedCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{dossierItemMB.dossierItem.added}", Boolean.class));
+        addedCreateInput.setRequired(true);
+        htmlPanelGrid.getChildren().add(addedCreateInput);
+        
+        Message addedCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        addedCreateInputMessage.setId("addedCreateInputMessage");
+        addedCreateInputMessage.setFor("addedCreateInput");
+        addedCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(addedCreateInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -280,6 +299,24 @@ privileged aspect DossierItemMB_Roo_ManagedBean {
         filesEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(filesEditInputMessage);
         
+        OutputLabel addedEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        addedEditOutput.setFor("addedEditInput");
+        addedEditOutput.setId("addedEditOutput");
+        addedEditOutput.setValue("Added:");
+        htmlPanelGrid.getChildren().add(addedEditOutput);
+        
+        SelectBooleanCheckbox addedEditInput = (SelectBooleanCheckbox) application.createComponent(SelectBooleanCheckbox.COMPONENT_TYPE);
+        addedEditInput.setId("addedEditInput");
+        addedEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{dossierItemMB.dossierItem.added}", Boolean.class));
+        addedEditInput.setRequired(true);
+        htmlPanelGrid.getChildren().add(addedEditInput);
+        
+        Message addedEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        addedEditInputMessage.setId("addedEditInputMessage");
+        addedEditInputMessage.setFor("addedEditInput");
+        addedEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(addedEditInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -320,6 +357,15 @@ privileged aspect DossierItemMB_Roo_ManagedBean {
         filesValue.setId("filesValue");
         filesValue.setValue("This relationship is managed from the DossierItemFile side");
         htmlPanelGrid.getChildren().add(filesValue);
+        
+        HtmlOutputText addedLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        addedLabel.setId("addedLabel");
+        addedLabel.setValue("Added:");
+        htmlPanelGrid.getChildren().add(addedLabel);
+        
+        HtmlOutputText addedValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        addedValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{dossierItemMB.dossierItem.added}", String.class));
+        htmlPanelGrid.getChildren().add(addedValue);
         
         return htmlPanelGrid;
     }

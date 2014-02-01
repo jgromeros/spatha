@@ -35,4 +35,12 @@ privileged aspect DossierItem_Roo_JavaBean {
         this.files = files;
     }
     
+    public Boolean DossierItem.getAdded() {
+        return this.added;
+    }
+    
+    public void DossierItem.setAdded(Boolean added) {
+        this.added = added;
+    }
+    
 }

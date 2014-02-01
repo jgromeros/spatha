@@ -12,13 +12,10 @@ import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.jpa.entity.RooJpaEntity;
 import org.springframework.roo.addon.tostring.RooToString;
 
-import co.qcsc.spatha.domain.dossier.DocumentType;
 import co.qcsc.spatha.domain.dossier.DossierDescription;
 import co.qcsc.spatha.domain.product.ProductClient;
 
@@ -42,7 +39,7 @@ public class Client {
 
 	/**
      */
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "client", fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "client", fetch = FetchType.EAGER)
 	private Set<DossierDescription> dossierDescriptions = new HashSet<DossierDescription>();
 
 	/**

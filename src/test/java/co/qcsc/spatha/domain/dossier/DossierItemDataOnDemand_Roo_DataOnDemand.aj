@@ -41,7 +41,13 @@ privileged aspect DossierItemDataOnDemand_Roo_DataOnDemand {
     
     public DossierItem DossierItemDataOnDemand.getNewTransientDossierItem(int index) {
         DossierItem obj = new DossierItem();
+        setAdded(obj, index);
         return obj;
+    }
+    
+    public void DossierItemDataOnDemand.setAdded(DossierItem obj, int index) {
+        Boolean added = Boolean.TRUE;
+        obj.setAdded(added);
     }
     
     public DossierItem DossierItemDataOnDemand.getSpecificDossierItem(int index) {

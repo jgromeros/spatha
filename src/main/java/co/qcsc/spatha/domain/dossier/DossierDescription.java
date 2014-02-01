@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
@@ -34,7 +35,7 @@ public class DossierDescription {
 
     /**
      */
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "dossierDescription")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "dossierDescription", fetch = FetchType.EAGER)
     private Set<DocumentType> documentTypes = new HashSet<DocumentType>();
 
     /**
@@ -42,15 +43,15 @@ public class DossierDescription {
     @NotNull
     private Boolean valid;
 
-    /**
-     * Method to return the set of documentTypes as a List (Used for rendering purposes with
-     * PrimeFaces components).
-     * @return
-     */
-    public List<DocumentType> getDocumentTypesList() {
-        List<DocumentType> list = new ArrayList<DocumentType>();
-        list.addAll(getDocumentTypes());
-        return list;
-    }
+//    /**
+//     * Method to return the set of documentTypes as a List (Used for rendering purposes with
+//     * PrimeFaces components).
+//     * @return
+//     */
+//    public List<DocumentType> getDocumentTypesList() {
+//        List<DocumentType> list = new ArrayList<DocumentType>();
+//        list.addAll(getDocumentTypes());
+//        return list;
+//    }
 
 }

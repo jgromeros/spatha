@@ -7,7 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
 
+import co.qcsc.spatha.domain.dossier.DocumentType;
 import co.qcsc.spatha.domain.dossier.Dossier;
+import co.qcsc.spatha.domain.dossier.DossierDescription;
+import co.qcsc.spatha.domain.dossier.DossierItem;
 import co.qcsc.spatha.domain.product.Specialty;
 import co.qcsc.spatha.domain.purchase.OrderItem;
 import co.qcsc.spatha.domain.purchase.PurchaseOrder;
@@ -32,7 +35,7 @@ public class DossierMB {
     private Client client;
     private List<PurchaseOrder> purchaseOrders;
     private PurchaseOrder purchaseOrder;
-    private Dossier dossier;
+    private List<Dossier> dossiers;
     private OrderItem orderItem;
 
     public List<Client> getClients() {
@@ -49,10 +52,20 @@ public class DossierMB {
     }
 
     public String displayCreateDialog() {
-        if (orderItem.getDossiers() == null){
-            orderItem.setDossiers(new HashSet<Dossier>());
+        orderItem.setDossiers(new HashSet<Dossier>());
+        dossiers = new ArrayList<Dossier>();
+        for (DossierDescription dossierDescription : client.getDossierDescriptions()){
+            Dossier dossier = new Dossier();
+            dossier.setOrderItem(orderItem);
+            dossier.setItems(new HashSet<DossierItem>());
+            for (DocumentType documentType : dossierDescription.getDocumentTypes()){
+                DossierItem dossierItem = new DossierItem();
+                dossierItem.setDocumentType(documentType);
+                dossierItem.setDossier(dossier);
+                dossier.getItems().add(dossierItem);
+            }
+            getDossiers().add(dossier);
         }
-        dossier = new Dossier();
         return "dossier";
     }
 
@@ -103,5 +116,13 @@ public class DossierMB {
 
     public void setOrderItem(OrderItem orderItem) {
         this.orderItem = orderItem;
+    }
+
+    public List<Dossier> getDossiers() {
+        return dossiers;
+    }
+
+    public void setDossiers(List<Dossier> dossiers) {
+        this.dossiers = dossiers;
     }
 }
