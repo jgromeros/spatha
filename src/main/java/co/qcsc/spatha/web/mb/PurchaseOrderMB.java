@@ -834,4 +834,6 @@ public class PurchaseOrderMB {
 		this.formDisabled = formDisabled;
 	}
 
+
+	private HtmlPanelGrid viewPanelGrid;
 }

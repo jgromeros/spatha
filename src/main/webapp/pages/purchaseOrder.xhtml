@@ -56,8 +56,8 @@
 						</p:commandButton>
 						<p:tooltip for="editButton" value="#{messages.label_edit}"
 							showEffect="fade" hideEffect="fade" />
-						<p:commandButton id="deleteButton" icon="ui-icon-trash" rendered="false"
-							oncomplete="deleteDialogWidget.show()"
+						<p:commandButton id="deleteButton" icon="ui-icon-trash"
+							rendered="false" oncomplete="deleteDialogWidget.show()"
 							title="#{messages.label_delete}">
 							<f:setPropertyActionListener value="#{purchaseOrder}"
 								target="#{purchaseOrderMB.purchaseOrder}" />
@@ -166,9 +166,38 @@
 			maximizable="true" showEffect="fade" hideEffect="explode">
 			<p:outputPanel id="viewPanel">
 				<h:form id="viewForm" enctype="multipart/form-data">
-					<h:panelGrid id="viewPanelGrid" columns="2"
-						binding="#{purchaseOrderMB.viewPanelGrid}" styleClass="dialog"
-						columnClasses="col1,col2" />
+					<h:panelGrid id="viewPanelGrid" columns="2" styleClass="dialog"
+						columnClasses="col1,col2">
+						<h:outputText id="numberOrderLabel" value="Number Order:"></h:outputText>
+						<h:outputText id="numberOrderValue"
+							value="#{purchaseOrderMB.purchaseOrder.numberOrder}"></h:outputText>
+						<h:outputText id="supplierContactLabel" value="Supplier Contact:"></h:outputText>
+						<h:outputText id="supplierContactValue"
+							value="#{purchaseOrderMB.purchaseOrder.supplierContact}"></h:outputText>
+						<h:outputText id="clientContactLabel" value="Client Contact:"></h:outputText>
+						<h:outputText id="clientContactValue"
+							value="#{purchaseOrderMB.purchaseOrder.clientContact}"></h:outputText>
+						<h:outputText id="supplierPhoneLabel" value="Supplier Phone:"></h:outputText>
+						<h:outputText id="supplierPhoneValue"
+							value="#{purchaseOrderMB.purchaseOrder.supplierPhone}"></h:outputText>
+						<h:outputText id="clientPhoneLabel" value="Client Phone:"></h:outputText>
+						<h:outputText id="clientPhoneValue"
+							value="#{purchaseOrderMB.purchaseOrder.clientPhone}"></h:outputText>
+						<h:outputText id="supplierEmailLabel" value="Supplier Email:"></h:outputText>
+						<h:outputText id="supplierEmailValue"
+							value="#{purchaseOrderMB.purchaseOrder.supplierEmail}"></h:outputText>
+						<h:outputText id="clientEmailLabel" value="Client Email:"></h:outputText>
+						<h:outputText id="clientEmailValue"
+							value="#{purchaseOrderMB.purchaseOrder.clientEmail}"></h:outputText>
+						<h:outputText id="clientLabel" value="Client:"></h:outputText>
+						<h:outputText value="#{purchaseOrderMB.purchaseOrder.client}"
+							converter="co.qcsc.spatha.web.mb.converter.ClientConverter"></h:outputText>
+						<h:outputText id="supplierLabel" value="Supplier:"></h:outputText>
+						<h:outputText value="#{purchaseOrderMB.purchaseOrder.supplier}"
+							converter="co.qcsc.spatha.web.mb.converter.SupplierConverter"></h:outputText>
+						<h:outputText id="itemsLabel" value="Items:"></h:outputText>
+
+					</h:panelGrid>
 					<p:commandButton id="viewCloseButton"
 						value="#{messages.label_close}" onclick="viewDialogWidget.hide()"
 						type="button" />
