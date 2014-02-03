@@ -196,7 +196,19 @@
 						<h:outputText value="#{purchaseOrderMB.purchaseOrder.supplier}"
 							converter="co.qcsc.spatha.web.mb.converter.SupplierConverter"></h:outputText>
 						<h:outputText id="itemsLabel" value="Items:"></h:outputText>
-
+						<p:dataTable id="list"
+							value="#{purchaseOrderMB.purchaseOrderItemList}" var="orderItem"
+							resizableColumns="false" paginator="true"
+							paginatorTemplate=" {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							rowsPerPageTemplate="5,10,25,50" rows="10">
+							<p:columns value="#{purchaseOrderMB.orderItemColumns}"
+								var="column" columnIndexVar="colIndex">
+								<f:facet name="header">
+									<h:outputText value="#{applicationBean.getColumnName(column)}" />
+								</f:facet>
+								<h:outputText value="#{orderItem[column]}" />
+							</p:columns>
+						</p:dataTable>
 					</h:panelGrid>
 					<p:commandButton id="viewCloseButton"
 						value="#{messages.label_close}" onclick="viewDialogWidget.hide()"
