@@ -47,19 +47,20 @@ public class Client {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "client")
 	private Set<ProductClient> products = new HashSet<ProductClient>();
 
-    /**
-     * Method to return the set of dossierDescriptions as a List (Used for rendering purposes with
-     * PrimeFaces components).
-     * @return
-     */
-    public List<DossierDescription> getDossierDescriptionsList() {
-        List<DossierDescription> list = new ArrayList<DossierDescription>();
-        list.addAll(getDossierDescriptions());
-        return list;
-    }
+	/**
+	 * Method to return the set of dossierDescriptions as a List (Used for
+	 * rendering purposes with PrimeFaces components).
+	 * 
+	 * @return
+	 */
+	public List<DossierDescription> getDossierDescriptionsList() {
+		List<DossierDescription> list = new ArrayList<DossierDescription>();
+		list.addAll(getDossierDescriptions());
+		return list;
+	}
 
-    public String toString() {
-        return this.getId().toString();
-    }
+	public String toString() {
+		return this.getId().toString() + " - " + this.getName();
+	}
 
 }

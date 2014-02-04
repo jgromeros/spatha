@@ -53,6 +53,11 @@ public class PurchaseOrder {
 	private String clientEmail;
 
 	/**
+	 * Actual state of PO
+	 */
+	private String state;
+
+	/**
      */
 	@ManyToOne
 	private Client client;
@@ -68,14 +73,15 @@ public class PurchaseOrder {
 	private Set<OrderItem> items = new HashSet<OrderItem>();
 
 	/**
-	 * Method to return the set of orderItems as a List (Used for rendering purposes with
-	 * PrimeFaces components).
+	 * Method to return the set of orderItems as a List (Used for rendering
+	 * purposes with PrimeFaces components).
+	 * 
 	 * @return
 	 */
-    public List<OrderItem> getOrderItemList() {
-        List<OrderItem> list = new ArrayList<OrderItem>();
-        list.addAll(getItems());
-        return list;
-    }
+	public List<OrderItem> getOrderItemList() {
+		List<OrderItem> list = new ArrayList<OrderItem>();
+		list.addAll(getItems());
+		return list;
+	}
 
 }

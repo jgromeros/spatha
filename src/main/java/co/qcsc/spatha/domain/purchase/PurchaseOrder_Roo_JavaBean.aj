@@ -67,6 +67,14 @@ privileged aspect PurchaseOrder_Roo_JavaBean {
         this.clientEmail = clientEmail;
     }
     
+    public String PurchaseOrder.getState() {
+        return this.state;
+    }
+    
+    public void PurchaseOrder.setState(String state) {
+        this.state = state;
+    }
+    
     public Client PurchaseOrder.getClient() {
         return this.client;
     }

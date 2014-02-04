@@ -45,6 +45,7 @@ privileged aspect PurchaseOrderDataOnDemand_Roo_DataOnDemand {
         setClientEmail(obj, index);
         setClientPhone(obj, index);
         setNumberOrder(obj, index);
+        setState(obj, index);
         setSupplierContact(obj, index);
         setSupplierEmail(obj, index);
         setSupplierPhone(obj, index);
@@ -69,6 +70,11 @@ privileged aspect PurchaseOrderDataOnDemand_Roo_DataOnDemand {
     public void PurchaseOrderDataOnDemand.setNumberOrder(PurchaseOrder obj, int index) {
         String numberOrder = "numberOrder_" + index;
         obj.setNumberOrder(numberOrder);
+    }
+    
+    public void PurchaseOrderDataOnDemand.setState(PurchaseOrder obj, int index) {
+        String state = "state_" + index;
+        obj.setState(state);
     }
     
     public void PurchaseOrderDataOnDemand.setSupplierContact(PurchaseOrder obj, int index) {
