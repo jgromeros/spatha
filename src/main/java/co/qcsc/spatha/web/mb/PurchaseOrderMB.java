@@ -603,7 +603,35 @@ public class PurchaseOrderMB {
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
 				"PurchaseOrder");
 		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-		
+
+		// reset();
+		// return findAllPurchaseOrders();
+		return null;
+	}
+
+	public String cancel() {
+		String message = "";
+		if (purchaseOrder.getItems().isEmpty()) {
+			message = "message_need_items";
+		} else {
+			purchaseOrder.setState("C");
+			if (purchaseOrder.getId() != null) {
+				purchaseOrderService.updatePurchaseOrder(purchaseOrder);
+				message = "message_successfully_updated";
+			} else {
+				purchaseOrderService.savePurchaseOrder(purchaseOrder);
+				message = "message_successfully_created";
+			}
+			formDisabled = true;
+		}
+		RequestContext context = RequestContext.getCurrentInstance();
+		context.execute("createDialogWidget.hide()");
+		context.execute("editDialogWidget.hide()");
+
+		FacesMessage facesMessage = MessageFactory.getMessage(message,
+				"PurchaseOrder");
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+
 		// reset();
 		// return findAllPurchaseOrders();
 		return null;
@@ -835,6 +863,9 @@ public class PurchaseOrderMB {
 		this.formDisabled = formDisabled;
 	}
 
-
 	private HtmlPanelGrid viewPanelGrid;
+
+	public boolean getPurchaseOrderActive() {
+		return "A".equals(purchaseOrder.getState());
+	}
 }
