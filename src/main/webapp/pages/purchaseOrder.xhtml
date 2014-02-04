@@ -190,11 +190,9 @@
 						<h:outputText id="clientEmailValue"
 							value="#{purchaseOrderMB.purchaseOrder.clientEmail}"></h:outputText>
 						<h:outputText id="clientLabel" value="Client:"></h:outputText>
-						<h:outputText value="#{purchaseOrderMB.purchaseOrder.client}"
-							converter="co.qcsc.spatha.web.mb.converter.ClientConverter"></h:outputText>
+						<h:outputText value="#{purchaseOrderMB.purchaseOrder.client}"></h:outputText>
 						<h:outputText id="supplierLabel" value="Supplier:"></h:outputText>
-						<h:outputText value="#{purchaseOrderMB.purchaseOrder.supplier}"
-							converter="co.qcsc.spatha.web.mb.converter.SupplierConverter"></h:outputText>
+						<h:outputText value="#{purchaseOrderMB.purchaseOrder.supplier}"></h:outputText>
 						<h:outputText id="itemsLabel" value="Items:"></h:outputText>
 						<p:dataTable id="list"
 							value="#{purchaseOrderMB.purchaseOrderItemList}" var="orderItem"
