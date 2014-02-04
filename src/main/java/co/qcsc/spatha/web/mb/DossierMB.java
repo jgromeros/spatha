@@ -84,6 +84,9 @@ public class DossierMB {
         dossiers = orderItem.getDossiersList();
         for (Dossier dossierTmp : orderItem.getDossiers()){
             getDossier().setSpecialty(dossierTmp.getSpecialty());
+            for (DossierItem dossierItemTmp : dossierTmp.getItems()){
+                dossierItemTmp.getId();
+            }
         }
         return "dossier";
     }
