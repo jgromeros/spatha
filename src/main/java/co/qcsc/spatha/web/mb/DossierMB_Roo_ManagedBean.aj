@@ -29,7 +29,6 @@ import org.primefaces.component.autocomplete.AutoComplete;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
 import org.primefaces.component.selectbooleancheckbox.SelectBooleanCheckbox;
-import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -418,25 +417,6 @@ privileged aspect DossierMB_Roo_ManagedBean {
         createDialogVisible = false;
         findAllDossiers();
         return "dossier";
-    }
-    
-    public String DossierMB.persist() {
-        String message = "";
-        if (dossier.getId() != null) {
-            dossierService.updateDossier(dossier);
-            message = "message_successfully_updated";
-        } else {
-            dossierService.saveDossier(dossier);
-            message = "message_successfully_created";
-        }
-        RequestContext context = RequestContext.getCurrentInstance();
-        context.execute("createDialogWidget.hide()");
-        context.execute("editDialogWidget.hide()");
-        
-        FacesMessage facesMessage = MessageFactory.getMessage(message, "Dossier");
-        FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-        reset();
-        return findAllDossiers();
     }
     
     public String DossierMB.delete() {

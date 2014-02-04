@@ -17,13 +17,23 @@
           <h:outputText value="#{dossierMB.name}" />
         </f:facet>
         <h:panelGrid id="oiPanelGrid" columns="2">
-            <h:outputText value="#{dossierMB.client.name}" />
-            <h:outputText value="#{dossierMB.orderItem.product.clientDescription}" />
-            <p:commandButton id="newDossierButton" update=":createForm:createPanelGrid"
+            <p:outputLabel for="cientOutput" id="clientOutputLabel" value="#{app.label_client}:"/>
+            <h:outputText id="cientOutput" value="#{dossierMB.client.name}" />
+            <p:outputLabel for="productOutput" id="productOutputLabel" value="#{app.label_product}:"/>
+            <h:outputText id="productOutput" value="#{dossierMB.orderItem.product.clientDescription}" />
+            <p:commandButton id="newDossierIdxButton" update=":createForm:createPanelGrid"
+                    rendered="#{dossierMB.createEnabled}"
                     value="#{messages.label_create}" oncomplete="dossierDialogWidget.show()"
-                    title="#{messages.label_create}">
+                    title="#{messages.label_create}" action="#{dossierMB.displayCreateDialog}">
             </p:commandButton>
-            <p:tooltip for="newDossierButton" value="#{messages.label_create}"
+            <p:tooltip for="newDossierIdxButton" value="#{messages.label_view}"
+                    showEffect="fade" hideEffect="fade" />
+            <p:commandButton id="viewDossierIdxButton" update=":createForm:createPanelGrid"
+                    rendered="#{!dossierMB.createEnabled}"
+                    value="#{messages.label_view}" oncomplete="dossierDialogWidget.show()"
+                    title="#{messages.label_view}" action="#{dossierMB.displayEditDialog}">
+            </p:commandButton>
+            <p:tooltip for="viewDossierIdxButton" value="#{messages.label_view}"
                     showEffect="fade" hideEffect="fade" />
         </h:panelGrid>
         <p:dataTable id="list" value="#{dossierMB.orderItem.dossiersList}" var="dossier"
@@ -67,6 +77,7 @@
                     dropdown="true" var="specialty" required="false"
                     itemLabel="#{specialty.name}" itemValue="#{specialty}"
                     converter="co.qcsc.spatha.web.mb.converter.SpecialtyConverter"/>
+          </h:panelGrid>
             <p:tabView id="dossiersTabView" var="dossier" value="#{dossierMB.dossiers}">
                 <p:tab id="dossierTab" title="#{dossier.name}">
                     <p:dataTable id="dossierList" value="#{dossier.itemsList}"
@@ -85,10 +96,8 @@
                     </p:dataTable>
                 </p:tab>
             </p:tabView>
-          </h:panelGrid>
-
           <p:commandButton id="createSaveButton" value="#{messages.label_save}" action="#{dossierMB.persist}" update="createPanelGrid :growlForm:growl" />
-          <p:commandButton id="createCloseButton" value="#{messages.label_close}" onclick="createDialogWidget.hide()" type="button" />
+          <p:commandButton id="createCloseButton" value="#{messages.label_close}" onclick="dossierDialogWidget.hide()" type="button" />
         </h:form>
       </p:outputPanel>
     </p:dialog>

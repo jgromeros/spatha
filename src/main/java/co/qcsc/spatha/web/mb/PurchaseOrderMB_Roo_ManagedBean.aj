@@ -49,7 +49,6 @@ privileged aspect PurchaseOrderMB_Roo_ManagedBean {
     
     private HtmlPanelGrid PurchaseOrderMB.editPanelGrid;
     
-        
     private boolean PurchaseOrderMB.createDialogVisible = false;
     
     private List<OrderItem> PurchaseOrderMB.selectedItems;

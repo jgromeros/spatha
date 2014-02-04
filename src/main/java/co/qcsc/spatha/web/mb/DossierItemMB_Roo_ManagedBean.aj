@@ -26,7 +26,9 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGrid;
 import javax.faces.context.FacesContext;
+import javax.faces.validator.LengthValidator;
 import org.primefaces.component.autocomplete.AutoComplete;
+import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
 import org.primefaces.component.selectbooleancheckbox.SelectBooleanCheckbox;
@@ -72,6 +74,7 @@ privileged aspect DossierItemMB_Roo_ManagedBean {
     @PostConstruct
     public void DossierItemMB.init() {
         columns = new ArrayList<String>();
+        columns.add("comment");
     }
     
     public String DossierItemMB.getName() {
@@ -224,6 +227,27 @@ privileged aspect DossierItemMB_Roo_ManagedBean {
         addedCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(addedCreateInputMessage);
         
+        OutputLabel commentCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        commentCreateOutput.setFor("commentCreateInput");
+        commentCreateOutput.setId("commentCreateOutput");
+        commentCreateOutput.setValue("Comment:");
+        htmlPanelGrid.getChildren().add(commentCreateOutput);
+        
+        InputTextarea commentCreateInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
+        commentCreateInput.setId("commentCreateInput");
+        commentCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{dossierItemMB.dossierItem.comment}", String.class));
+        LengthValidator commentCreateInputValidator = new LengthValidator();
+        commentCreateInputValidator.setMaximum(2048);
+        commentCreateInput.addValidator(commentCreateInputValidator);
+        commentCreateInput.setRequired(true);
+        htmlPanelGrid.getChildren().add(commentCreateInput);
+        
+        Message commentCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        commentCreateInputMessage.setId("commentCreateInputMessage");
+        commentCreateInputMessage.setFor("commentCreateInput");
+        commentCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(commentCreateInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -317,6 +341,27 @@ privileged aspect DossierItemMB_Roo_ManagedBean {
         addedEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(addedEditInputMessage);
         
+        OutputLabel commentEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        commentEditOutput.setFor("commentEditInput");
+        commentEditOutput.setId("commentEditOutput");
+        commentEditOutput.setValue("Comment:");
+        htmlPanelGrid.getChildren().add(commentEditOutput);
+        
+        InputTextarea commentEditInput = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
+        commentEditInput.setId("commentEditInput");
+        commentEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{dossierItemMB.dossierItem.comment}", String.class));
+        LengthValidator commentEditInputValidator = new LengthValidator();
+        commentEditInputValidator.setMaximum(2048);
+        commentEditInput.addValidator(commentEditInputValidator);
+        commentEditInput.setRequired(true);
+        htmlPanelGrid.getChildren().add(commentEditInput);
+        
+        Message commentEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        commentEditInputMessage.setId("commentEditInputMessage");
+        commentEditInputMessage.setFor("commentEditInput");
+        commentEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(commentEditInputMessage);
+        
         return htmlPanelGrid;
     }
     
@@ -366,6 +411,18 @@ privileged aspect DossierItemMB_Roo_ManagedBean {
         HtmlOutputText addedValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         addedValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{dossierItemMB.dossierItem.added}", String.class));
         htmlPanelGrid.getChildren().add(addedValue);
+        
+        HtmlOutputText commentLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        commentLabel.setId("commentLabel");
+        commentLabel.setValue("Comment:");
+        htmlPanelGrid.getChildren().add(commentLabel);
+        
+        InputTextarea commentValue = (InputTextarea) application.createComponent(InputTextarea.COMPONENT_TYPE);
+        commentValue.setId("commentValue");
+        commentValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{dossierItemMB.dossierItem.comment}", String.class));
+        commentValue.setReadonly(true);
+        commentValue.setDisabled(true);
+        htmlPanelGrid.getChildren().add(commentValue);
         
         return htmlPanelGrid;
     }

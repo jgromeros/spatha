@@ -42,12 +42,21 @@ privileged aspect DossierItemDataOnDemand_Roo_DataOnDemand {
     public DossierItem DossierItemDataOnDemand.getNewTransientDossierItem(int index) {
         DossierItem obj = new DossierItem();
         setAdded(obj, index);
+        setComment(obj, index);
         return obj;
     }
     
     public void DossierItemDataOnDemand.setAdded(DossierItem obj, int index) {
         Boolean added = Boolean.TRUE;
         obj.setAdded(added);
+    }
+    
+    public void DossierItemDataOnDemand.setComment(DossierItem obj, int index) {
+        String comment = "comment_" + index;
+        if (comment.length() > 2048) {
+            comment = comment.substring(0, 2048);
+        }
+        obj.setComment(comment);
     }
     
     public DossierItem DossierItemDataOnDemand.getSpecificDossierItem(int index) {

@@ -2,11 +2,12 @@ package co.qcsc.spatha.web.mb;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import org.primefaces.context.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
-
 import co.qcsc.spatha.domain.dossier.DocumentType;
 import co.qcsc.spatha.domain.dossier.Dossier;
 import co.qcsc.spatha.domain.dossier.DossierDescription;
@@ -18,6 +19,7 @@ import co.qcsc.spatha.domain.thirdparty.Client;
 import co.qcsc.spatha.service.product.SpecialtyService;
 import co.qcsc.spatha.service.purchase.PurchaseOrderService;
 import co.qcsc.spatha.service.thirdparty.ClientService;
+import co.qcsc.spatha.web.mb.util.MessageFactory;
 
 @RooSerializable
 @RooJsfManagedBean(entity = Dossier.class, beanName = "dossierMB")
@@ -51,6 +53,13 @@ public class DossierMB {
         return "consultPO";
     }
 
+    /**
+     * Creates a new list of empty dossiers, assigning it to the orderItem selected.
+     * Each documentType that is part of the correspondant dossierDescription is created
+     * and defaulted to added true. This way, every document is initially part of the dossier
+     * index.
+     * @return
+     */
     public String displayCreateDialog() {
         orderItem.setDossiers(new HashSet<Dossier>());
         dossiers = new ArrayList<Dossier>();
@@ -62,10 +71,28 @@ public class DossierMB {
                 DossierItem dossierItem = new DossierItem();
                 dossierItem.setDocumentType(documentType);
                 dossierItem.setDossier(dossier);
+                dossierItem.setAdded(Boolean.TRUE);
                 dossier.getItems().add(dossierItem);
             }
             getDossiers().add(dossier);
         }
+        orderItem.getDossiers().addAll(getDossiers());
+        return "dossier";
+    }
+
+    public String displayEditDialog() {
+        dossiers = orderItem.getDossiersList();
+        for (Dossier dossierTmp : orderItem.getDossiers()){
+            getDossier().setSpecialty(dossierTmp.getSpecialty());
+        }
+        return "dossier";
+    }
+
+    /**
+     * Navigates to dossier
+     * @return
+     */
+    public String displayOrderItem() {
         return "dossier";
     }
 
@@ -84,6 +111,29 @@ public class DossierMB {
             }
         }
         return suggestions;
+    }
+
+    public String persist() {
+        String message = "";
+        for (Dossier dossier : orderItem.getDossiers()){
+            dossier.setSpecialty(getDossier().getSpecialty());
+        }
+        orderItemService.updateOrderItem(orderItem);
+        RequestContext context = RequestContext.getCurrentInstance();
+        context.execute("dossierDialogWidget.hide()");
+        FacesMessage facesMessage = MessageFactory.getMessage(message, "Dossier");
+        FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+        reset();
+        return "dossier";
+    }
+
+    public boolean isCreateEnabled() {
+        purchaseOrder = poService.findPurchaseOrder(purchaseOrder.getId());
+        orderItem = orderItemService.findOrderItem(orderItem.getId());
+        if (orderItem.getDossiers().size() > 0){
+            return Boolean.FALSE;
+        }
+        return Boolean.TRUE;
     }
 
     public Client getClient() {
@@ -125,4 +175,5 @@ public class DossierMB {
     public void setDossiers(List<Dossier> dossiers) {
         this.dossiers = dossiers;
     }
+
 }

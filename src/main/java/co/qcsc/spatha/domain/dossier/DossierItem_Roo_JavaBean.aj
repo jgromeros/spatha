@@ -43,4 +43,12 @@ privileged aspect DossierItem_Roo_JavaBean {
         this.added = added;
     }
     
+    public String DossierItem.getComment() {
+        return this.comment;
+    }
+    
+    public void DossierItem.setComment(String comment) {
+        this.comment = comment;
+    }
+    
 }

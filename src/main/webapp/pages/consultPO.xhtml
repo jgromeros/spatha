@@ -67,8 +67,12 @@
                 maximizable="true" showEffect="fade" hideEffect="explode">
             <p:outputPanel id="viewOrderItemPanel">
                 <h:form id="viewOrderItemForm" enctype="multipart/form-data">
-                    <h:panelGrid id="viewOrderItemPanelGrid" columns="1" styleClass="dialog"/>
-                    <h:outputText value="#{dossierMB.purchaseOrder.supplier}"></h:outputText>
+                    <h:panelGrid id="viewOrderItemPanelGrid" columns="4" styleClass="dialog">
+                        <p:outputLabel for="supplierOutput" id="supplierOutputLabel" value="#{app.label_supplier}:"/>
+                        <h:outputText id="supplierOutput" value="#{dossierMB.purchaseOrder.supplier}"></h:outputText>
+                        <p:outputLabel for="poNumberOutput" id="poNumberOutputLabel" value="#{app.label_purchaseOrder}:"/>
+                        <h:outputText id="poNumberOutput" value="#{dossierMB.purchaseOrder.numberOrder}"></h:outputText>
+                    </h:panelGrid>
         			<p:dataTable id="oiList" value="#{dossierMB.purchaseOrder.orderItemList}"
             				var="orderItem" resizableColumns="false" paginator="true"
             				paginatorTemplate=" {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -90,7 +94,7 @@
                                 <h:outputText value="#{messages.label_actions}" />
                             </f:facet>
                             <p:commandButton id="viewDossierButton" icon="ui-icon-zoomin"
-                                    title="#{messages.label_view}" action="#{dossierMB.displayCreateDialog}">
+                                    title="#{messages.label_view}" action="#{dossierMB.displayOrderItem}">
                                 <f:setPropertyActionListener value="#{orderItem}"
                                     target="#{dossierMB.orderItem}" />
                             </p:commandButton>
