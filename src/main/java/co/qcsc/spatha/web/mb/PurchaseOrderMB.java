@@ -586,6 +586,7 @@ public class PurchaseOrderMB {
 		if (purchaseOrder.getItems().isEmpty()) {
 			message = "message_need_items";
 		} else {
+			purchaseOrder.setState("A");
 			if (purchaseOrder.getId() != null) {
 				purchaseOrderService.updatePurchaseOrder(purchaseOrder);
 				message = "message_successfully_updated";

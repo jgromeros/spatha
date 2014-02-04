@@ -233,6 +233,24 @@ privileged aspect PurchaseOrderMB_Roo_ManagedBean {
         clientEmailEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(clientEmailEditInputMessage);
         
+        OutputLabel stateEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        stateEditOutput.setFor("stateEditInput");
+        stateEditOutput.setId("stateEditOutput");
+        stateEditOutput.setValue("State:");
+        htmlPanelGrid.getChildren().add(stateEditOutput);
+        
+        InputText stateEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        stateEditInput.setId("stateEditInput");
+        stateEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{purchaseOrderMB.purchaseOrder.state}", String.class));
+        stateEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(stateEditInput);
+        
+        Message stateEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        stateEditInputMessage.setId("stateEditInputMessage");
+        stateEditInputMessage.setFor("stateEditInput");
+        stateEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(stateEditInputMessage);
+        
         OutputLabel clientEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         clientEditOutput.setFor("clientEditInput");
         clientEditOutput.setId("clientEditOutput");
