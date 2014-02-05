@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="../templates/layout.xhtml">
+	<ui:define name="content">
+		<h:form prependId="false" id="growlForm">
+			<p:growl id="growl" showDetail="false" />
+		</h:form>
+		<h:form prependId="false" id="dataForm">
+			<p:panel id="data" toggleable="true" toggleSpeed="250">
+				<f:facet name="header">
+					<h:outputText value="File Upload Test" />
+				</f:facet>
+				<p:commandButton id="uploadButton"
+							oncomplete="uploadDialogWidget.show()"
+							title="upload">
+						</p:commandButton>
+			</p:panel>
+		</h:form>
+		<p:dialog id="uploadDialog"
+			header="File Upload" modal="true"
+			widgetVar="uploadDialogWidget" dynamic="true" resizable="true"
+			maximizable="true" showEffect="fade" hideEffect="explode">
+			<p:outputPanel id="uploadPanel">
+				<h:form id="uploadForm" enctype="multipart/form-data">
+					<h:panelGrid id="uploadPanelGrid" columns="2" styleClass="dialog"
+						columnClasses="col1,col2">
+						<p:fileUpload></p:fileUpload>
+					</h:panelGrid>
+					<p:commandButton id="viewCloseButton"
+						value="#{messages.label_close}" onclick="viewDialogWidget.hide()"
+						type="button" />
+				</h:form>
+			</p:outputPanel>
+		</p:dialog>
+		<p:dialog id="viewOrderItemDialog"
+			header="#{messages.label_view} OrderItem" modal="true"
+			widgetVar="viewOrderItemDialogWidget" dynamic="true" resizable="true"
+			maximizable="true" showEffect="fade" hideEffect="explode">
+			<p:outputPanel id="viewOrderItemPanel">
+				<h:form id="viewOrderItemForm" enctype="multipart/form-data">
+					<h:panelGrid id="viewOrderItemPanelGrid" columns="2"
+						binding="#{purchaseOrderMB.viewOrderItemPanelGrid}"
+						styleClass="dialog" columnClasses="col1,col2" />
+					<p:commandButton id="viewOrderItemCloseButton"
+						value="#{messages.label_close}"
+						onclick="viewOrderItemDialogWidget.hide()" type="button" />
+				</h:form>
+			</p:outputPanel>
+		</p:dialog>
+		<p:confirmDialog id="deleteDialog" widgetVar="deleteDialogWidget"
+			message="#{messages.label_delete_record}" showEffect="fade"
+			hideEffect="explode" header="#{messages.label_confirm_deletion}"
+			severity="alarm">
+			<p:outputPanel id="deletePanel">
+				<h:form id="deleteForm">
+					<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"
+						action="#{purchaseOrderMB.delete}"
+						update=":dataForm:data :growlForm:growl"
+						oncomplete="deleteDialogWidget.hide()" />
+					<p:commandButton id="deleteNoButton" value="#{messages.label_no}"
+						onclick="deleteDialogWidget.hide()" type="button" />
+				</h:form>
+			</p:outputPanel>
+		</p:confirmDialog>
+
+	</ui:define>
+</ui:composition>
+</html>
