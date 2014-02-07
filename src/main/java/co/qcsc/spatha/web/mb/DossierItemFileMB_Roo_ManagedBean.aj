@@ -172,7 +172,7 @@ privileged aspect DossierItemFileMB_Roo_ManagedBean {
         dossierItemCreateInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{dossierItemFileMB.completeDossierItem}", List.class, new Class[] { String.class }));
         dossierItemCreateInput.setDropdown(true);
         dossierItemCreateInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "dossierItem", String.class));
-        dossierItemCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{dossierItem.id}", String.class));
+        dossierItemCreateInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{dossierItem.comment}", String.class));
         dossierItemCreateInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{dossierItem}", DossierItem.class));
         dossierItemCreateInput.setConverter(new DossierItemConverter());
         dossierItemCreateInput.setRequired(false);
@@ -228,7 +228,7 @@ privileged aspect DossierItemFileMB_Roo_ManagedBean {
         dossierItemEditInput.setCompleteMethod(expressionFactory.createMethodExpression(elContext, "#{dossierItemFileMB.completeDossierItem}", List.class, new Class[] { String.class }));
         dossierItemEditInput.setDropdown(true);
         dossierItemEditInput.setValueExpression("var", expressionFactory.createValueExpression(elContext, "dossierItem", String.class));
-        dossierItemEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{dossierItem.id}", String.class));
+        dossierItemEditInput.setValueExpression("itemLabel", expressionFactory.createValueExpression(elContext, "#{dossierItem.comment}", String.class));
         dossierItemEditInput.setValueExpression("itemValue", expressionFactory.createValueExpression(elContext, "#{dossierItem}", DossierItem.class));
         dossierItemEditInput.setConverter(new DossierItemConverter());
         dossierItemEditInput.setRequired(false);
@@ -308,7 +308,7 @@ privileged aspect DossierItemFileMB_Roo_ManagedBean {
     public List<DossierItem> DossierItemFileMB.completeDossierItem(String query) {
         List<DossierItem> suggestions = new ArrayList<DossierItem>();
         for (DossierItem dossierItem : dossierItemService.findAllDossierItems()) {
-            String dossierItemStr = String.valueOf(dossierItem.getId());
+            String dossierItemStr = String.valueOf(dossierItem.getComment());
             if (dossierItemStr.toLowerCase().startsWith(query.toLowerCase())) {
                 suggestions.add(dossierItem);
             }

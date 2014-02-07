@@ -146,62 +146,64 @@
 			maximizable="true" showEffect="fade" hideEffect="explode">
 			<p:ajax event="close" update=":dataForm:data"
 				listener="#{purchaseOrderMB.handleDialogClose}" />
-			<p:outputPanel id="editPanel">
-				<h:form id="editForm" enctype="multipart/form-data">
-					<h:panelGrid id="editPanelGrid" columns="2" styleClass="dialog"
-						columnClasses="col1,col2">
-						<h:outputText id="numberOrderLabel" value="Number Order:"></h:outputText>
-						<h:outputText id="numberOrderValue"
-							value="#{purchaseOrderMB.purchaseOrder.numberOrder}"></h:outputText>
-						<h:outputText id="supplierContactLabel" value="Supplier Contact:"></h:outputText>
-						<h:outputText id="supplierContactValue"
-							value="#{purchaseOrderMB.purchaseOrder.supplierContact}"></h:outputText>
-						<h:outputText id="clientContactLabel" value="Client Contact:"></h:outputText>
-						<h:outputText id="clientContactValue"
-							value="#{purchaseOrderMB.purchaseOrder.clientContact}"></h:outputText>
-						<h:outputText id="supplierPhoneLabel" value="Supplier Phone:"></h:outputText>
-						<h:outputText id="supplierPhoneValue"
-							value="#{purchaseOrderMB.purchaseOrder.supplierPhone}"></h:outputText>
-						<h:outputText id="clientPhoneLabel" value="Client Phone:"></h:outputText>
-						<h:outputText id="clientPhoneValue"
-							value="#{purchaseOrderMB.purchaseOrder.clientPhone}"></h:outputText>
-						<h:outputText id="supplierEmailLabel" value="Supplier Email:"></h:outputText>
-						<h:outputText id="supplierEmailValue"
-							value="#{purchaseOrderMB.purchaseOrder.supplierEmail}"></h:outputText>
-						<h:outputText id="clientEmailLabel" value="Client Email:"></h:outputText>
-						<h:outputText id="clientEmailValue"
-							value="#{purchaseOrderMB.purchaseOrder.clientEmail}"></h:outputText>
-						<h:outputText id="clientLabel" value="Client:"></h:outputText>
-						<h:outputText value="#{purchaseOrderMB.purchaseOrder.client}"></h:outputText>
-						<h:outputText id="supplierLabel" value="Supplier:"></h:outputText>
-						<h:outputText value="#{purchaseOrderMB.purchaseOrder.supplier}"></h:outputText>
-						<h:outputText id="stateLabel" value="State:"></h:outputText>
-						<h:outputText value="#{purchaseOrderMB.purchaseOrder.state}"></h:outputText>
-						<h:outputText id="itemsLabel" value="Items:"></h:outputText>
-						<p:dataTable id="list"
-							value="#{purchaseOrderMB.purchaseOrderItemList}" var="orderItem"
-							resizableColumns="false" paginator="true"
-							paginatorTemplate=" {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-							rowsPerPageTemplate="5,10,25,50" rows="10">
-							<p:columns value="#{purchaseOrderMB.orderItemColumns}"
-								var="column" columnIndexVar="colIndex">
-								<f:facet name="header">
-									<h:outputText value="#{applicationBean.getColumnName(column)}" />
-								</f:facet>
-								<h:outputText value="#{orderItem[column]}" />
-							</p:columns>
-						</p:dataTable>
-					</h:panelGrid>
-					<p:commandButton id="editSaveButton"
-						rendered="#{purchaseOrderMB.purchaseOrderActive}"
-						value="#{messages.label_cancel}"
-						action="#{purchaseOrderMB.cancel}"
-						update="editPanelGrid :growlForm:growl" />
-					<p:commandButton id="editCloseButton"
-						value="#{messages.label_close}" onclick="editDialogWidget.hide()"
-						type="button" />
-				</h:form>
-			</p:outputPanel>
+			<h:panelGrid id="editPanelGrid">
+				<p:outputPanel id="editPanel">
+					<h:form id="editForm" enctype="multipart/form-data">
+						<h:panelGrid id="editPanelGrid" columns="2" styleClass="dialog"
+							columnClasses="col1,col2">
+							<h:outputText id="numberOrderLabel" value="Number Order:"></h:outputText>
+							<h:outputText id="numberOrderValue"
+								value="#{purchaseOrderMB.purchaseOrder.numberOrder}"></h:outputText>
+							<h:outputText id="supplierContactLabel" value="Supplier Contact:"></h:outputText>
+							<h:outputText id="supplierContactValue"
+								value="#{purchaseOrderMB.purchaseOrder.supplierContact}"></h:outputText>
+							<h:outputText id="clientContactLabel" value="Client Contact:"></h:outputText>
+							<h:outputText id="clientContactValue"
+								value="#{purchaseOrderMB.purchaseOrder.clientContact}"></h:outputText>
+							<h:outputText id="supplierPhoneLabel" value="Supplier Phone:"></h:outputText>
+							<h:outputText id="supplierPhoneValue"
+								value="#{purchaseOrderMB.purchaseOrder.supplierPhone}"></h:outputText>
+							<h:outputText id="clientPhoneLabel" value="Client Phone:"></h:outputText>
+							<h:outputText id="clientPhoneValue"
+								value="#{purchaseOrderMB.purchaseOrder.clientPhone}"></h:outputText>
+							<h:outputText id="supplierEmailLabel" value="Supplier Email:"></h:outputText>
+							<h:outputText id="supplierEmailValue"
+								value="#{purchaseOrderMB.purchaseOrder.supplierEmail}"></h:outputText>
+							<h:outputText id="clientEmailLabel" value="Client Email:"></h:outputText>
+							<h:outputText id="clientEmailValue"
+								value="#{purchaseOrderMB.purchaseOrder.clientEmail}"></h:outputText>
+							<h:outputText id="clientLabel" value="Client:"></h:outputText>
+							<h:outputText value="#{purchaseOrderMB.purchaseOrder.client}"></h:outputText>
+							<h:outputText id="supplierLabel" value="Supplier:"></h:outputText>
+							<h:outputText value="#{purchaseOrderMB.purchaseOrder.supplier}"></h:outputText>
+							<h:outputText id="stateLabel" value="State:"></h:outputText>
+							<h:outputText value="#{purchaseOrderMB.purchaseOrder.state}"></h:outputText>
+							<h:outputText id="itemsLabel" value="Items:"></h:outputText>
+							<p:dataTable id="list"
+								value="#{purchaseOrderMB.purchaseOrderItemList}" var="orderItem"
+								resizableColumns="false" paginator="true"
+								paginatorTemplate=" {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								rowsPerPageTemplate="5,10,25,50" rows="10">
+								<p:columns value="#{purchaseOrderMB.orderItemColumns}"
+									var="column" columnIndexVar="colIndex">
+									<f:facet name="header">
+										<h:outputText value="#{applicationBean.getColumnName(column)}" />
+									</f:facet>
+									<h:outputText value="#{orderItem[column]}" />
+								</p:columns>
+							</p:dataTable>
+						</h:panelGrid>
+						<p:commandButton id="editSaveButton"
+							rendered="#{purchaseOrderMB.purchaseOrderActive}"
+							value="#{messages.label_cancel}"
+							action="#{purchaseOrderMB.cancel}"
+							update="editPanelGrid" />
+						<p:commandButton id="editCloseButton" update="editPanelGrid"
+							value="#{messages.label_close}" onclick="editDialogWidget.hide()"
+							type="button" />
+					</h:form>
+				</p:outputPanel>
+			</h:panelGrid>
 		</p:dialog>
 		<p:dialog id="viewDialog"
 			header="#{messages.label_view} PurchaseOrder" modal="true"
