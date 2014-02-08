@@ -4,4 +4,5 @@ import org.springframework.roo.addon.jsf.converter.RooJsfConverter;
 
 @RooJsfConverter(entity = ProductClient.class)
 public class ProductClientConverter {
+	
 }

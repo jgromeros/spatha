@@ -11,169 +11,172 @@
 		<h:form prependId="false" id="growlForm">
 			<p:growl id="growl" showDetail="false" />
 		</h:form>
-		<p:panel toggleable="true" toggleSpeed="250">
-			<f:facet name="header">
-				<h:outputText value="#{purchaseOrderMB.name}" />
-			</f:facet>
-			<p:outputPanel id="createPanel">
-				<h:form id="createForm" enctype="multipart/form-data">
-					<h:panelGrid id="createPanelGrid" columns="3"
-						columnClasses="col1,col2,col3">
-						<p:outputLabel for="numberOrderCreateInput"
-							id="numberOrderCreateOutput" value="Number Order:"></p:outputLabel>
-						<p:inputText id="numberOrderCreateInput"
-							disabled="#{purchaseOrderMB.formDisabled}"
-							value="#{purchaseOrderMB.purchaseOrder.numberOrder}"
-							required="true"></p:inputText>
-						<p:message id="numberOrderCreateInputMessage"
-							for="numberOrderCreateInput" display="icon"></p:message>
-						<p:outputLabel for="supplierContactCreateInput"
-							id="supplierContactCreateOutput" value="Supplier Contact:"></p:outputLabel>
-						<p:inputText id="supplierContactCreateInput"
-							disabled="#{purchaseOrderMB.formDisabled}"
-							value="#{purchaseOrderMB.purchaseOrder.supplierContact}"
-							required="false"></p:inputText>
-						<p:message id="supplierContactCreateInputMessage"
-							for="supplierContactCreateInput" display="icon"></p:message>
-						<p:outputLabel for="clientContactCreateInput"
-							id="clientContactCreateOutput" value="Client Contact:"></p:outputLabel>
-						<p:inputText id="clientContactCreateInput"
-							disabled="#{purchaseOrderMB.formDisabled}"
-							value="#{purchaseOrderMB.purchaseOrder.clientContact}"
-							required="false"></p:inputText>
-						<p:message id="clientContactCreateInputMessage"
-							for="clientContactCreateInput" display="icon"></p:message>
-						<p:outputLabel for="supplierPhoneCreateInput"
-							id="supplierPhoneCreateOutput" value="Supplier Phone:"></p:outputLabel>
-						<p:inputText id="supplierPhoneCreateInput" maxlength="10"
-							disabled="#{purchaseOrderMB.formDisabled}"
-							validatorMessage="#{messages.incorrect_phone}"
-							value="#{purchaseOrderMB.purchaseOrder.supplierPhone}"
-							required="false">
-							<f:validateRegex pattern="[0-9]+"></f:validateRegex>
-						</p:inputText>
-						<p:message id="supplierPhoneCreateInputMessage"
-							for="supplierPhoneCreateInput" display="icon"></p:message>
-						<p:outputLabel for="clientPhoneCreateInput"
-							id="clientPhoneCreateOutput" value="Client Phone:"></p:outputLabel>
-						<p:inputText id="clientPhoneCreateInput" maxlength="10"
-							validatorMessage="#{messages.incorrect_phone}"
-							disabled="#{purchaseOrderMB.formDisabled}"
-							value="#{purchaseOrderMB.purchaseOrder.clientPhone}"
-							required="false">
-							<f:validateRegex pattern="[0-9]+"></f:validateRegex>
-						</p:inputText>
-						<p:message id="clientPhoneCreateInputMessage"
-							for="clientPhoneCreateInput" display="icon"></p:message>
-						<p:outputLabel for="supplierEmailCreateInput"
-							id="supplierEmailCreateOutput" value="Supplier Email:"></p:outputLabel>
-						<p:inputText id="supplierEmailCreateInput"
-							validatorMessage="#{messages.incorrect_email}"
-							disabled="#{purchaseOrderMB.formDisabled}"
-							value="#{purchaseOrderMB.purchaseOrder.supplierEmail}"
-							required="false">
-							<f:validateRegex
-								pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$"></f:validateRegex>
-						</p:inputText>
-						<p:message id="supplierEmailCreateInputMessage"
-							for="supplierEmailCreateInput" display="icon"></p:message>
-						<p:outputLabel for="clientEmailCreateInput"
-							id="clientEmailCreateOutput" value="Client Email:"></p:outputLabel>
-						<p:inputText id="clientEmailCreateInput"
-							validatorMessage="#{messages.incorrect_email}"
-							disabled="#{purchaseOrderMB.formDisabled}"
-							value="#{purchaseOrderMB.purchaseOrder.clientEmail}"
-							required="false">
-							<f:validateRegex
-								pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$"></f:validateRegex>
-						</p:inputText>
-						<p:message id="clientEmailCreateInputMessage"
-							for="clientEmailCreateInput" display="icon"></p:message>
-						<p:outputLabel for="clientCreateInput" id="clientCreateOutput"
-							value="Client:"></p:outputLabel>
-						<p:autoComplete id="clientCreateInput"
-							disabled="#{purchaseOrderMB.formDisabled}"
-							value="#{purchaseOrderMB.purchaseOrder.client}"
-							completeMethod="#{purchaseOrderMB.completeClient}"
-							dropdown="true" var="client"
-							itemLabel="#{client.identification} #{client.name}"
-							itemValue="#{client}"
-							converter="co.qcsc.spatha.web.mb.converter.ClientConverter"
-							required="false"></p:autoComplete>
-						<p:message id="clientCreateInputMessage" for="clientCreateInput"
-							display="icon"></p:message>
-						<p:outputLabel for="supplierCreateInput" id="supplierCreateOutput"
-							value="Supplier:"></p:outputLabel>
-						<p:autoComplete id="supplierCreateInput"
-							disabled="#{purchaseOrderMB.formDisabled}"
-							value="#{purchaseOrderMB.purchaseOrder.supplier}"
-							completeMethod="#{purchaseOrderMB.completeSupplier}"
-							dropdown="true" var="supplier"
-							itemLabel="#{supplier.identification} #{supplier.name}"
-							itemValue="#{supplier}"
-							converter="co.qcsc.spatha.web.mb.converter.SupplierConverter"
-							required="false"></p:autoComplete>
-						<p:message id="supplierCreateInputMessage"
-							for="supplierCreateInput" display="icon"></p:message>
-						<h:outputText id="itemsCreateOutput" value="Items:"></h:outputText>
-					</h:panelGrid>
-					<p></p>
+		<h:panelGrid id="createPanelGrid" style="width:100%;">
+			<p:panel toggleable="true" toggleSpeed="250">
+				<f:facet name="header">
+					<h:outputText value="#{purchaseOrderMB.name}" />
+				</f:facet>
+				<p:outputPanel id="createPanel">
+					<h:form id="createForm" enctype="multipart/form-data">
+						<h:panelGrid id="createPanelGrid" columns="3"
+							columnClasses="col1,col2,col3">
+							<p:outputLabel for="numberOrderCreateInput"
+								id="numberOrderCreateOutput" value="Number Order:"></p:outputLabel>
+							<p:inputText id="numberOrderCreateInput"
+								disabled="#{purchaseOrderMB.formDisabled}"
+								value="#{purchaseOrderMB.purchaseOrder.numberOrder}"
+								required="true"></p:inputText>
+							<p:message id="numberOrderCreateInputMessage"
+								for="numberOrderCreateInput" display="icon"></p:message>
+							<p:outputLabel for="supplierContactCreateInput"
+								id="supplierContactCreateOutput" value="Supplier Contact:"></p:outputLabel>
+							<p:inputText id="supplierContactCreateInput"
+								disabled="#{purchaseOrderMB.formDisabled}"
+								value="#{purchaseOrderMB.purchaseOrder.supplierContact}"
+								required="false"></p:inputText>
+							<p:message id="supplierContactCreateInputMessage"
+								for="supplierContactCreateInput" display="icon"></p:message>
+							<p:outputLabel for="clientContactCreateInput"
+								id="clientContactCreateOutput" value="Client Contact:"></p:outputLabel>
+							<p:inputText id="clientContactCreateInput"
+								disabled="#{purchaseOrderMB.formDisabled}"
+								value="#{purchaseOrderMB.purchaseOrder.clientContact}"
+								required="false"></p:inputText>
+							<p:message id="clientContactCreateInputMessage"
+								for="clientContactCreateInput" display="icon"></p:message>
+							<p:outputLabel for="supplierPhoneCreateInput"
+								id="supplierPhoneCreateOutput" value="Supplier Phone:"></p:outputLabel>
+							<p:inputText id="supplierPhoneCreateInput" maxlength="10"
+								disabled="#{purchaseOrderMB.formDisabled}"
+								validatorMessage="#{messages.incorrect_phone}"
+								value="#{purchaseOrderMB.purchaseOrder.supplierPhone}"
+								required="false">
+								<f:validateRegex pattern="[0-9]+"></f:validateRegex>
+							</p:inputText>
+							<p:message id="supplierPhoneCreateInputMessage"
+								for="supplierPhoneCreateInput" display="icon"></p:message>
+							<p:outputLabel for="clientPhoneCreateInput"
+								id="clientPhoneCreateOutput" value="Client Phone:"></p:outputLabel>
+							<p:inputText id="clientPhoneCreateInput" maxlength="10"
+								validatorMessage="#{messages.incorrect_phone}"
+								disabled="#{purchaseOrderMB.formDisabled}"
+								value="#{purchaseOrderMB.purchaseOrder.clientPhone}"
+								required="false">
+								<f:validateRegex pattern="[0-9]+"></f:validateRegex>
+							</p:inputText>
+							<p:message id="clientPhoneCreateInputMessage"
+								for="clientPhoneCreateInput" display="icon"></p:message>
+							<p:outputLabel for="supplierEmailCreateInput"
+								id="supplierEmailCreateOutput" value="Supplier Email:"></p:outputLabel>
+							<p:inputText id="supplierEmailCreateInput"
+								validatorMessage="#{messages.incorrect_email}"
+								disabled="#{purchaseOrderMB.formDisabled}"
+								value="#{purchaseOrderMB.purchaseOrder.supplierEmail}"
+								required="false">
+								<f:validateRegex
+									pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$"></f:validateRegex>
+							</p:inputText>
+							<p:message id="supplierEmailCreateInputMessage"
+								for="supplierEmailCreateInput" display="icon"></p:message>
+							<p:outputLabel for="clientEmailCreateInput"
+								id="clientEmailCreateOutput" value="Client Email:"></p:outputLabel>
+							<p:inputText id="clientEmailCreateInput"
+								validatorMessage="#{messages.incorrect_email}"
+								disabled="#{purchaseOrderMB.formDisabled}"
+								value="#{purchaseOrderMB.purchaseOrder.clientEmail}"
+								required="false">
+								<f:validateRegex
+									pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$"></f:validateRegex>
+							</p:inputText>
+							<p:message id="clientEmailCreateInputMessage"
+								for="clientEmailCreateInput" display="icon"></p:message>
+							<p:outputLabel for="clientCreateInput" id="clientCreateOutput"
+								value="Client:"></p:outputLabel>
+							<p:autoComplete id="clientCreateInput"
+								disabled="#{purchaseOrderMB.formDisabled}"
+								value="#{purchaseOrderMB.purchaseOrder.client}"
+								completeMethod="#{purchaseOrderMB.completeClient}"
+								dropdown="true" var="client"
+								itemLabel="#{client.identification} #{client.name}"
+								itemValue="#{client}"
+								converter="co.qcsc.spatha.web.mb.converter.ClientConverter"
+								required="false"></p:autoComplete>
+							<p:message id="clientCreateInputMessage" for="clientCreateInput"
+								display="icon"></p:message>
+							<p:outputLabel for="supplierCreateInput"
+								id="supplierCreateOutput" value="Supplier:"></p:outputLabel>
+							<p:autoComplete id="supplierCreateInput"
+								disabled="#{purchaseOrderMB.formDisabled}"
+								value="#{purchaseOrderMB.purchaseOrder.supplier}"
+								completeMethod="#{purchaseOrderMB.completeSupplier}"
+								dropdown="true" var="supplier"
+								itemLabel="#{supplier.identification} #{supplier.name}"
+								itemValue="#{supplier}"
+								converter="co.qcsc.spatha.web.mb.converter.SupplierConverter"
+								required="false"></p:autoComplete>
+							<p:message id="supplierCreateInputMessage"
+								for="supplierCreateInput" display="icon"></p:message>
+							<h:outputText id="itemsCreateOutput" value="Items:"></h:outputText>
+						</h:panelGrid>
+						<p></p>
 
-					<p:outputPanel id="createPanelOrderItem">
-						<p:dataTable id="listOrderItem"
-							value="#{purchaseOrderMB.purchaseOrderItemList}" var="orderItem"
-							resizableColumns="false" paginator="true"
-							paginatorTemplate=" {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-							rowsPerPageTemplate="5,10,25,50" rows="10">
-							<p:columns value="#{purchaseOrderMB.orderItemColumns}"
-								var="column" columnIndexVar="colIndex">
-								<f:facet name="header">
-									<h:outputText value="#{applicationBean.getColumnName(column)}" />
-								</f:facet>
-								<h:outputText value="#{orderItem[column]}" />
-							</p:columns>
-							<p:column styleClass="action-column">
-								<f:facet name="header">
-									<h:outputText value="Actions" />
-								</f:facet>
-								<p:commandButton id="viewButton" icon="ui-icon-zoomin"
-									oncomplete="viewOrderItemDialogWidget.show()"
-									title="#{messages.label_view}">
-									<f:setPropertyActionListener value="#{orderItem}"
-										target="#{purchaseOrderMB.orderItem}" />
-								</p:commandButton>
-								<p:tooltip for="viewButton" value="#{messages.label_view}"
-									showEffect="fade" hideEffect="fade" />
-								<p:commandButton id="deleteOrderItemButton" icon="ui-icon-trash"
-									disabled="#{purchaseOrderMB.formDisabled}"
-									oncomplete="deleteOrderItemDialogWidget.show()"
-									title="#{messages.label_delete}">
-									<f:setPropertyActionListener value="#{orderItem}"
-										target="#{purchaseOrderMB.orderItemDelete}" />
-								</p:commandButton>
-								<p:tooltip for="deleteOrderItemButton"
-									value="#{messages.label_delete}" showEffect="fade"
-									hideEffect="fade" />
-							</p:column>
-						</p:dataTable>
+						<p:outputPanel id="createPanelOrderItem">
+							<p:dataTable id="listOrderItem"
+								value="#{purchaseOrderMB.purchaseOrderItemList}" var="orderItem"
+								resizableColumns="false" paginator="true"
+								paginatorTemplate=" {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								rowsPerPageTemplate="5,10,25,50" rows="10">
+								<p:columns value="#{purchaseOrderMB.orderItemColumns}"
+									var="column" columnIndexVar="colIndex">
+									<f:facet name="header">
+										<h:outputText value="#{applicationBean.getColumnName(column)}" />
+									</f:facet>
+									<h:outputText value="#{orderItem[column]}" />
+								</p:columns>
+								<p:column styleClass="action-column">
+									<f:facet name="header">
+										<h:outputText value="Actions" />
+									</f:facet>
+									<p:commandButton id="viewButton" icon="ui-icon-zoomin"
+										oncomplete="viewOrderItemDialogWidget.show()"
+										title="#{messages.label_view}">
+										<f:setPropertyActionListener value="#{orderItem}"
+											target="#{purchaseOrderMB.orderItem}" />
+									</p:commandButton>
+									<p:tooltip for="viewButton" value="#{messages.label_view}"
+										showEffect="fade" hideEffect="fade" />
+									<p:commandButton id="deleteOrderItemButton"
+										icon="ui-icon-trash"
+										disabled="#{purchaseOrderMB.formDisabled}"
+										oncomplete="deleteOrderItemDialogWidget.show()"
+										title="#{messages.label_delete}">
+										<f:setPropertyActionListener value="#{orderItem}"
+											target="#{purchaseOrderMB.orderItemDelete}" />
+									</p:commandButton>
+									<p:tooltip for="deleteOrderItemButton"
+										value="#{messages.label_delete}" showEffect="fade"
+										hideEffect="fade" />
+								</p:column>
+							</p:dataTable>
 
-						<h:panelGrid id="createPanelGridOrderItem" columns="3"
-							binding="#{purchaseOrderMB.createOrderItemPanelGrid}"
-							styleClass="dialog" columnClasses="col1,col2,col3" />
-						<p:commandButton id="createOrderItemSaveButton"
-							disabled="#{purchaseOrderMB.formDisabled}"
-							value="#{messages.label_add}"
-							action="#{purchaseOrderMB.addOrderItem}"
-							update="listOrderItem,createPanelGridOrderItem :growlForm:growl" />
-					</p:outputPanel>
-					<p:outputPanel>
-						<p:commandButton id="createSaveButton"
-							value="#{messages.label_save}"
-							action="#{purchaseOrderMB.persist}" update="createPanelGrid" />
-					</p:outputPanel>
-				</h:form>
-			</p:outputPanel>
-		</p:panel>
+							<h:panelGrid id="createPanelGridOrderItem" columns="3"
+								binding="#{purchaseOrderMB.createOrderItemPanelGrid}"
+								styleClass="dialog" columnClasses="col1,col2,col3" />
+							<p:commandButton id="createOrderItemSaveButton"
+								disabled="#{purchaseOrderMB.formDisabled}"
+								value="#{messages.label_add}"
+								action="#{purchaseOrderMB.addOrderItem}"
+								update="listOrderItem,createPanelGridOrderItem :growlForm:growl" />
+						</p:outputPanel>
+						<p:outputPanel>
+							<p:commandButton id="createSaveButton"
+								value="#{messages.label_save}"
+								action="#{purchaseOrderMB.persist}" update="createPanelGrid" />
+						</p:outputPanel>
+					</h:form>
+				</p:outputPanel>
+			</p:panel>
+		</h:panelGrid>
 		<p:dialog id="viewOrderItemDialog"
 			header="#{messages.label_view} OrderItem" modal="true"
 			widgetVar="viewOrderItemDialogWidget" dynamic="true" resizable="true"

@@ -34,7 +34,6 @@ public class ProductClient {
 	 */
 	private String clientDescription;
 
-	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -42,7 +41,8 @@ public class ProductClient {
 	 */
 	@Override
 	public String toString() {
-		return this.clientDescription;
+		return this.getClient().getIdentification() + " "
+				+ this.getProduct().getName() + " - "
+				+ this.getClientDescription();
 	}
-
 }

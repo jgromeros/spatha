@@ -596,9 +596,6 @@ public class PurchaseOrderMB {
 			}
 			formDisabled = true;
 		}
-		RequestContext context = RequestContext.getCurrentInstance();
-		context.execute("createDialogWidget.hide()");
-		context.execute("editDialogWidget.hide()");
 
 		FacesMessage facesMessage = MessageFactory.getMessage(message,
 				"PurchaseOrder");
