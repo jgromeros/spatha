@@ -69,7 +69,7 @@
                 <h:form id="viewOrderItemForm" enctype="multipart/form-data">
                     <h:panelGrid id="viewOrderItemPanelGrid" columns="4" styleClass="dialog">
                         <p:outputLabel for="supplierOutput" id="supplierOutputLabel" value="#{app.label_supplier}:"/>
-                        <h:outputText id="supplierOutput" value="#{dossierMB.purchaseOrder.supplier}"></h:outputText>
+                        <h:outputText id="supplierOutput" value="#{dossierMB.purchaseOrder.supplier.name}"></h:outputText>
                         <p:outputLabel for="poNumberOutput" id="poNumberOutputLabel" value="#{app.label_purchaseOrder}:"/>
                         <h:outputText id="poNumberOutput" value="#{dossierMB.purchaseOrder.numberOrder}"></h:outputText>
                     </h:panelGrid>
@@ -81,14 +81,14 @@
                             <f:facet name="header">
                                 <h:outputText value="#{app.label_order_item_product}" />
                             </f:facet>
-                            <h:outputText value="#{orderItem.product}"/>
+                            <h:outputText value="#{orderItem.product.clientDescription}"/>
                         </p:column>
-        				<p:column>
-        					<f:facet name="header">
-        						<h:outputText value="#{app.label_order_item_quantity}" />
-        					</f:facet>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{app.label_order_item_quantity}" />
+                            </f:facet>
                             <h:outputText value="#{orderItem.quantity}"/>
-        				</p:column>
+                        </p:column>
                         <p:column styleClass="action-column">
                             <f:facet name="header">
                                 <h:outputText value="#{messages.label_actions}" />

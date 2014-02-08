@@ -1,13 +1,17 @@
 package co.qcsc.spatha.web.mb;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+
 import org.primefaces.context.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
+
 import co.qcsc.spatha.domain.dossier.DocumentType;
 import co.qcsc.spatha.domain.dossier.Dossier;
 import co.qcsc.spatha.domain.dossier.DossierDescription;
@@ -16,6 +20,7 @@ import co.qcsc.spatha.domain.product.Specialty;
 import co.qcsc.spatha.domain.purchase.OrderItem;
 import co.qcsc.spatha.domain.purchase.PurchaseOrder;
 import co.qcsc.spatha.domain.thirdparty.Client;
+import co.qcsc.spatha.service.dossier.DossierDescriptionService;
 import co.qcsc.spatha.service.product.SpecialtyService;
 import co.qcsc.spatha.service.purchase.PurchaseOrderService;
 import co.qcsc.spatha.service.thirdparty.ClientService;
@@ -33,6 +38,9 @@ public class DossierMB {
     
     @Autowired
     SpecialtyService specialtyService;
+
+    @Autowired
+    DossierDescriptionService dossierDescriptionService;
 
     private Client client;
     private List<PurchaseOrder> purchaseOrders;
@@ -63,7 +71,8 @@ public class DossierMB {
     public String displayCreateDialog() {
         orderItem.setDossiers(new HashSet<Dossier>());
         dossiers = new ArrayList<Dossier>();
-        for (DossierDescription dossierDescription : client.getDossierDescriptions()){
+        for (DossierDescription dossierDescription : dossierDescriptionService.
+                findDossierDescriptionByClient(client)){
             Dossier dossier = new Dossier();
             dossier.setOrderItem(orderItem);
             dossier.setItems(new HashSet<DossierItem>());
@@ -76,17 +85,14 @@ public class DossierMB {
             }
             getDossiers().add(dossier);
         }
-        orderItem.getDossiers().addAll(getDossiers());
         return "dossier";
     }
 
     public String displayEditDialog() {
         dossiers = orderItem.getDossiersList();
-        for (Dossier dossierTmp : orderItem.getDossiers()){
+        for (Dossier dossierTmp : getDossiers()){
             getDossier().setSpecialty(dossierTmp.getSpecialty());
-            for (DossierItem dossierItemTmp : dossierTmp.getItems()){
-                dossierItemTmp.getId();
-            }
+            Collections.sort(dossierTmp.getItemsList());
         }
         return "dossier";
     }
@@ -121,6 +127,7 @@ public class DossierMB {
         for (Dossier dossier : orderItem.getDossiers()){
             dossier.setSpecialty(getDossier().getSpecialty());
         }
+        orderItem.getDossiers().addAll(getDossiers());
         orderItemService.updateOrderItem(orderItem);
         RequestContext context = RequestContext.getCurrentInstance();
         context.execute("dossierDialogWidget.hide()");

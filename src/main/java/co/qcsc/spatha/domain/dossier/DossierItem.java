@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 @RooJavaBean
 @RooToString
 @RooJpaEntity
-public class DossierItem {
+public class DossierItem implements Comparable<DossierItem> {
 
     /**
      */
@@ -39,4 +39,11 @@ public class DossierItem {
      */
     @Size(max = 2048)
     private String comment;
+
+    @Override
+    public int compareTo(DossierItem o) {
+        return this.getDocumentType().getDocumentOrder().compareTo(
+                o.getDocumentType().getDocumentOrder());
+    }
+
 }

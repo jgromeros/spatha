@@ -36,7 +36,7 @@
             <p:tooltip for="viewDossierIdxButton" value="#{messages.label_view}"
                     showEffect="fade" hideEffect="fade" />
         </h:panelGrid>
-        <p:dataTable id="list" value="#{dossierMB.orderItem.dossiersList}" var="dossier"
+        <p:dataTable id="list" value="#{dossierMB.dossiers}" var="dossier"
                 rendered="#{dossierMB.dataVisible}" resizableColumns="false" paginator="true"
                 paginatorTemplate=" {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                 rowsPerPageTemplate="5,10,25,50" rows="10">
@@ -84,6 +84,12 @@
                             var="item" resizableColumns="false" paginator="true"
                             paginatorTemplate=" {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                             rowsPerPageTemplate="5,10,25,50" rows="10">
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{app.label_code}" />
+                            </f:facet>
+                            <h:outputText value="#{item.documentType.code}"/>
+                        </p:column>
                         <p:column>
                             <f:facet name="header">
                                 <h:outputText value="#{app.label_documentType}" />
