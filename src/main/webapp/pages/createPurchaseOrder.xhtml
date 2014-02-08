@@ -45,24 +45,30 @@
 							for="clientContactCreateInput" display="icon"></p:message>
 						<p:outputLabel for="supplierPhoneCreateInput"
 							id="supplierPhoneCreateOutput" value="Supplier Phone:"></p:outputLabel>
-						<p:inputText id="supplierPhoneCreateInput"
+						<p:inputText id="supplierPhoneCreateInput" maxlength="10"
 							disabled="#{purchaseOrderMB.formDisabled}"
+							validatorMessage="#{messages.incorrect_phone}"
 							value="#{purchaseOrderMB.purchaseOrder.supplierPhone}"
 							required="false">
+							<f:validateRegex pattern="[0-9]+"></f:validateRegex>
 						</p:inputText>
 						<p:message id="supplierPhoneCreateInputMessage"
 							for="supplierPhoneCreateInput" display="icon"></p:message>
 						<p:outputLabel for="clientPhoneCreateInput"
 							id="clientPhoneCreateOutput" value="Client Phone:"></p:outputLabel>
-						<p:inputText id="clientPhoneCreateInput"
+						<p:inputText id="clientPhoneCreateInput" maxlength="10"
+							validatorMessage="#{messages.incorrect_phone}"
 							disabled="#{purchaseOrderMB.formDisabled}"
 							value="#{purchaseOrderMB.purchaseOrder.clientPhone}"
-							required="false"></p:inputText>
+							required="false">
+							<f:validateRegex pattern="[0-9]+"></f:validateRegex>
+						</p:inputText>
 						<p:message id="clientPhoneCreateInputMessage"
 							for="clientPhoneCreateInput" display="icon"></p:message>
 						<p:outputLabel for="supplierEmailCreateInput"
 							id="supplierEmailCreateOutput" value="Supplier Email:"></p:outputLabel>
-						<p:inputText id="supplierEmailCreateInput" validatorMessage="incorrect_email"
+						<p:inputText id="supplierEmailCreateInput"
+							validatorMessage="#{messages.incorrect_email}"
 							disabled="#{purchaseOrderMB.formDisabled}"
 							value="#{purchaseOrderMB.purchaseOrder.supplierEmail}"
 							required="false">
@@ -73,7 +79,8 @@
 							for="supplierEmailCreateInput" display="icon"></p:message>
 						<p:outputLabel for="clientEmailCreateInput"
 							id="clientEmailCreateOutput" value="Client Email:"></p:outputLabel>
-						<p:inputText id="clientEmailCreateInput" validatorMessage="incorrect_email"
+						<p:inputText id="clientEmailCreateInput"
+							validatorMessage="#{messages.incorrect_email}"
 							disabled="#{purchaseOrderMB.formDisabled}"
 							value="#{purchaseOrderMB.purchaseOrder.clientEmail}"
 							required="false">
