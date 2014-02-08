@@ -48,7 +48,8 @@
 						<p:inputText id="supplierPhoneCreateInput"
 							disabled="#{purchaseOrderMB.formDisabled}"
 							value="#{purchaseOrderMB.purchaseOrder.supplierPhone}"
-							required="false"></p:inputText>
+							required="false">
+						</p:inputText>
 						<p:message id="supplierPhoneCreateInputMessage"
 							for="supplierPhoneCreateInput" display="icon"></p:message>
 						<p:outputLabel for="clientPhoneCreateInput"
@@ -61,18 +62,24 @@
 							for="clientPhoneCreateInput" display="icon"></p:message>
 						<p:outputLabel for="supplierEmailCreateInput"
 							id="supplierEmailCreateOutput" value="Supplier Email:"></p:outputLabel>
-						<p:inputText id="supplierEmailCreateInput"
+						<p:inputText id="supplierEmailCreateInput" validatorMessage="incorrect_email"
 							disabled="#{purchaseOrderMB.formDisabled}"
 							value="#{purchaseOrderMB.purchaseOrder.supplierEmail}"
-							required="false"></p:inputText>
+							required="false">
+							<f:validateRegex
+								pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$"></f:validateRegex>
+						</p:inputText>
 						<p:message id="supplierEmailCreateInputMessage"
 							for="supplierEmailCreateInput" display="icon"></p:message>
 						<p:outputLabel for="clientEmailCreateInput"
 							id="clientEmailCreateOutput" value="Client Email:"></p:outputLabel>
-						<p:inputText id="clientEmailCreateInput"
+						<p:inputText id="clientEmailCreateInput" validatorMessage="incorrect_email"
 							disabled="#{purchaseOrderMB.formDisabled}"
 							value="#{purchaseOrderMB.purchaseOrder.clientEmail}"
-							required="false"></p:inputText>
+							required="false">
+							<f:validateRegex
+								pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$"></f:validateRegex>
+						</p:inputText>
 						<p:message id="clientEmailCreateInputMessage"
 							for="clientEmailCreateInput" display="icon"></p:message>
 						<p:outputLabel for="clientCreateInput" id="clientCreateOutput"
