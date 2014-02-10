@@ -1,11 +1,11 @@
 package co.qcsc.spatha.web.mb;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 
 import org.primefaces.context.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +47,7 @@ public class DossierMB {
     private PurchaseOrder purchaseOrder;
     private List<Dossier> dossiers;
     private OrderItem orderItem;
+    private DossierItem dossierItem;
 
     public List<Client> getClients() {
         return clientService.findAllClients();
@@ -92,7 +93,7 @@ public class DossierMB {
         dossiers = orderItem.getDossiersList();
         for (Dossier dossierTmp : getDossiers()){
             getDossier().setSpecialty(dossierTmp.getSpecialty());
-            Collections.sort(dossierTmp.getItemsList());
+            dossierTmp.getItemsList();
         }
         return "dossier";
     }
@@ -124,8 +125,8 @@ public class DossierMB {
 
     public String persist() {
         String message = "";
-        for (Dossier dossier : orderItem.getDossiers()){
-            dossier.setSpecialty(getDossier().getSpecialty());
+        for (Dossier dossierTmp : getDossiers()){
+            dossierTmp.setSpecialty(getDossier().getSpecialty());
         }
         orderItem.getDossiers().addAll(getDossiers());
         orderItemService.updateOrderItem(orderItem);
@@ -184,6 +185,14 @@ public class DossierMB {
 
     public void setDossiers(List<Dossier> dossiers) {
         this.dossiers = dossiers;
+    }
+
+    public DossierItem getDossierItem() {
+        return dossierItem;
+    }
+
+    public void setDossierItem(DossierItem dossierItem) {
+        this.dossierItem = dossierItem;
     }
 
 }

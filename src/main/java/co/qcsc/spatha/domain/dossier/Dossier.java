@@ -1,5 +1,6 @@
 package co.qcsc.spatha.domain.dossier;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -61,6 +62,7 @@ public class Dossier {
     public List<DossierItem> getItemsList() {
         List<DossierItem> list = new ArrayList<DossierItem>();
         list.addAll(getItems());
+        Collections.sort(list);
         return list;
     }
 

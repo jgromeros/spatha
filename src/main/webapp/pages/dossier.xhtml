@@ -81,9 +81,7 @@
             <p:tabView id="dossiersTabView" var="dossier" value="#{dossierMB.dossiers}">
                 <p:tab id="dossierTab" title="#{dossier.name}">
                     <p:dataTable id="dossierList" value="#{dossier.itemsList}"
-                            var="item" resizableColumns="false" paginator="true"
-                            paginatorTemplate=" {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                            rowsPerPageTemplate="5,10,25,50" rows="10">
+                            var="item" resizableColumns="false" paginator="false">
                         <p:column>
                             <f:facet name="header">
                                 <h:outputText value="#{app.label_code}" />
