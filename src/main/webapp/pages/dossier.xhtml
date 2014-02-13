@@ -63,13 +63,13 @@
       </p:panel>
     </h:form>
     <p:dialog id="createDialog" header="#{messages.label_create} Dossier" modal="true"
-            widgetVar="dossierDialogWidget" dynamic="true" visible="#{dossierMB.createDialogVisible}"
+            widgetVar="dossierDialogWidget" visible="#{dossierMB.createDialogVisible}"
             resizable="true" maximizable="true" showEffect="fade" hideEffect="explode">
       <p:ajax event="close" update=":dataForm:data" listener="#{dossierMB.handleDialogClose}" />
       <p:outputPanel id="createPanel">
         <h:form id="createForm" enctype="multipart/form-data">
 
-          <h:panelGrid id="createPanelGrid" columns="2" styleClass="dialog" columnClasses="col1,col2">
+          <h:panelGrid id="createPanelGrid" columns="1" styleClass="dialog">
             <h:outputText value="#{app.label_specialty}" />
             <p:autoComplete id="specialtyInput"
                     value="#{dossierMB.dossier.specialty}"
@@ -77,11 +77,13 @@
                     dropdown="true" var="specialty" required="false"
                     itemLabel="#{specialty.name}" itemValue="#{specialty}"
                     converter="co.qcsc.spatha.web.mb.converter.SpecialtyConverter"/>
-          </h:panelGrid>
             <p:tabView id="dossiersTabView" var="dossier" value="#{dossierMB.dossiers}">
+                <p:ajax event="tabChange" listener="#{dossierMB.onTabChange}"/>
                 <p:tab id="dossierTab" title="#{dossier.name}">
                     <p:dataTable id="dossierList" value="#{dossier.itemsList}"
-                            var="item" resizableColumns="false" paginator="false">
+                            var="item" resizableColumns="false" paginator="true"
+                            rowsPerPageTemplate="5,10,25,50" rows="10">
+                        <p:ajax event="page" listener="#{dossierMB.onPageChange}"/>
                         <p:column>
                             <f:facet name="header">
                                 <h:outputText value="#{app.label_code}" />
@@ -95,11 +97,13 @@
                             <h:outputText value="#{item.documentType.name}"/>
                         </p:column>
                         <p:column>
-                            <p:selectBooleanCheckbox value="#{item.added}"/>
+                            <p:selectBooleanCheckbox value="#{item.added}" valueChangeListener="#{dossierMB.selectDocumentType}">
+                            </p:selectBooleanCheckbox>
                         </p:column>
                     </p:dataTable>
                 </p:tab>
             </p:tabView>
+          </h:panelGrid>
           <p:commandButton id="createSaveButton" value="#{messages.label_save}" action="#{dossierMB.persist}" update="createPanelGrid :growlForm:growl" />
           <p:commandButton id="createCloseButton" value="#{messages.label_close}" onclick="dossierDialogWidget.hide()" type="button" />
         </h:form>

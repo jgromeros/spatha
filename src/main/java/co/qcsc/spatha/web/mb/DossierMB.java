@@ -5,9 +5,11 @@ import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.event.AjaxBehaviorEvent;
+import javax.faces.event.ValueChangeEvent;
 
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.TabChangeEvent;
+import org.primefaces.event.data.PageEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
@@ -145,6 +147,21 @@ public class DossierMB {
             return Boolean.FALSE;
         }
         return Boolean.TRUE;
+    }
+
+    public void onTabChange(TabChangeEvent event) {
+        String tabId = event.getTab().getClientId();
+        System.out.println("Tab id: " + tabId);
+    }
+
+    public void onPageChange(PageEvent event) {
+        int numberOfPage = event.getPage();
+        System.out.println("Page number: " + numberOfPage);
+    }
+
+    public void selectDocumentType(ValueChangeEvent event) {
+        System.out.println("Componente:" + event.getComponent().getClientId());
+        System.out.println("Old value:" + event.getOldValue() + " new Value: " + event.getNewValue());
     }
 
     public Client getClient() {
