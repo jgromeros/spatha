@@ -1,122 +1,175 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:c="http://java.sun.com/jstl/core"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
+	xmlns:c="http://java.sun.com/jstl/core"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
 <ui:composition template="../templates/layout.xhtml">
-  <ui:define name="content">
-    <h:form prependId="false" id="growlForm">
-      <p:growl id="growl" showDetail="false" />
-    </h:form>
-    <h:form prependId="false" id="dataForm">
-      <p:panel id="data" toggleable="true" toggleSpeed="250">
-        <f:facet name="header">
-          <h:outputText value="#{dossierMB.name}" />
-        </f:facet>
-        <h:panelGrid id="oiPanelGrid" columns="2">
-            <p:outputLabel for="cientOutput" id="clientOutputLabel" value="#{app.label_client}:"/>
-            <h:outputText id="cientOutput" value="#{dossierMB.client.name}" />
-            <p:outputLabel for="productOutput" id="productOutputLabel" value="#{app.label_product}:"/>
-            <h:outputText id="productOutput" value="#{dossierMB.orderItem.product.clientDescription}" />
-            <p:commandButton id="newDossierIdxButton" update=":createForm:createPanelGrid"
-                    rendered="#{dossierMB.createEnabled}"
-                    value="#{messages.label_create}" oncomplete="dossierDialogWidget.show()"
-                    title="#{messages.label_create}" action="#{dossierMB.displayCreateDialog}">
-            </p:commandButton>
-            <p:tooltip for="newDossierIdxButton" value="#{messages.label_view}"
-                    showEffect="fade" hideEffect="fade" />
-            <p:commandButton id="viewDossierIdxButton" update=":createForm:createPanelGrid"
-                    rendered="#{!dossierMB.createEnabled}"
-                    value="#{messages.label_view}" oncomplete="dossierDialogWidget.show()"
-                    title="#{messages.label_view}" action="#{dossierMB.displayEditDialog}">
-            </p:commandButton>
-            <p:tooltip for="viewDossierIdxButton" value="#{messages.label_view}"
-                    showEffect="fade" hideEffect="fade" />
-        </h:panelGrid>
-        <p:dataTable id="list" value="#{dossierMB.dossiers}" var="dossier"
-                rendered="#{dossierMB.dataVisible}" resizableColumns="false" paginator="true"
-                paginatorTemplate=" {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                rowsPerPageTemplate="5,10,25,50" rows="10">
-          <p:columns value="#{dossierMB.columns}" var="column" columnIndexVar="colIndex">
-            <f:facet name="header">
-              <h:outputText value="#{applicationBean.getColumnName(column)}" />
-            </f:facet>
-            <h:outputText value="#{dossier[column]}" />
-          </p:columns>
-          <p:column styleClass="action-column">
-            <f:facet name="header">
-              <h:outputText value="Actions" />
-            </f:facet>
-            <p:commandButton id="viewButton" icon="ui-icon-zoomin" update=":createForm:createPanelGrid" oncomplete="viewDialogWidget.show()" title="#{messages.label_view}">
-              <f:setPropertyActionListener value="#{dossier}" target="#{dossierMB.dossier}" />
-            </p:commandButton>
-            <p:tooltip for="viewButton" value="#{messages.label_view}" showEffect="fade" hideEffect="fade" />
-            <p:commandButton id="deleteButton" icon="ui-icon-trash" oncomplete="deleteDialogWidget.show()" title="#{messages.label_delete}">
-              <f:setPropertyActionListener value="#{dossier}" target="#{dossierMB.dossier}" />
-            </p:commandButton>
-            <p:tooltip for="deleteButton" value="#{messages.label_delete}" showEffect="fade" hideEffect="fade" />
-          </p:column>
-        </p:dataTable>
-      </p:panel>
-    </h:form>
-    <p:dialog id="createDialog" header="#{messages.label_create} Dossier" modal="true"
-            widgetVar="dossierDialogWidget" visible="#{dossierMB.createDialogVisible}"
-            resizable="true" maximizable="true" showEffect="fade" hideEffect="explode">
-      <p:ajax event="close" update=":dataForm:data" listener="#{dossierMB.handleDialogClose}" />
-      <p:outputPanel id="createPanel">
-        <h:form id="createForm" enctype="multipart/form-data">
+	<ui:define name="content">
+		<h:form prependId="false" id="growlForm">
+			<p:growl id="growl" showDetail="false" />
+		</h:form>
+		<h:form prependId="false" id="dataForm">
+			<p:panel id="data" toggleable="true" toggleSpeed="250">
+				<f:facet name="header">
+					<h:outputText value="#{dossierMB.name}" />
+				</f:facet>
+				<h:panelGrid id="oiPanelGrid" columns="2">
+					<p:outputLabel for="cientOutput" id="clientOutputLabel"
+						value="#{app.label_client}:" />
+					<h:outputText id="cientOutput" value="#{dossierMB.client.name}" />
+					<p:outputLabel for="productOutput" id="productOutputLabel"
+						value="#{app.label_product}:" />
+					<h:outputText id="productOutput"
+						value="#{dossierMB.orderItem.product.clientDescription}" />
+					<p:commandButton id="newDossierIdxButton"
+						update=":createForm:createPanelGrid"
+						rendered="#{dossierMB.createEnabled}"
+						value="#{messages.label_create}"
+						oncomplete="dossierDialogWidget.show()"
+						title="#{messages.label_create}"
+						action="#{dossierMB.displayCreateDialog}">
+					</p:commandButton>
+					<p:tooltip for="newDossierIdxButton" value="#{messages.label_view}"
+						showEffect="fade" hideEffect="fade" />
+					<p:commandButton id="viewDossierIdxButton"
+						update=":createForm:createPanelGrid"
+						rendered="#{!dossierMB.createEnabled}"
+						value="#{messages.label_view}"
+						oncomplete="dossierDialogWidget.show()"
+						title="#{messages.label_view}"
+						action="#{dossierMB.displayEditDialog}">
+					</p:commandButton>
+					<p:tooltip for="viewDossierIdxButton"
+						value="#{messages.label_view}" showEffect="fade" hideEffect="fade" />
+				</h:panelGrid>
+				<p:dataTable id="list" value="#{dossierMB.dossiers}" var="dossier"
+					rendered="#{dossierMB.dataVisible}" resizableColumns="false"
+					paginator="true"
+					paginatorTemplate=" {CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					rowsPerPageTemplate="5,10,25,50" rows="10">
+					<p:columns value="#{dossierMB.columns}" var="column"
+						columnIndexVar="colIndex">
+						<f:facet name="header">
+							<h:outputText value="#{applicationBean.getColumnName(column)}" />
+						</f:facet>
+						<h:outputText value="#{dossier[column]}" />
+					</p:columns>
+					<p:column styleClass="action-column">
+						<f:facet name="header">
+							<h:outputText value="Actions" />
+						</f:facet>
+						<p:commandButton id="viewButton" icon="ui-icon-zoomin"
+							update=":createForm:createPanelGrid"
+							oncomplete="viewDialogWidget.show()"
+							title="#{messages.label_view}">
+							<f:setPropertyActionListener value="#{dossier}"
+								target="#{dossierMB.dossier}" />
+						</p:commandButton>
+						<p:tooltip for="viewButton" value="#{messages.label_view}"
+							showEffect="fade" hideEffect="fade" />
+						<p:commandButton id="deleteButton" icon="ui-icon-trash"
+							oncomplete="deleteDialogWidget.show()"
+							title="#{messages.label_delete}">
+							<f:setPropertyActionListener value="#{dossier}"
+								target="#{dossierMB.dossier}" />
+						</p:commandButton>
+						<p:tooltip for="deleteButton" value="#{messages.label_delete}"
+							showEffect="fade" hideEffect="fade" />
+					</p:column>
+				</p:dataTable>
+			</p:panel>
+		</h:form>
+		<p:dialog id="createDialog" header="#{messages.label_create} Dossier"
+			modal="true" widgetVar="dossierDialogWidget"
+			visible="#{dossierMB.createDialogVisible}" resizable="true"
+			maximizable="true" showEffect="fade" hideEffect="explode">
+			<p:ajax event="close" update=":dataForm:data"
+				listener="#{dossierMB.handleDialogClose}" />
+			<p:outputPanel id="createPanel">
+				<h:form id="createForm" enctype="multipart/form-data">
 
-          <h:panelGrid id="createPanelGrid" columns="1" styleClass="dialog">
-            <h:outputText value="#{app.label_specialty}" />
-            <p:autoComplete id="specialtyInput"
-                    value="#{dossierMB.dossier.specialty}"
-                    completeMethod="#{dossierMB.completeSpecialty}"
-                    dropdown="true" var="specialty" required="false"
-                    itemLabel="#{specialty.name}" itemValue="#{specialty}"
-                    converter="co.qcsc.spatha.web.mb.converter.SpecialtyConverter"/>
-            <p:tabView id="dossiersTabView" var="dossier" value="#{dossierMB.dossiers}">
-                <p:ajax event="tabChange" listener="#{dossierMB.onTabChange}"/>
-                <p:tab id="dossierTab" title="#{dossier.name}">
-                    <p:dataTable id="dossierList" value="#{dossier.itemsList}"
-                            var="item" resizableColumns="false" paginator="true"
-                            rowsPerPageTemplate="5,10,25,50" rows="10">
-                        <p:ajax event="page" listener="#{dossierMB.onPageChange}"/>
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{app.label_code}" />
-                            </f:facet>
-                            <h:outputText value="#{item.documentType.code}"/>
-                        </p:column>
-                        <p:column>
-                            <f:facet name="header">
-                                <h:outputText value="#{app.label_documentType}" />
-                            </f:facet>
-                            <h:outputText value="#{item.documentType.name}"/>
-                        </p:column>
-                        <p:column>
-                            <p:selectBooleanCheckbox value="#{item.added}" valueChangeListener="#{dossierMB.selectDocumentType}">
-                            </p:selectBooleanCheckbox>
-                        </p:column>
-                    </p:dataTable>
-                </p:tab>
-            </p:tabView>
-          </h:panelGrid>
-          <p:commandButton id="createSaveButton" value="#{messages.label_save}" action="#{dossierMB.persist}" update="createPanelGrid :growlForm:growl" />
-          <p:commandButton id="createCloseButton" value="#{messages.label_close}" onclick="dossierDialogWidget.hide()" type="button" />
-        </h:form>
-      </p:outputPanel>
-    </p:dialog>
-    <p:confirmDialog id="deleteDialog" widgetVar="deleteDialogWidget" message="#{messages.label_delete_record}" showEffect="fade" hideEffect="explode" header="#{messages.label_confirm_deletion}" severity="alarm">
-      <p:outputPanel id="deletePanel">
-        <h:form id="deleteForm">
-          <p:commandButton id="deleteYesButton" value="#{messages.label_yes}" action="#{dossierMB.delete}" update=":dataForm:data :growlForm:growl" oncomplete="deleteDialogWidget.hide()" />
-          <p:commandButton id="deleteNoButton" value="#{messages.label_no}" onclick="deleteDialogWidget.hide()" type="button" />
-        </h:form>
-      </p:outputPanel>
-    </p:confirmDialog>
-  </ui:define>
+					<h:panelGrid id="createPanelGrid" columns="1" styleClass="dialog">
+						<h:outputText value="#{app.label_specialty}" />
+						<p:autoComplete id="specialtyInput"
+							value="#{dossierMB.dossier.specialty}"
+							completeMethod="#{dossierMB.completeSpecialty}" dropdown="true"
+							var="specialty" required="false" itemLabel="#{specialty.name}"
+							itemValue="#{specialty}"
+							converter="co.qcsc.spatha.web.mb.converter.SpecialtyConverter" />
+						<p:tabView id="dossiersTabView" var="dossier"
+							value="#{dossierMB.dossiers}">
+							<p:ajax event="tabChange" listener="#{dossierMB.onTabChange}" />
+							<p:tab id="dossierTab" title="#{dossier.name}">
+								<p:dataTable id="dossierList" value="#{dossier.itemsList}"
+									var="item" resizableColumns="false" paginator="true"
+									rowsPerPageTemplate="5,10,25,50" rows="10">
+									<p:ajax event="page" listener="#{dossierMB.onPageChange}" />
+									<p:column>
+										<f:facet name="header">
+											<h:outputText value="#{app.label_code}" />
+										</f:facet>
+										<p:commandLink id="uploadButton"
+											oncomplete="uploadDialogWidget.show()" title="upload">
+											<h:outputText value="#{item.documentType.code}" />
+										</p:commandLink>
+									</p:column>
+									<p:column>
+										<f:facet name="header">
+											<h:outputText value="#{app.label_documentType}" />
+										</f:facet>
+										<h:outputText value="#{item.documentType.name}" />
+									</p:column>
+									<p:column>
+										<p:selectBooleanCheckbox value="#{item.added}"
+											valueChangeListener="#{dossierMB.selectDocumentType}">
+										</p:selectBooleanCheckbox>
+									</p:column>
+								</p:dataTable>
+							</p:tab>
+						</p:tabView>
+					</h:panelGrid>
+					<p:commandButton id="createSaveButton"
+						value="#{messages.label_save}" action="#{dossierMB.persist}"
+						update="createPanelGrid :growlForm:growl" />
+					<p:commandButton id="createCloseButton"
+						value="#{messages.label_close}"
+						onclick="dossierDialogWidget.hide()" type="button" />
+				</h:form>
+			</p:outputPanel>
+		</p:dialog>
+		<p:dialog id="uploadDialog" header="File Upload" modal="true"
+			widgetVar="uploadDialogWidget" dynamic="true" resizable="true"
+			maximizable="true" showEffect="fade" hideEffect="explode">
+			<p:outputPanel id="uploadPanel">
+				<h:form id="uploadForm" enctype="multipart/form-data">
+					<h:panelGrid id="uploadPanelGrid" columns="2" styleClass="dialog"
+						columnClasses="col1,col2">
+						<p:fileUpload></p:fileUpload>
+					</h:panelGrid>
+					<p:commandButton id="viewCloseButton"
+						value="#{messages.label_close}" onclick="uploadDialogWidget.hide()"
+						type="button" />
+				</h:form>
+			</p:outputPanel>
+		</p:dialog>
+		<p:confirmDialog id="deleteDialog" widgetVar="deleteDialogWidget"
+			message="#{messages.label_delete_record}" showEffect="fade"
+			hideEffect="explode" header="#{messages.label_confirm_deletion}"
+			severity="alarm">
+			<p:outputPanel id="deletePanel">
+				<h:form id="deleteForm">
+					<p:commandButton id="deleteYesButton" value="#{messages.label_yes}"
+						action="#{dossierMB.delete}"
+						update=":dataForm:data :growlForm:growl"
+						oncomplete="deleteDialogWidget.hide()" />
+					<p:commandButton id="deleteNoButton" value="#{messages.label_no}"
+						onclick="deleteDialogWidget.hide()" type="button" />
+				</h:form>
+			</p:outputPanel>
+		</p:confirmDialog>
+	</ui:define>
 </ui:composition>
 </html>
