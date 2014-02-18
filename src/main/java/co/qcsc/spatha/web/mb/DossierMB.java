@@ -72,7 +72,7 @@ public class DossierMB {
      * @return
      */
     public String displayCreateDialog() {
-        orderItem.setDossiers(new HashSet<Dossier>());
+//        orderItem.setDossiers(new HashSet<Dossier>());
         dossiers = new ArrayList<Dossier>();
         for (DossierDescription dossierDescription : dossierDescriptionService.
                 findDossierDescriptionByClient(client)){
