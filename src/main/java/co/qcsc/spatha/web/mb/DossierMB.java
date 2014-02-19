@@ -1,4 +1,5 @@
 package co.qcsc.spatha.web.mb;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -18,6 +19,7 @@ import co.qcsc.spatha.domain.dossier.DocumentType;
 import co.qcsc.spatha.domain.dossier.Dossier;
 import co.qcsc.spatha.domain.dossier.DossierDescription;
 import co.qcsc.spatha.domain.dossier.DossierItem;
+import co.qcsc.spatha.domain.dossier.DossierItemFile;
 import co.qcsc.spatha.domain.product.Specialty;
 import co.qcsc.spatha.domain.purchase.OrderItem;
 import co.qcsc.spatha.domain.purchase.PurchaseOrder;
@@ -32,184 +34,223 @@ import co.qcsc.spatha.web.mb.util.MessageFactory;
 @RooJsfManagedBean(entity = Dossier.class, beanName = "dossierMB")
 public class DossierMB {
 
-    @Autowired
-    PurchaseOrderService poService;
+	@Autowired
+	PurchaseOrderService poService;
 
-    @Autowired
-    ClientService clientService;
-    
-    @Autowired
-    SpecialtyService specialtyService;
+	@Autowired
+	ClientService clientService;
 
-    @Autowired
-    DossierDescriptionService dossierDescriptionService;
+	@Autowired
+	SpecialtyService specialtyService;
 
-    private Client client;
-    private List<PurchaseOrder> purchaseOrders;
-    private PurchaseOrder purchaseOrder;
-    private List<Dossier> dossiers;
-    private OrderItem orderItem;
-    private DossierItem dossierItem;
+	@Autowired
+	DossierDescriptionService dossierDescriptionService;
 
-    public List<Client> getClients() {
-        return clientService.findAllClients();
-    }
+	private Client client;
+	private List<PurchaseOrder> purchaseOrders;
+	private PurchaseOrder purchaseOrder;
+	private List<Dossier> dossiers;
+	private OrderItem orderItem;
+	private DossierItem dossierItem;
+	private List<DossierItemFile> files;
+	private DossierItemFile dossierItemFile;
 
-    public String displayConsultPO() {
-        return "consultPO";
-    }
+	public List<Client> getClients() {
+		return clientService.findAllClients();
+	}
 
-    public String findPurchaseOrders() {
-        purchaseOrders = poService.findPurchaseOrderByClient(client);
-        return "consultPO";
-    }
+	public String displayConsultPO() {
+		return "consultPO";
+	}
 
-    /**
-     * Creates a new list of empty dossiers, assigning it to the orderItem selected.
-     * Each documentType that is part of the correspondant dossierDescription is created
-     * and defaulted to added true. This way, every document is initially part of the dossier
-     * index.
-     * @return
-     */
-    public String displayCreateDialog() {
-        orderItem.setDossiers(new HashSet<Dossier>());
-        dossiers = new ArrayList<Dossier>();
-        for (DossierDescription dossierDescription : dossierDescriptionService.
-                findDossierDescriptionByClient(client)){
-            Dossier dossier = new Dossier();
-            dossier.setOrderItem(orderItem);
-            dossier.setItems(new HashSet<DossierItem>());
-            for (DocumentType documentType : dossierDescription.getDocumentTypes()){
-                DossierItem dossierItem = new DossierItem();
-                dossierItem.setDocumentType(documentType);
-                dossierItem.setDossier(dossier);
-                dossierItem.setAdded(Boolean.TRUE);
-                dossier.getItems().add(dossierItem);
-            }
-            getDossiers().add(dossier);
-        }
-        return "dossier";
-    }
+	public String findPurchaseOrders() {
+		purchaseOrders = poService.findPurchaseOrderByClient(client);
+		return "consultPO";
+	}
 
-    public String displayEditDialog() {
-        dossiers = orderItem.getDossiersList();
-        for (Dossier dossierTmp : getDossiers()){
-            getDossier().setSpecialty(dossierTmp.getSpecialty());
-            dossierTmp.getItemsList();
-        }
-        return "dossier";
-    }
+	/**
+	 * Creates a new list of empty dossiers, assigning it to the orderItem
+	 * selected. Each documentType that is part of the correspondant
+	 * dossierDescription is created and defaulted to added true. This way,
+	 * every document is initially part of the dossier index.
+	 * 
+	 * @return
+	 */
+	public String displayCreateDialog() {
+		orderItem.setDossiers(new HashSet<Dossier>());
+		dossiers = new ArrayList<Dossier>();
+		for (DossierDescription dossierDescription : dossierDescriptionService
+				.findDossierDescriptionByClient(client)) {
+			Dossier dossier = new Dossier();
+			dossier.setOrderItem(orderItem);
+			dossier.setItems(new HashSet<DossierItem>());
+			for (DocumentType documentType : dossierDescription
+					.getDocumentTypes()) {
+				DossierItem dossierItem = new DossierItem();
+				dossierItem.setDocumentType(documentType);
+				dossierItem.setDossier(dossier);
+				dossierItem.setAdded(Boolean.TRUE);
+				dossier.getItems().add(dossierItem);
+			}
+			getDossiers().add(dossier);
+		}
+		return "dossier";
+	}
 
-    /**
-     * Navigates to dossier
-     * @return
-     */
-    public String displayOrderItem() {
-        return "dossier";
-    }
+	public String displayEditDialog() {
+		dossiers = orderItem.getDossiersList();
+		for (Dossier dossierTmp : getDossiers()) {
+			getDossier().setSpecialty(dossierTmp.getSpecialty());
+			dossierTmp.getItemsList();
+		}
+		return "dossier";
+	}
 
-    /**
-     * Autocomplete method for returning the list of specialties matching the query for an
-     * autocomplete component 
-     * @param query
-     * @return
-     */
-    public List<Specialty> completeSpecialty(String query) {
-        List<Specialty> suggestions = new ArrayList<Specialty>();
-        for (Specialty specialty : specialtyService.findAllSpecialtys()) {
-            String specialtyStr = String.valueOf(specialty.getName());
-            if (specialtyStr.toLowerCase().contains(query.toLowerCase())) {
-                suggestions.add(specialty);
-            }
-        }
-        return suggestions;
-    }
+	/**
+	 * Gets all necessary data in order to upload a file from DossierItem
+	 */
+	public void selectDossierItem() {
+		this.setFiles(this.getDossierItem().getFilesList());
+		this.setDossierItemFile(new DossierItemFile());
+	}
 
-    public String persist() {
-        String message = "";
-        for (Dossier dossierTmp : getDossiers()){
-            dossierTmp.setSpecialty(getDossier().getSpecialty());
-        }
-        orderItem.getDossiers().addAll(getDossiers());
-        orderItemService.updateOrderItem(orderItem);
-        RequestContext context = RequestContext.getCurrentInstance();
-        context.execute("dossierDialogWidget.hide()");
-        FacesMessage facesMessage = MessageFactory.getMessage(message, "Dossier");
-        FacesContext.getCurrentInstance().addMessage(null, facesMessage);
-        reset();
-        return "dossier";
-    }
+	/**
+	 * Action to upload file
+	 */
+	public void uploadFile() {
 
-    public boolean isCreateEnabled() {
-        purchaseOrder = poService.findPurchaseOrder(purchaseOrder.getId());
-        orderItem = orderItemService.findOrderItem(orderItem.getId());
-        if (orderItem.getDossiers().size() > 0){
-            return Boolean.FALSE;
-        }
-        return Boolean.TRUE;
-    }
+	}
 
-    public void onTabChange(TabChangeEvent event) {
-        String tabId = event.getTab().getClientId();
-        System.out.println("Tab id: " + tabId);
-    }
+	/**
+	 * Navigates to dossier
+	 * 
+	 * @return
+	 */
+	public String displayOrderItem() {
+		return "dossier";
+	}
 
-    public void onPageChange(PageEvent event) {
-        int numberOfPage = event.getPage();
-        System.out.println("Page number: " + numberOfPage);
-    }
+	/**
+	 * Autocomplete method for returning the list of specialties matching the
+	 * query for an autocomplete component
+	 * 
+	 * @param query
+	 * @return
+	 */
+	public List<Specialty> completeSpecialty(String query) {
+		List<Specialty> suggestions = new ArrayList<Specialty>();
+		for (Specialty specialty : specialtyService.findAllSpecialtys()) {
+			String specialtyStr = String.valueOf(specialty.getName());
+			if (specialtyStr.toLowerCase().contains(query.toLowerCase())) {
+				suggestions.add(specialty);
+			}
+		}
+		return suggestions;
+	}
 
-    public void selectDocumentType(ValueChangeEvent event) {
-        System.out.println("Componente:" + event.getComponent().getClientId());
-        System.out.println("Old value:" + event.getOldValue() + " new Value: " + event.getNewValue());
-    }
+	public String persist() {
+		String message = "";
+		for (Dossier dossierTmp : getDossiers()) {
+			dossierTmp.setSpecialty(getDossier().getSpecialty());
+		}
+		orderItem.getDossiers().addAll(getDossiers());
+		orderItemService.updateOrderItem(orderItem);
+		RequestContext context = RequestContext.getCurrentInstance();
+		context.execute("dossierDialogWidget.hide()");
+		FacesMessage facesMessage = MessageFactory.getMessage(message,
+				"Dossier");
+		FacesContext.getCurrentInstance().addMessage(null, facesMessage);
+		reset();
+		return "dossier";
+	}
 
-    public Client getClient() {
-        return client;
-    }
+	public boolean isCreateEnabled() {
+		purchaseOrder = poService.findPurchaseOrder(purchaseOrder.getId());
+		orderItem = orderItemService.findOrderItem(orderItem.getId());
+		if (orderItem.getDossiers().size() > 0) {
+			return Boolean.FALSE;
+		}
+		return Boolean.TRUE;
+	}
 
-    public void setClient(Client client) {
-        this.client = client;
-    }
+	public void onTabChange(TabChangeEvent event) {
+		String tabId = event.getTab().getClientId();
+		System.out.println("Tab id: " + tabId);
+	}
 
-    public List<PurchaseOrder> getPurchaseOrders() {
-        return purchaseOrders;
-    }
+	public void onPageChange(PageEvent event) {
+		int numberOfPage = event.getPage();
+		System.out.println("Page number: " + numberOfPage);
+	}
 
-    public void setPurchaseOrders(List<PurchaseOrder> purchaseOrders) {
-        this.purchaseOrders = purchaseOrders;
-    }
+	public void selectDocumentType(ValueChangeEvent event) {
+		System.out.println("Componente:" + event.getComponent().getClientId());
+		System.out.println("Old value:" + event.getOldValue() + " new Value: "
+				+ event.getNewValue());
+	}
 
-    public PurchaseOrder getPurchaseOrder() {
-        return purchaseOrder;
-    }
+	public Client getClient() {
+		return client;
+	}
 
-    public void setPurchaseOrder(PurchaseOrder purchaseOrder) {
-        this.purchaseOrder = purchaseOrder;
-    }
+	public void setClient(Client client) {
+		this.client = client;
+	}
 
-    public OrderItem getOrderItem() {
-        return orderItem;
-    }
+	public List<PurchaseOrder> getPurchaseOrders() {
+		return purchaseOrders;
+	}
 
-    public void setOrderItem(OrderItem orderItem) {
-        this.orderItem = orderItem;
-    }
+	public void setPurchaseOrders(List<PurchaseOrder> purchaseOrders) {
+		this.purchaseOrders = purchaseOrders;
+	}
 
-    public List<Dossier> getDossiers() {
-        return dossiers;
-    }
+	public PurchaseOrder getPurchaseOrder() {
+		return purchaseOrder;
+	}
 
-    public void setDossiers(List<Dossier> dossiers) {
-        this.dossiers = dossiers;
-    }
+	public void setPurchaseOrder(PurchaseOrder purchaseOrder) {
+		this.purchaseOrder = purchaseOrder;
+	}
 
-    public DossierItem getDossierItem() {
-        return dossierItem;
-    }
+	public OrderItem getOrderItem() {
+		return orderItem;
+	}
 
-    public void setDossierItem(DossierItem dossierItem) {
-        this.dossierItem = dossierItem;
-    }
+	public void setOrderItem(OrderItem orderItem) {
+		this.orderItem = orderItem;
+	}
+
+	public List<Dossier> getDossiers() {
+		return dossiers;
+	}
+
+	public void setDossiers(List<Dossier> dossiers) {
+		this.dossiers = dossiers;
+	}
+
+	public DossierItem getDossierItem() {
+		return dossierItem;
+	}
+
+	public void setDossierItem(DossierItem dossierItem) {
+		this.dossierItem = dossierItem;
+	}
+
+	public List<DossierItemFile> getFiles() {
+		return files;
+	}
+
+	public void setFiles(List<DossierItemFile> files) {
+		this.files = files;
+	}
+
+	public DossierItemFile getDossierItemFile() {
+		return dossierItemFile;
+	}
+
+	public void setDossierItemFile(DossierItemFile dossierItemFile) {
+		this.dossierItemFile = dossierItemFile;
+	}
 
 }
