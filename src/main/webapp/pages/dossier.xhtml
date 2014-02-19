@@ -152,8 +152,8 @@
 						columnClasses="col1,col2,col3">
 						<p:outputLabel for="fileUploadInput" id="fileUploadOutput"
 							value="File:"></p:outputLabel>
-						<p:fileUpload id="fileUploadInput" required="true" fileLimit="1"
-							value="#{dossierMB.dossierItemFile.itemFile}"></p:fileUpload>
+						<p:fileUpload id="fileUploadInput" multiple="false"
+							required="true" fileLimit="1" value="#{dossierMB.uploadedFile}"></p:fileUpload>
 						<p:message id="fileUploadInputMessage" for="fileUploadInput"
 							display="icon"></p:message>
 						<p:outputLabel for="nameUploadInput" id="nameUploadOutput"

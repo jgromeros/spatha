@@ -11,6 +11,7 @@ import javax.faces.event.ValueChangeEvent;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.TabChangeEvent;
 import org.primefaces.event.data.PageEvent;
+import org.primefaces.model.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
@@ -54,6 +55,7 @@ public class DossierMB {
 	private DossierItem dossierItem;
 	private List<DossierItemFile> files;
 	private DossierItemFile dossierItemFile;
+	private UploadedFile uploadedFile;
 
 	public List<Client> getClients() {
 		return clientService.findAllClients();
@@ -118,7 +120,7 @@ public class DossierMB {
 	 * Action to upload file
 	 */
 	public void uploadFile() {
-
+		System.out.println("fileUploaded:OLA KE ASE");
 	}
 
 	/**
@@ -251,6 +253,14 @@ public class DossierMB {
 
 	public void setDossierItemFile(DossierItemFile dossierItemFile) {
 		this.dossierItemFile = dossierItemFile;
+	}
+
+	public UploadedFile getUploadedFile() {
+		return uploadedFile;
+	}
+
+	public void setUploadedFile(UploadedFile uploadedFile) {
+		this.uploadedFile = uploadedFile;
 	}
 
 }
