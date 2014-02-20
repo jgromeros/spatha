@@ -112,8 +112,11 @@
 											<h:outputText value="#{app.label_code}" />
 										</f:facet>
 										<p:commandLink id="uploadButton"
+											action="#{dossierMB.selectDossierItem}"
 											oncomplete="uploadDialogWidget.show()" title="upload">
 											<h:outputText value="#{item.documentType.code}" />
+											<f:setPropertyActionListener value="#{item}"
+												target="#{dossierMB.dossierItem}" />
 										</p:commandLink>
 									</p:column>
 									<p:column>
@@ -145,13 +148,31 @@
 			maximizable="true" showEffect="fade" hideEffect="explode">
 			<p:outputPanel id="uploadPanel">
 				<h:form id="uploadForm" enctype="multipart/form-data">
-					<h:panelGrid id="uploadPanelGrid" columns="2" styleClass="dialog"
-						columnClasses="col1,col2">
-						<p:fileUpload></p:fileUpload>
+					<h:panelGrid id="uploadPanelGrid" columns="3" styleClass="dialog"
+						columnClasses="col1,col2,col3">
+						<p:outputLabel for="fileUploadInput" id="fileUploadOutput"
+							value="File:"></p:outputLabel>
+						<p:fileUpload id="fileUploadInput" multiple="false"
+							required="true" fileLimit="1" value="#{dossierMB.uploadedFile}"></p:fileUpload>
+						<p:message id="fileUploadInputMessage" for="fileUploadInput"
+							display="icon"></p:message>
+						<p:outputLabel for="nameUploadInput" id="nameUploadOutput"
+							value="Name:"></p:outputLabel>
+						<p:inputText id="nameUploadInput" required="true"></p:inputText>
+						<p:message id="nameUploadInputMessage" for="nameUploadInput"
+							display="icon"></p:message>
+						<p:outputLabel for="versionUploadInput" id="versionUploadOutput"
+							value="Version:"></p:outputLabel>
+						<p:inputText id="versionUploadInput" required="true"></p:inputText>
+						<p:message id="versionUploadInputMessage" for="versionUploadInput"
+							display="icon"></p:message>
 					</h:panelGrid>
-					<p:commandButton id="viewCloseButton"
-						value="#{messages.label_close}" onclick="uploadDialogWidget.hide()"
-						type="button" />
+					<p:commandButton id="uploadSaveButton"
+						value="#{messages.label_save}" action="#{dossierMB.uploadFile}"
+						onclick="uploadDialogWidget.hide()" type="button" />
+					<p:commandButton id="uploadCloseButton"
+						value="#{messages.label_close}"
+						onclick="uploadDialogWidget.hide()" type="button" />
 				</h:form>
 			</p:outputPanel>
 		</p:dialog>

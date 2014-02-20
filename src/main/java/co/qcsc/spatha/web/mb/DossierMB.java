@@ -1,4 +1,5 @@
 package co.qcsc.spatha.web.mb;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -10,6 +11,7 @@ import javax.faces.event.ValueChangeEvent;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.TabChangeEvent;
 import org.primefaces.event.data.PageEvent;
+import org.primefaces.model.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.jsf.managedbean.RooJsfManagedBean;
 import org.springframework.roo.addon.serializable.RooSerializable;
@@ -18,6 +20,7 @@ import co.qcsc.spatha.domain.dossier.DocumentType;
 import co.qcsc.spatha.domain.dossier.Dossier;
 import co.qcsc.spatha.domain.dossier.DossierDescription;
 import co.qcsc.spatha.domain.dossier.DossierItem;
+import co.qcsc.spatha.domain.dossier.DossierItemFile;
 import co.qcsc.spatha.domain.product.Specialty;
 import co.qcsc.spatha.domain.purchase.OrderItem;
 import co.qcsc.spatha.domain.purchase.PurchaseOrder;
@@ -50,6 +53,9 @@ public class DossierMB {
     private List<Dossier> dossiers;
     private OrderItem orderItem;
     private DossierItem dossierItem;
+    private List<DossierItemFile> files;
+    private DossierItemFile dossierItemFile;
+    private UploadedFile uploadedFile;
 
     public List<Client> getClients() {
         return clientService.findAllClients();
@@ -109,6 +115,21 @@ public class DossierMB {
     }
 
     /**
+     * Gets all necessary data in order to upload a file from DossierItem
+     */
+    public void selectDossierItem() {
+        this.setFiles(this.getDossierItem().getFilesList());
+        this.setDossierItemFile(new DossierItemFile());
+    }
+
+    /**
+     * Action to upload file
+     */
+    public void uploadFile() {
+        System.out.println("fileUploaded:OLA KE ASE");
+    }
+
+    /**
      * Autocomplete method for returning the list of specialties matching the query for an
      * autocomplete component 
      * @param query
@@ -124,6 +145,13 @@ public class DossierMB {
         }
         return suggestions;
     }
+    /**
+     * Autocomplete method for returning the list of specialties matching the
+     * query for an autocomplete component
+     * 
+     * @param query
+     * @return
+     */
 
     public String persist() {
         String message = "";
@@ -211,5 +239,29 @@ public class DossierMB {
     public void setDossierItem(DossierItem dossierItem) {
         this.dossierItem = dossierItem;
     }
+
+	public List<DossierItemFile> getFiles() {
+		return files;
+	}
+
+	public void setFiles(List<DossierItemFile> files) {
+		this.files = files;
+	}
+
+	public DossierItemFile getDossierItemFile() {
+		return dossierItemFile;
+	}
+
+	public void setDossierItemFile(DossierItemFile dossierItemFile) {
+		this.dossierItemFile = dossierItemFile;
+	}
+
+	public UploadedFile getUploadedFile() {
+		return uploadedFile;
+	}
+
+	public void setUploadedFile(UploadedFile uploadedFile) {
+		this.uploadedFile = uploadedFile;
+	}
 
 }
