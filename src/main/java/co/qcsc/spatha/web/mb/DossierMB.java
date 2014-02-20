@@ -9,6 +9,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.TabChangeEvent;
 import org.primefaces.event.data.PageEvent;
 import org.primefaces.model.UploadedFile;
@@ -121,6 +122,10 @@ public class DossierMB {
 	 */
 	public void uploadFile() {
 		System.out.println("fileUploaded:OLA KE ASE");
+	}
+
+	public void handleFileUpload(FileUploadEvent event) {
+		this.setUploadedFile(event.getFile());
 	}
 
 	/**

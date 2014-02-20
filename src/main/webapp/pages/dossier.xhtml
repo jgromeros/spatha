@@ -153,7 +153,10 @@
 						<p:outputLabel for="fileUploadInput" id="fileUploadOutput"
 							value="File:"></p:outputLabel>
 						<p:fileUpload id="fileUploadInput" multiple="false"
-							required="true" fileLimit="1" value="#{dossierMB.uploadedFile}"></p:fileUpload>
+							fileUploadListener="#{dossierMB.handleFileUpload}"
+							required="true" fileLimit="1" mode="advanced"
+							dragDropSupport="false" sizeLimit="100000"
+							></p:fileUpload>
 						<p:message id="fileUploadInputMessage" for="fileUploadInput"
 							display="icon"></p:message>
 						<p:outputLabel for="nameUploadInput" id="nameUploadOutput"
@@ -169,7 +172,7 @@
 					</h:panelGrid>
 					<p:commandButton id="uploadSaveButton"
 						value="#{messages.label_save}" action="#{dossierMB.uploadFile}"
-						onclick="uploadDialogWidget.hide()" type="button" />
+						type="button" />
 					<p:commandButton id="uploadCloseButton"
 						value="#{messages.label_close}"
 						onclick="uploadDialogWidget.hide()" type="button" />
