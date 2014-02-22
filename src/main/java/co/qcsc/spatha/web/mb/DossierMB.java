@@ -36,6 +36,7 @@ import co.qcsc.spatha.web.mb.util.MessageFactory;
 @RooJsfManagedBean(entity = Dossier.class, beanName = "dossierMB")
 public class DossierMB {
 
+
 	@Autowired
 	PurchaseOrderService poService;
 

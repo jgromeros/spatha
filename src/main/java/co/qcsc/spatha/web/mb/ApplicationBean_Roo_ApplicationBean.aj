@@ -6,17 +6,12 @@ package co.qcsc.spatha.web.mb;
 import co.qcsc.spatha.web.mb.ApplicationBean;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
-import org.primefaces.model.MenuModel;
 
 privileged aspect ApplicationBean_Roo_ApplicationBean {
     
     declare @type: ApplicationBean: @ManagedBean;
     
     declare @type: ApplicationBean: @RequestScoped;
-    
-    public MenuModel ApplicationBean.getMenuModel() {
-        return menuModel;
-    }
     
     public String ApplicationBean.getAppName() {
         return "Spatha";
