@@ -38,12 +38,30 @@ privileged aspect DossierItemFileDataOnDemand_Roo_DataOnDemand {
     public DossierItemFile DossierItemFileDataOnDemand.getNewTransientDossierItemFile(int index) {
         DossierItemFile obj = new DossierItemFile();
         setItemFile(obj, index);
+        setName(obj, index);
+        setSystemVersion(obj, index);
+        setUserVersion(obj, index);
         return obj;
     }
     
     public void DossierItemFileDataOnDemand.setItemFile(DossierItemFile obj, int index) {
         byte[] itemFile = String.valueOf(index).getBytes();
         obj.setItemFile(itemFile);
+    }
+    
+    public void DossierItemFileDataOnDemand.setName(DossierItemFile obj, int index) {
+        String name = "name_" + index;
+        obj.setName(name);
+    }
+    
+    public void DossierItemFileDataOnDemand.setSystemVersion(DossierItemFile obj, int index) {
+        Long systemVersion = new Integer(index).longValue();
+        obj.setSystemVersion(systemVersion);
+    }
+    
+    public void DossierItemFileDataOnDemand.setUserVersion(DossierItemFile obj, int index) {
+        String userVersion = "userVersion_" + index;
+        obj.setUserVersion(userVersion);
     }
     
     public DossierItemFile DossierItemFileDataOnDemand.getSpecificDossierItemFile(int index) {

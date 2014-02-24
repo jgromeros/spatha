@@ -27,8 +27,10 @@ import org.primefaces.component.autocomplete.AutoComplete;
 import org.primefaces.component.commandbutton.CommandButton;
 import org.primefaces.component.filedownload.FileDownloadActionListener;
 import org.primefaces.component.fileupload.FileUpload;
+import org.primefaces.component.inputtext.InputText;
 import org.primefaces.component.message.Message;
 import org.primefaces.component.outputlabel.OutputLabel;
+import org.primefaces.component.spinner.Spinner;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.CloseEvent;
 import org.primefaces.event.FileUploadEvent;
@@ -69,6 +71,9 @@ privileged aspect DossierItemFileMB_Roo_ManagedBean {
     @PostConstruct
     public void DossierItemFileMB.init() {
         columns = new ArrayList<String>();
+        columns.add("name");
+        columns.add("userVersion");
+        columns.add("systemVersion");
     }
     
     public String DossierItemFileMB.getName() {
@@ -160,6 +165,61 @@ privileged aspect DossierItemFileMB_Roo_ManagedBean {
         itemFileCreateInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(itemFileCreateInputMessage);
         
+        OutputLabel nameCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        nameCreateOutput.setFor("nameCreateInput");
+        nameCreateOutput.setId("nameCreateOutput");
+        nameCreateOutput.setValue("Name:");
+        htmlPanelGrid.getChildren().add(nameCreateOutput);
+        
+        InputText nameCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        nameCreateInput.setId("nameCreateInput");
+        nameCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{dossierItemFileMB.dossierItemFile.name}", String.class));
+        nameCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(nameCreateInput);
+        
+        Message nameCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        nameCreateInputMessage.setId("nameCreateInputMessage");
+        nameCreateInputMessage.setFor("nameCreateInput");
+        nameCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(nameCreateInputMessage);
+        
+        OutputLabel userVersionCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        userVersionCreateOutput.setFor("userVersionCreateInput");
+        userVersionCreateOutput.setId("userVersionCreateOutput");
+        userVersionCreateOutput.setValue("User Version:");
+        htmlPanelGrid.getChildren().add(userVersionCreateOutput);
+        
+        InputText userVersionCreateInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        userVersionCreateInput.setId("userVersionCreateInput");
+        userVersionCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{dossierItemFileMB.dossierItemFile.userVersion}", String.class));
+        userVersionCreateInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(userVersionCreateInput);
+        
+        Message userVersionCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        userVersionCreateInputMessage.setId("userVersionCreateInputMessage");
+        userVersionCreateInputMessage.setFor("userVersionCreateInput");
+        userVersionCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(userVersionCreateInputMessage);
+        
+        OutputLabel systemVersionCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        systemVersionCreateOutput.setFor("systemVersionCreateInput");
+        systemVersionCreateOutput.setId("systemVersionCreateOutput");
+        systemVersionCreateOutput.setValue("System Version:");
+        htmlPanelGrid.getChildren().add(systemVersionCreateOutput);
+        
+        Spinner systemVersionCreateInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
+        systemVersionCreateInput.setId("systemVersionCreateInput");
+        systemVersionCreateInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{dossierItemFileMB.dossierItemFile.systemVersion}", Long.class));
+        systemVersionCreateInput.setRequired(false);
+        
+        htmlPanelGrid.getChildren().add(systemVersionCreateInput);
+        
+        Message systemVersionCreateInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        systemVersionCreateInputMessage.setId("systemVersionCreateInputMessage");
+        systemVersionCreateInputMessage.setFor("systemVersionCreateInput");
+        systemVersionCreateInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(systemVersionCreateInputMessage);
+        
         OutputLabel dossierItemCreateOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         dossierItemCreateOutput.setFor("dossierItemCreateInput");
         dossierItemCreateOutput.setId("dossierItemCreateOutput");
@@ -216,6 +276,61 @@ privileged aspect DossierItemFileMB_Roo_ManagedBean {
         itemFileEditInputMessage.setDisplay("icon");
         htmlPanelGrid.getChildren().add(itemFileEditInputMessage);
         
+        OutputLabel nameEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        nameEditOutput.setFor("nameEditInput");
+        nameEditOutput.setId("nameEditOutput");
+        nameEditOutput.setValue("Name:");
+        htmlPanelGrid.getChildren().add(nameEditOutput);
+        
+        InputText nameEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        nameEditInput.setId("nameEditInput");
+        nameEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{dossierItemFileMB.dossierItemFile.name}", String.class));
+        nameEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(nameEditInput);
+        
+        Message nameEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        nameEditInputMessage.setId("nameEditInputMessage");
+        nameEditInputMessage.setFor("nameEditInput");
+        nameEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(nameEditInputMessage);
+        
+        OutputLabel userVersionEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        userVersionEditOutput.setFor("userVersionEditInput");
+        userVersionEditOutput.setId("userVersionEditOutput");
+        userVersionEditOutput.setValue("User Version:");
+        htmlPanelGrid.getChildren().add(userVersionEditOutput);
+        
+        InputText userVersionEditInput = (InputText) application.createComponent(InputText.COMPONENT_TYPE);
+        userVersionEditInput.setId("userVersionEditInput");
+        userVersionEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{dossierItemFileMB.dossierItemFile.userVersion}", String.class));
+        userVersionEditInput.setRequired(false);
+        htmlPanelGrid.getChildren().add(userVersionEditInput);
+        
+        Message userVersionEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        userVersionEditInputMessage.setId("userVersionEditInputMessage");
+        userVersionEditInputMessage.setFor("userVersionEditInput");
+        userVersionEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(userVersionEditInputMessage);
+        
+        OutputLabel systemVersionEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
+        systemVersionEditOutput.setFor("systemVersionEditInput");
+        systemVersionEditOutput.setId("systemVersionEditOutput");
+        systemVersionEditOutput.setValue("System Version:");
+        htmlPanelGrid.getChildren().add(systemVersionEditOutput);
+        
+        Spinner systemVersionEditInput = (Spinner) application.createComponent(Spinner.COMPONENT_TYPE);
+        systemVersionEditInput.setId("systemVersionEditInput");
+        systemVersionEditInput.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{dossierItemFileMB.dossierItemFile.systemVersion}", Long.class));
+        systemVersionEditInput.setRequired(false);
+        
+        htmlPanelGrid.getChildren().add(systemVersionEditInput);
+        
+        Message systemVersionEditInputMessage = (Message) application.createComponent(Message.COMPONENT_TYPE);
+        systemVersionEditInputMessage.setId("systemVersionEditInputMessage");
+        systemVersionEditInputMessage.setFor("systemVersionEditInput");
+        systemVersionEditInputMessage.setDisplay("icon");
+        htmlPanelGrid.getChildren().add(systemVersionEditInputMessage);
+        
         OutputLabel dossierItemEditOutput = (OutputLabel) application.createComponent(OutputLabel.COMPONENT_TYPE);
         dossierItemEditOutput.setFor("dossierItemEditInput");
         dossierItemEditOutput.setId("dossierItemEditOutput");
@@ -267,6 +382,35 @@ privileged aspect DossierItemFileMB_Roo_ManagedBean {
             ((HtmlOutputText) itemFileValue).setValue("");
         }
         htmlPanelGrid.getChildren().add(itemFileValue);
+        
+        HtmlOutputText nameLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        nameLabel.setId("nameLabel");
+        nameLabel.setValue("Name:");
+        htmlPanelGrid.getChildren().add(nameLabel);
+        
+        HtmlOutputText nameValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        nameValue.setId("nameValue");
+        nameValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{dossierItemFileMB.dossierItemFile.name}", String.class));
+        htmlPanelGrid.getChildren().add(nameValue);
+        
+        HtmlOutputText userVersionLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        userVersionLabel.setId("userVersionLabel");
+        userVersionLabel.setValue("User Version:");
+        htmlPanelGrid.getChildren().add(userVersionLabel);
+        
+        HtmlOutputText userVersionValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        userVersionValue.setId("userVersionValue");
+        userVersionValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{dossierItemFileMB.dossierItemFile.userVersion}", String.class));
+        htmlPanelGrid.getChildren().add(userVersionValue);
+        
+        HtmlOutputText systemVersionLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        systemVersionLabel.setId("systemVersionLabel");
+        systemVersionLabel.setValue("System Version:");
+        htmlPanelGrid.getChildren().add(systemVersionLabel);
+        
+        HtmlOutputText systemVersionValue = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        systemVersionValue.setValueExpression("value", expressionFactory.createValueExpression(elContext, "#{dossierItemFileMB.dossierItemFile.systemVersion}", String.class));
+        htmlPanelGrid.getChildren().add(systemVersionValue);
         
         HtmlOutputText dossierItemLabel = (HtmlOutputText) application.createComponent(HtmlOutputText.COMPONENT_TYPE);
         dossierItemLabel.setId("dossierItemLabel");

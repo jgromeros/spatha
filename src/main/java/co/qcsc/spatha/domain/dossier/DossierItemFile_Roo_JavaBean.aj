@@ -16,6 +16,30 @@ privileged aspect DossierItemFile_Roo_JavaBean {
         this.itemFile = itemFile;
     }
     
+    public String DossierItemFile.getName() {
+        return this.name;
+    }
+    
+    public void DossierItemFile.setName(String name) {
+        this.name = name;
+    }
+    
+    public String DossierItemFile.getUserVersion() {
+        return this.userVersion;
+    }
+    
+    public void DossierItemFile.setUserVersion(String userVersion) {
+        this.userVersion = userVersion;
+    }
+    
+    public Long DossierItemFile.getSystemVersion() {
+        return this.systemVersion;
+    }
+    
+    public void DossierItemFile.setSystemVersion(Long systemVersion) {
+        this.systemVersion = systemVersion;
+    }
+    
     public DossierItem DossierItemFile.getDossierItem() {
         return this.dossierItem;
     }

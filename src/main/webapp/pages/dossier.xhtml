@@ -146,38 +146,40 @@
 		<p:dialog id="uploadDialog" header="File Upload" modal="true"
 			widgetVar="uploadDialogWidget" dynamic="true" resizable="true"
 			maximizable="true" showEffect="fade" hideEffect="explode">
-			<p:outputPanel id="uploadPanel">
-				<h:form id="uploadForm" enctype="multipart/form-data">
-					<h:panelGrid id="uploadPanelGrid" columns="3" styleClass="dialog"
-						columnClasses="col1,col2,col3">
-						<p:outputLabel for="fileUploadInput" id="fileUploadOutput"
-							value="File:"></p:outputLabel>
-						<p:fileUpload id="fileUploadInput" multiple="false"
-							fileUploadListener="#{dossierMB.handleFileUpload}"
-							required="true" fileLimit="1" mode="advanced"
-							dragDropSupport="false" sizeLimit="100000"
-							></p:fileUpload>
-						<p:message id="fileUploadInputMessage" for="fileUploadInput"
-							display="icon"></p:message>
-						<p:outputLabel for="nameUploadInput" id="nameUploadOutput"
-							value="Name:"></p:outputLabel>
-						<p:inputText id="nameUploadInput" required="true"></p:inputText>
-						<p:message id="nameUploadInputMessage" for="nameUploadInput"
-							display="icon"></p:message>
-						<p:outputLabel for="versionUploadInput" id="versionUploadOutput"
-							value="Version:"></p:outputLabel>
-						<p:inputText id="versionUploadInput" required="true"></p:inputText>
-						<p:message id="versionUploadInputMessage" for="versionUploadInput"
-							display="icon"></p:message>
-					</h:panelGrid>
-					<p:commandButton id="uploadSaveButton"
-						value="#{messages.label_save}" action="#{dossierMB.uploadFile}"
-						type="button" />
-					<p:commandButton id="uploadCloseButton"
-						value="#{messages.label_close}"
-						onclick="uploadDialogWidget.hide()" type="button" />
-				</h:form>
-			</p:outputPanel>
+			<h:panelGrid id="hPanelGrid">
+				<p:outputPanel id="uploadPanel">
+					<h:form id="uploadForm" enctype="multipart/form-data">
+						<h:panelGrid id="uploadPanelGrid" columns="3" styleClass="dialog"
+							columnClasses="col1,col2,col3">
+							<p:outputLabel for="fileUploadInput" id="fileUploadOutput"
+								value="File:"></p:outputLabel>
+							<p:fileUpload id="fileUploadInput" multiple="false"
+								value="#{dossierMB.uploadedFile}" required="true" fileLimit="1"
+								mode="simple" update="uploadPanelGrid" dragDropSupport="false"
+								sizeLimit="100000"></p:fileUpload>
+							<p:message id="fileUploadInputMessage" for="fileUploadInput"
+								display="icon"></p:message>
+							<p:outputLabel for="nameUploadInput" id="nameUploadOutput"
+								value="Name:"></p:outputLabel>
+							<p:inputText id="nameUploadInput" required="true"
+								value="#{dossierMB.dossierItemFile.name}"></p:inputText>
+							<p:message id="nameUploadInputMessage" for="nameUploadInput"
+								display="icon"></p:message>
+							<p:outputLabel for="versionUploadInput" id="versionUploadOutput"
+								value="Version:"></p:outputLabel>
+							<p:inputText id="versionUploadInput" required="true"
+								value="#{dossierMB.dossierItemFile.userVersion}"></p:inputText>
+							<p:message id="versionUploadInputMessage"
+								for="versionUploadInput" display="icon"></p:message>
+						</h:panelGrid>
+						<p:commandButton id="uploadSaveButton" ajax="false"
+							value="#{messages.label_save}"
+							action="#{dossierMB.saveFile}" type="button" />
+
+					</h:form>
+
+				</p:outputPanel>
+			</h:panelGrid>
 		</p:dialog>
 		<p:confirmDialog id="deleteDialog" widgetVar="deleteDialogWidget"
 			message="#{messages.label_delete_record}" showEffect="fade"

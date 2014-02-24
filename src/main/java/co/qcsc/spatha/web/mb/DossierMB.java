@@ -36,7 +36,6 @@ import co.qcsc.spatha.web.mb.util.MessageFactory;
 @RooJsfManagedBean(entity = Dossier.class, beanName = "dossierMB")
 public class DossierMB {
 
-
 	@Autowired
 	PurchaseOrderService poService;
 
@@ -121,7 +120,7 @@ public class DossierMB {
 	/**
 	 * Action to upload file
 	 */
-	public void uploadFile() {
+	public void saveFile() {
 		System.out.println("fileUploaded:OLA KE ASE");
 	}
 
